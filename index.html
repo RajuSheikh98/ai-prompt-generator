@@ -1,0 +1,759 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Advanced AI Prompt Generator Pro</title>
+  <meta name="description" content="Generate professional, detailed AI prompts for Midjourney, DALL·E 3, Stable Diffusion, and Flux models with subcategories and custom input." />
+  <meta name="theme-color" content="#0b1220" />
+  <link rel="icon" href="image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎨</text></svg>">
+  <style>
+    :root{
+      --bg:#0b1220;
+      --surface:#111a2e;
+      --surface-2:#0f1830;
+      --text:#ecf1ff;
+      --muted:#a7b1c6;
+      --primary:#4f7cff;
+      --accent:#22d3ee;
+      --danger:#ef4444;
+      --border:#24314f;
+      --shadow:0 10px 24px rgba(0,0,0,.35);
+      --radius:14px;
+      --radius-sm:10px;
+      --radius-xs:8px;
+      --focus:0 0 0 3px rgba(79,124,255,.35);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,sans-serif;background:linear-gradient(120deg,#0a0f1c,#0b1220);color:var(--text);letter-spacing:.2px;height:100%}
+    .container{max-width:1200px;margin:24px auto;padding:0 16px;display:grid;grid-template-columns:1fr 1fr;gap:24px;min-height: calc(100vh - 48px)}
+    @media (max-width:1000px){.container{grid-template-columns:1fr;gap:16px;margin:16px auto;min-height: calc(100vh - 32px)}}
+    .app-header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,#0b1220,#0b1220d9);position:sticky;top:0;z-index:20}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{font-size:28px}
+    .title{font-size:18px;margin:0;color:#e7ecff}
+    .header-actions{display:flex;gap:8px}
+    .panel{background:linear-gradient(180deg,var(--surface),var(--surface-2));border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;display:flex;flex-direction:column}
+    .panel-title{margin:0 0 12px 0;font-size:18px}
+    .panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+    .panel-tools{display:flex;gap:8px}
+    .field{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+    .input{background:#0a1327;border:1px solid var(--border);color:var(--text);border-radius:var(--radius-xs);padding:12px 14px;outline:none;transition:.2s;font-size:14px}
+    .input:focus{box-shadow:var(--focus);border-color:#3e5fd8}
+    .input.textarea{resize:vertical;font-size:14px}
+    .grid.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    @media (max-width:680px){.grid.two{grid-template-columns:1fr}}
+    .help{color:var(--muted);font-size:12px}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+    .btn{background:#152448;border:1px solid var(--border);color:var(--text);border-radius:12px;padding:12px 14px;cursor:pointer;min-height:44px;min-width:44px;transition:.2s;font-size:14px}
+    .btn:hover{transform:translateY(-1px);border-color:#3552a6}
+    .btn:focus{outline:none;box-shadow:var(--focus)}
+    .btn.small{padding:8px 10px;min-height:36px;min-width:36px}
+    .btn.primary{background:linear-gradient(90deg,#3f66ff,#5e8bff);border-color:#4970ff}
+    .btn.accent{background:linear-gradient(90deg,#15b3d6,#36e0ff);border-color:#1db6d8}
+    .btn.ghost{background:transparent}
+    .btn.outline{background:transparent;border-color:#3552a6}
+    .btn.danger{background:linear-gradient(90deg,#da3c3c,#ef4444);border-color:#ef4444}
+    .prompt-output{background:#080f21;border:1px dashed #2a3a68;border-radius:var(--radius);padding:16px;min-height:220px;white-space:pre-wrap;line-height:1.5;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;flex-grow:1;overflow:auto}
+    .meta{display:flex;justify-content:space-between;gap:16px;margin-top:10px;color:var(--muted);font-size:13px}
+    .history{margin-top:18px}
+    .subheading{margin:0 0 10px 0;font-size:16px}
+    .history-list{display:flex;flex-direction:column;gap:8px;max-height:220px;overflow:auto}
+    .history-item{background:#0a142d;border:1px solid var(--border);border-radius:10px;padding:10px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:left;font-size:13px}
+    .history-item:hover{border-color:#4361d8}
+    .modal{position:fixed;inset:0;background:rgba(6,10,22,.75);display:grid;place-items:center;padding:16px;z-index:1000}
+    .modal-card{width:min(860px,96vw);background:linear-gradient(180deg,#0e1730,#0c1530);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow)}
+    .modal-header{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--border)}
+    .modal-body{padding:14px}
+    .modal-footer{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding:10px 14px}
+    .muted{color:var(--muted)}
+    .toast{position:fixed;bottom:20px;right:20px;background:#0c142b;border:1px solid var(--border);border-radius:12px;padding:12px 16px;box-shadow:var(--shadow);z-index:1000}
+    .hidden{display:none}
+    .custom-input-section{margin-top:20px;padding-top:20px;border-top:1px solid var(--border)}
+    .controls-content{flex-grow:1;display:flex;flex-direction:column}
+    .output-content{display:flex;flex-direction:column;flex-grow:1}
+    .panel-controls{height:100%}
+    .panel-output{height:100%}
+  </style>
+</head>
+<body>
+  <header class="app-header" role="banner">
+    <div class="brand">
+      <span class="logo" aria-hidden="true">🎨</span>
+      <h1 class="title">Advanced AI Prompt Generator Pro</h1>
+    </div>
+    <div class="header-actions">
+      <button id="themeToggle" class="btn ghost" aria-label="Toggle theme">Theme</button>
+    </div>
+  </header>
+
+  <main class="container" role="main" aria-label="Prompt Generator">
+    <section class="panel panel-controls" aria-labelledby="controls-heading">
+      <h2 id="controls-heading" class="panel-title">Controls</h2>
+      <div class="controls-content">
+        <div class="field">
+          <label for="platformSelect">Target Model</label>
+          <select id="platformSelect" class="input" aria-describedby="platformHelp">
+            <option value="midjourney">Midjourney</option>
+            <option value="dalle3">DALL·E 3</option>
+            <option value="stable_diffusion">Stable Diffusion</option>
+            <option value="flux_1_schnell">Flux.1 Schnell</option>
+            <option value="flux_1_dev">Flux.1 Dev</option>
+            <option value="flux_1_pro">Flux.1 Pro</option>
+          </select>
+          <div id="platformHelp" class="help">Applies model-specific tails and tone.</div>
+        </div>
+
+        <div class="grid two">
+          <div class="field">
+            <label for="categorySelect">Category</label>
+            <select id="categorySelect" class="input" aria-label="Category">
+              <option value="portrait">Portrait</option>
+              <option value="landscape">Landscape</option>
+              <option value="product">Product</option>
+              <option value="concept">Concept Art</option>
+              <option value="scene">Scene</option>
+              <option value="abstract">Abstract</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="subcategorySelect">Subcategory</label>
+            <select id="subcategorySelect" class="input" aria-label="Subcategory"></select>
+          </div>
+        </div>
+
+        <div class="grid two">
+          <div class="field">
+            <label for="styleSelect">Style</label>
+            <select id="styleSelect" class="input" aria-label="Style">
+              <option value="realistic">Realistic</option>
+              <option value="cinematic">Cinematic</option>
+              <option value="anime">Anime</option>
+              <option value="oil">Oil Painting</option>
+              <option value="digital">Digital Art</option>
+              <option value="cyberpunk">Cyberpunk</option>
+              <option value="minimal">Minimal</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="qualitySelect">Detail Level</label>
+            <select id="qualitySelect" class="input" aria-label="Detail Level">
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+              <option value="ultra">Ultra</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="generateBtn" class="btn primary" aria-label="Generate Standard Prompt">Generate</button>
+          <button id="variationBtn" class="btn" aria-label="Generate Variation">Variation</button>
+          <button id="surpriseBtn" class="btn accent" aria-label="Generate Surprise Prompt">Surprise</button>
+          <button id="customToggleBtn" class="btn outline" aria-label="Toggle Custom Input">Custom Input</button>
+          <button id="resetBtn" class="btn danger outline" aria-label="Reset All">Reset</button>
+        </div>
+
+        <div id="customInputSection" class="custom-input-section hidden">
+          <div class="field">
+            <label for="customText">Describe your idea</label>
+            <textarea id="customText" class="input textarea" rows="3" placeholder="e.g., Bollywood actress, selfie close-up portrait, neon rain, cinematic lighting, 85mm, Flux Pro, dramatic mood"></textarea>
+            <div class="help">We'll keep the prompt relevant.</div>
+          </div>
+
+          <div class="grid two">
+            <div class="field">
+              <label for="customCategory">Suggested Category</label>
+              <select id="customCategory" class="input" aria-label="Custom Category">
+                <option value="auto">Auto-detect</option>
+                <option value="portrait">Portrait</option>
+                <option value="landscape">Landscape</option>
+                <option value="product">Product</option>
+                <option value="concept">Concept Art</option>
+                <option value="scene">Scene</option>
+                <option value="abstract">Abstract</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="customPlatform">Target Model</label>
+              <select id="customPlatform" class="input" aria-label="Custom Platform">
+                <option value="auto">Auto-detect</option>
+                <option value="midjourney">Midjourney</option>
+                <option value="dalle3">DALL·E 3</option>
+                <option value="stable_diffusion">Stable Diffusion</option>
+                <option value="flux_1_schnell">Flux.1 Schnell</option>
+                <option value="flux_1_dev">Flux.1 Dev</option>
+                <option value="flux_1_pro">Flux.1 Pro</option>
+              </select>
+            </div>
+          </div>
+          
+          <button id="customGenerateBtn" class="btn primary" aria-label="Generate Custom Prompt">Generate Custom Prompt</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel panel-output" aria-labelledby="output-heading">
+      <div class="panel-header">
+        <h2 id="output-heading" class="panel-title">Generated Prompt</h2>
+        <div class="panel-tools">
+          <button id="copyBtn" class="btn small" aria-label="Copy Prompt">Copy</button>
+          <button id="saveFavBtn" class="btn small" aria-label="Save to Favorites">Save</button>
+        </div>
+      </div>
+      <div class="output-content">
+        <div id="promptOutput" class="prompt-output" role="region" aria-live="polite" aria-label="Prompt text output">
+          Your prompt will appear here...
+        </div>
+        <div class="meta">
+          <div>Length: <span id="lengthDisplay">0</span> characters</div>
+          <div>Last: <span id="lastDisplay">None</span></div>
+        </div>
+
+        <div class="history">
+          <h3 class="subheading">Recent Prompts</h3>
+          <div id="historyList" class="history-list" role="list"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Toast -->
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <script>
+    // Dataset
+    const DATASET = {
+      "categories": {
+        "portrait": {
+          "subcategories": ["close_up", "selfie", "full_body", "studio", "editorial", "environmental"],
+          "templates": [
+            "Portrait of {subject} {action} {expression}, {detailA}; in {environment} at {time}, {atmosphere} mood. Composed with {composition} using {camera} and {lighting}, rendering {textureA}. Colors favor {colorA} with {colorB} accents, integrating {elementA} and {elementB} without {negativeA}. {style} aesthetic, {quality} finish, refined edges and natural tonal roll-off."
+          ]
+        },
+        "landscape": {
+          "subcategories": ["mountain", "coastal", "forest", "desert", "urban", "aerial"],
+          "templates": [
+            "Expansive {landscape} with {elementA} and {elementB} at {time}, {atmosphere} tone. {composition} guides depth; {lighting} reveals {textureA} and {textureB}. Palette uses {colorA} with {colorB}; avoid {negativeA}. Context cues from {environment}; coherent and immersive, {style} sensibility, {quality} detail."
+          ]
+        },
+        "product": {
+          "subcategories": ["packshot", "lifestyle", "macro", "tech", "fashion", "food"],
+          "templates": [
+            "Premium product shot of {object} on {environment}, {lighting} unveiling {textureA} and {textureB}. {composition} ensures focal clarity; reflections controlled to prevent {negativeA}. Color: {colorA} primary with {colorB} accents. {atmosphere} and {style}, {quality} precision, coherent highlights and soft falloff."
+          ]
+        },
+        "concept": {
+          "subcategories": ["character", "creature", "vehicle", "environment", "prop", "interface"],
+          "templates": [
+            "Concept art: {subject} {action} amid {environment}, {lighting} and {atmosphere} mood. {composition} clarifies hierarchy; {elementA}, {elementB} for worldbuilding; avoid {negativeA}. Materials suggest {textureA}, {textureB}. Palette centers {colorA} with {colorB}. {style}, {quality} execution, balanced novelty and readability."
+          ]
+        },
+        "scene": {
+          "subcategories": ["street", "interior", "market", "festival", "sci_fi", "historical"],
+          "templates": [
+            "Cinematic scene of {subject} {action} in {environment} at {time}, {atmosphere} tone. {composition} orchestrates space; {lighting} shapes silhouette, exposing {textureA}. {elementA}, {elementB} enrich context; avoid {negativeA}. Palette {colorA} with {colorB}. {style} approach, {quality} detail, narrative cohesion."
+          ]
+        },
+        "abstract": {
+          "subcategories": ["geometric", "organic", "minimal", "op_art", "color_field", "kinetic"],
+          "templates": [
+            "Abstract study of {shapeA} and {shapeB}, {composition} rhythm, {atmosphere} feel. Palette {colorA} with {colorB} gradients; {lighting} creates controlled glow over {textureA}. Motifs like {elementA} stay restrained; avoid {negativeA}. {style} discipline, {quality} finish, balanced density and space."
+          ]
+        }
+      },
+      "subjects": ["Bollywood actress","actor","model","artist","scientist","dancer","photographer","architect","engineer","explorer","chef","astronaut","martial artist","fashion designer","composer","robot companion","time traveler","sage","scholar","inventor"],
+      "actions": ["standing poised","seated calmly","walking through rain","gazing into distance","turning toward camera","casting a subtle smile","closing eyes thoughtfully","adjusting attire","resting a hand on railing","moving with grace"],
+      "expressions": ["with a serene smile","in deep thought","with quiet determination","with a mysterious air","with focused intensity","with soft warmth","with cinematic melancholy","with poised elegance"],
+      "details": ["wearing elegant clothing","delicate gemstone accents","subtle metallic embroidery","tailored silhouette","rain-speckled fabric","natural skin texture","minimalist accessories","layered textiles","refined eye catchlights"],
+      "environments": ["futuristic cityscape","studio","neon-lit alley","glass skybridge","café terrace","museum atrium","rooftop skyline","subway platform","market street","lantern-lit courtyard"],
+      "landscapes": ["coastal cliffs","terraced hills","glacier valley","river delta","rainforest canopy","volcanic plain","alpine meadow","dune sea"],
+      "elements": ["neon signage","reflective puddles","rain-streaked glass","wet cobblestones","paper lanterns","floating dust motes","bokeh lights","steel trusses","glass canopies","traffic streaks"],
+      "times": ["golden hour","blue hour","twilight","midnight","pre-dawn hush","rainy dusk","clear noon","foggy morning"],
+      "atmospheres": ["cinematic","ethereal","dramatic","serene","mysterious","vibrant","romantic","melancholic","hopeful"],
+      "objects": ["vintage camera","artisan umbrella","handcrafted bracelet","ceramic cup","silk scarf","architectural model","folding fan","leather journal"],
+      "features": ["intricate patterns","shiny surface","delicate details","smooth finish","textured material","reflective properties","geometric form"],
+      "shapes": ["circles","triangles","hexagons","spirals","waves","faceted planes","arches","grids"],
+      "colors": ["deep blue","cool teal","crimson red","saffron gold","emerald green","violet purple","burnt orange","rose gold","silver gray","charcoal black"],
+      "cameras": ["85mm f/1.8 portrait prime","50mm f/1.4 classic prime","35mm f/1.8 story lens","24-70mm f/2.8 pro zoom","100mm f/2.8 macro"],
+      "lighting": ["cinematic key and rim lighting","softbox wrap lighting","golden hour backlight","overcast soft light","neon bounce and edge light","Rembrandt key with gentle fill"],
+      "compositions": ["centered composition","rule of thirds flow","leading lines through frame","symmetrical framing","negative space emphasis","deep focus"],
+      "textures": ["smooth skin","velvet fabric","polished metal","weathered stone","glossy ceramic","textured canvas","matte surface"],
+      "negatives": ["blurry","low-res","overexposed","underexposed","artifacting","pixelated","distorted anatomy","nsfw","watermarks","logo artifacts"],
+      "platforms": {
+        "midjourney": { "tail": "--ar 4:5" },
+        "dalle3": { "tail": "High detail, coherent composition, clear focal hierarchy; avoid copyrighted characters." },
+        "stable_diffusion": { "tail": "CFG 7, Steps 30, Sampler DPM++ 2M Karras, seed random; negative prompt: nsfw, blurry, artifacting, extra digits." },
+        "flux_1_schnell": { "tail": "Flux.1 Schnell: fast inference, balanced detail; prioritize clarity and stable lighting." },
+        "flux_1_dev": { "tail": "Flux.1 Dev: enhanced fidelity and detail adherence; emphasize structured composition and realistic textures." },
+        "flux_1_pro": { "tail": "Flux.1 Pro: maximum fidelity and nuanced lighting; preserve micro-contrast and coherent grading for production results." }
+      }
+    };
+
+    // App initialization
+    document.addEventListener('DOMContentLoaded', () => {
+      const platformSelect = document.getElementById('platformSelect');
+      const categorySelect = document.getElementById('categorySelect');
+      const subcategorySelect = document.getElementById('subcategorySelect');
+      const styleSelect = document.getElementById('styleSelect');
+      const qualitySelect = document.getElementById('qualitySelect');
+
+      const generateBtn = document.getElementById('generateBtn');
+      const variationBtn = document.getElementById('variationBtn');
+      const surpriseBtn = document.getElementById('surpriseBtn');
+      const resetBtn = document.getElementById('resetBtn');
+      const copyBtn = document.getElementById('copyBtn');
+      const saveFavBtn = document.getElementById('saveFavBtn');
+      const customToggleBtn = document.getElementById('customToggleBtn');
+
+      const promptOutput = document.getElementById('promptOutput');
+      const lengthDisplay = document.getElementById('lengthDisplay');
+      const lastDisplay = document.getElementById('lastDisplay');
+      const historyList = document.getElementById('historyList');
+      const toast = document.getElementById('toast');
+
+      const customInputSection = document.getElementById('customInputSection');
+      const customText = document.getElementById('customText');
+      const customCategory = document.getElementById('customCategory');
+      const customPlatform = document.getElementById('customPlatform');
+      const customGenerateBtn = document.getElementById('customGenerateBtn');
+
+      let history = [];
+      let favorites = [];
+      let lastPrompt = '';
+
+      const rand = arr => arr[Math.floor(Math.random()*arr.length)];
+      const pickTwo = arr => { const a=rand(arr); let b=rand(arr), g=0; while(b===a && g++<10) b=rand(arr); return [a,b]; };
+
+      function showToast(msg){ 
+        toast.textContent = msg; 
+        toast.hidden = false; 
+        setTimeout(()=>toast.hidden=true, 1600); 
+      }
+
+      function renderHistory(){
+        historyList.innerHTML = '';
+        history.forEach(p=>{
+          const btn = document.createElement('button');
+          btn.className = 'history-item';
+          btn.textContent = p.slice(0,160) + (p.length>160?'…':'');
+          btn.addEventListener('click', ()=>setOutput(p));
+          historyList.appendChild(btn);
+        });
+      }
+
+      function setOutput(text){
+        promptOutput.textContent = text;
+        lengthDisplay.textContent = text.length;
+        lastDisplay.textContent = new Date().toLocaleTimeString();
+        lastPrompt = text;
+        history.unshift(text);
+        history = history.slice(0,30);
+        renderHistory();
+      }
+
+      function keywordExtract(str){
+        return str.toLowerCase().replace(/[^a-z0-9\s\-]/g,' ')
+          .split(/\s+/).filter(Boolean).filter(w=>w.length>2).slice(0,30);
+      }
+
+      const SUBCAT_HINTS = {
+        portrait: {
+          close_up: { cameraBias:"85mm f/1.8 portrait prime", compositionBias:"centered composition", environmentBias:"studio" },
+          selfie:   { cameraBias:"35mm f/1.8 story lens", compositionBias:"rule of thirds flow", environmentBias:"neon-lit alley" },
+          full_body:{ cameraBias:"50mm f/1.4 classic prime", compositionBias:"leading lines through frame", environmentBias:"rooftop skyline" },
+          studio:   { lightingBias:"softbox wrap lighting", environmentBias:"studio" },
+          editorial:{ atmosphereBias:"cinematic", styleBias:"realistic", compositionBias:"negative space emphasis" },
+          environmental:{ environmentBias:"lantern-lit courtyard", compositionBias:"deep focus" }
+        },
+        landscape: {
+          mountain:{ landscapeBias:"alpine meadow", timeBias:"golden hour" },
+          coastal: { landscapeBias:"coastal cliffs", atmosphereBias:"serene" },
+          forest:  { landscapeBias:"rainforest canopy", lightingBias:"overcast soft light" },
+          desert:  { landscapeBias:"dune sea", atmosphereBias:"dramatic" },
+          urban:   { environmentBias:"rooftop skyline", elementBias:"neon signage" },
+          aerial:  { compositionBias:"elevated bird’s-eye perspective" }
+        },
+        product: {
+          packshot:{ environmentBias:"studio", lightingBias:"softbox wrap lighting" },
+          lifestyle:{ environmentBias:"café terrace" },
+          macro:   { cameraBias:"100mm f/2.8 macro" },
+          tech:    { elementBias:"glass canopies" },
+          fashion: { elementBias:"paper lanterns" },
+          food:    { environmentBias:"market street" }
+        },
+        concept: {
+          character:{ atmosphereBias:"cinematic" },
+          creature: { atmosphereBias:"mysterious" },
+          vehicle:  { compositionBias:"leading lines through frame" },
+          environment:{ compositionBias:"deep focus" },
+          prop:     { textureBias:"polished metal" },
+          interface:{ shapesBias:"grids" }
+        },
+        scene: {
+          street:   { environmentBias:"neon-lit alley" },
+          interior: { environmentBias:"museum atrium" },
+          market:   { environmentBias:"market street" },
+          festival: { elementBias:"paper lanterns" },
+          sci_fi:   { elementBias:"glass canopies", atmosphereBias:"futurist" },
+          historical:{ atmosphereBias:"romantic" }
+        },
+        abstract: {
+          geometric:{ shapesBias:"hexagons" },
+          organic:  { shapesBias:"waves" },
+          minimal:  { compositionBias:"negative space emphasis" },
+          op_art:   { shapesBias:"radial bursts" },
+          color_field:{ colorsBias:"rose gold" },
+          kinetic:  { compositionBias:"rule of thirds flow" }
+        }
+      };
+
+      function populateSubcategories(){
+        const cat = categorySelect.value;
+        const subs = (DATASET.categories[cat] && DATASET.categories[cat].subcategories) || [];
+        subcategorySelect.innerHTML = '';
+        subs.forEach(s=>{
+          const opt = document.createElement('option');
+          opt.value = s;
+          opt.textContent = s.replace(/_/g,' ');
+          subcategorySelect.appendChild(opt);
+        });
+      }
+
+      function detectCategory(tokens){
+        const s = tokens.join(' ');
+        if(/product|packshot|bottle|watch|phone|device/.test(s)) return 'product';
+        if(/portrait|actress|actor|model|face|headshot|fashion|beauty|bollywood/.test(s)) return 'portrait';
+        if(/landscape|mountain|valley|coast|river|forest|desert|skyline/.test(s)) return 'landscape';
+        if(/scene|city|street|alley|market|crowd|interior/.test(s)) return 'scene';
+        if(/concept|design|character|creature|mech|spaceship/.test(s)) return 'concept';
+        if(/abstract|geometric|pattern|shape|fractal/.test(s)) return 'abstract';
+        return categorySelect.value;
+      }
+
+      function detectPlatform(tokens){
+        const s = tokens.join(' ');
+        if(/flux|schnell|dev|pro/.test(s)){
+          if(/schnell/.test(s)) return 'flux_1_schnell';
+          if(/pro/.test(s)) return 'flux_1_pro';
+          return 'flux_1_dev';
+        }
+        if(/midjourney|mj/.test(s)) return 'midjourney';
+        if(/dalle|dall-e|openai/.test(s)) return 'dalle3';
+        if(/stable|sd|automatic1111|comfy/.test(s)) return 'stable_diffusion';
+        return platformSelect.value;
+      }
+
+      function chooseTemplate(category){
+        const cat = DATASET.categories[category];
+        if(!cat || !cat.templates || !cat.templates.length) {
+          return "Cinematic scene of {subject} {action} in {environment} at {time}, {atmosphere} tone. {composition} orchestrates space; {lighting} shapes silhouette, exposing {textureA}. {elementA}, {elementB} enrich context; avoid {negativeA}. Palette {colorA} with {colorB}. {style} approach, {quality} detail, narrative cohesion.";
+        }
+        return rand(cat.templates);
+      }
+
+      function applyBias(picks, category, subcat){
+        const bias = SUBCAT_HINTS[category] && SUBCAT_HINTS[category][subcat];
+        if(!bias) return picks;
+        const out = { ...picks };
+        if(bias.cameraBias) out.camera = bias.cameraBias;
+        if(bias.compositionBias) out.composition = bias.compositionBias;
+        if(bias.environmentBias) out.environment = bias.environmentBias;
+        if(bias.timeBias) out.time = bias.timeBias;
+        if(bias.landscapeBias) out.landscape = bias.landscapeBias;
+        if(bias.atmosphereBias) out.atmosphere = bias.atmosphereBias;
+        if(bias.elementBias) out.elementA = bias.elementBias;
+        if(bias.textureBias) out.textureA = bias.textureBias;
+        if(bias.shapesBias) out.shapesA = bias.shapesBias;
+        if(bias.colorsBias) out.colorA = bias.colorsBias;
+        return out;
+      }
+
+      function ensureRelevance(text, tokens){
+        const must = Array.from(new Set(tokens)).slice(0,6);
+        let out = text;
+        must.forEach(m=>{
+          if(!out.toLowerCase().includes(m)){
+            out += ` ${m}`;
+          }
+        });
+        return out;
+      }
+
+      function getTargetLength(quality) {
+        switch(quality) {
+          case 'low': return { min: 200, max: 300 };
+          case 'medium': return { min: 300, max: 500 };
+          case 'high': return { min: 600, max: 1000 };
+          case 'ultra': return { min: 1300, max: 1600 };
+          default: return { min: 600, max: 1000 };
+        }
+      }
+
+      function refineToWindow(text, tokens, quality){
+        const target = getTargetLength(quality);
+        let out = text.trim().replace(/\s+/g,' ');
+        
+        // For low quality, trim aggressively
+        if (quality === 'low') {
+          if (out.length > target.max) {
+            const trims = [
+              / ?with [^,.;]+/gi,
+              / ?featuring [^,.;]+/gi,
+              /, [^,]{0,30} textures?/gi,
+              /, [^,]{0,30} details?/gi,
+              /; [^.;]+/g,
+              /\s{2,}/g
+            ];
+            let k=0;
+            while(out.length > target.max && k<trims.length){
+              out = out.replace(trims[k], ' ');
+              k++;
+            }
+            if(out.length > target.max){
+              out = out.slice(0, target.max-1);
+              if(!/[.!?]$/.test(out)) out += '.';
+            }
+          }
+          return out;
+        }
+        
+        // For medium, high, ultra - expand if needed
+        if(out.length < target.min){
+          const top = (tokens||[]).slice(0,3).join(', ');
+          const adds = [
+            ` The composition maintains a readable hierarchy and consistent spacing so ${top || 'the subject'} remains central while all supporting elements feel intentional and restrained.`,
+            ` Materials and micro-contrast are tuned to remain believable under the selected lighting; edges resolve cleanly without fringing, and tonal transitions feel natural.`,
+            ` Spatial logic across foreground, midground, and background guides attention with clarity, avoiding distracting tangents or ambiguous silhouettes that would dilute focus.`,
+            ` Color and brightness relationships remain coherent with the environment, preventing implausible reflections or shadow behavior that could undermine immersion.`,
+            ` The final frame aims for production polish: coherent story intent, stable forms, balanced saturation, and carefully controlled highlights that protect detail.`
+          ];
+          let i=0;
+          while(out.length < target.min && i<adds.length){
+            out += adds[i++];
+          }
+          while(out.length < target.min){
+            out += ' Carefully balanced, coherent, and visually articulate.';
+          }
+        }
+        
+        if(out.length > target.max){
+          const trims = [
+            / ?with [^,.;]+/gi,
+            / ?featuring [^,.;]+/gi,
+            /, [^,]{0,30} textures?/gi,
+            /, [^,]{0,30} details?/gi,
+            /; [^.;]+/g,
+            /\s{2,}/g
+          ];
+          let k=0;
+          while(out.length > target.max && k<trims.length){
+            out = out.replace(trims[k], ' ');
+            k++;
+          }
+          if(out.length > target.max){
+            out = out.slice(0, target.max-1);
+            if(!/[.!?]$/.test(out)) out += '.';
+          }
+        }
+        return out;
+      }
+
+      function platformTail(platform){
+        const p = DATASET.platforms && DATASET.platforms[platform];
+        if(!p) return '';
+        const tail = p.tail;
+        return typeof tail === 'string' ? (' ' + tail) : (' ' + tail);
+      }
+
+      function assemble(category, subcat, style, quality, platform, tokens){
+        const template = chooseTemplate(category);
+        let picks = {
+          subject: rand(DATASET.subjects),
+          action: rand(DATASET.actions),
+          expression: rand(DATASET.expressions),
+          detailA: rand(DATASET.details),
+          environment: rand(DATASET.environments),
+          landscape: rand(DATASET.landscapes),
+          elementA: rand(DATASET.elements),
+          elementB: rand(DATASET.elements),
+          time: rand(DATASET.times),
+          atmosphere: rand(DATASET.atmospheres),
+          camera: rand(DATASET.cameras),
+          lighting: rand(DATASET.lighting),
+          composition: rand(DATASET.compositions),
+          textureA: rand(DATASET.textures),
+          textureB: rand(DATASET.textures),
+          colorA: rand(DATASET.colors),
+          colorB: rand(DATASET.colors),
+          negativeA: rand(DATASET.negatives),
+          shapeA: rand(DATASET.shapes || ['circles']),
+          shapeB: rand(DATASET.shapes || ['triangles'])
+        };
+        picks = applyBias(picks, category, subcat);
+
+        let filled = template
+          .replaceAll('{subject}', picks.subject)
+          .replaceAll('{action}', picks.action)
+          .replaceAll('{expression}', picks.expression)
+          .replaceAll('{detailA}', picks.detailA)
+          .replaceAll('{environment}', picks.environment)
+          .replaceAll('{landscape}', picks.landscape)
+          .replaceAll('{elementA}', picks.elementA)
+          .replaceAll('{elementB}', picks.elementB)
+          .replaceAll('{time}', picks.time)
+          .replaceAll('{atmosphere}', picks.atmosphere)
+          .replaceAll('{camera}', picks.camera)
+          .replaceAll('{lighting}', picks.lighting)
+          .replaceAll('{composition}', picks.composition)
+          .replaceAll('{textureA}', picks.textureA)
+          .replaceAll('{textureB}', picks.textureB)
+          .replaceAll('{colorA}', picks.colorA)
+          .replaceAll('{colorB}', picks.colorB)
+          .replaceAll('{negativeA}', picks.negativeA)
+          .replaceAll('{shapeA}', picks.shapeA)
+          .replaceAll('{shapeB}', picks.shapeB)
+          .replaceAll('{style}', style)
+          .replaceAll('{quality}', quality);
+
+        filled = ensureRelevance(filled, tokens);
+        filled += platformTail(platform);
+        return refineToWindow(filled, tokens, quality);
+      }
+
+      function makeVariation(base, tokens, quality){
+        const swaps = [
+          [DATASET.lighting, /(cinematic|softbox|golden hour|overcast|neon|split|Rembrandt|diffused|practicals)[^,.;]*/i],
+          [DATASET.compositions, /(composition|hierarchy|framing|leading lines|symmetry|negative space|deep focus)[^,.;]*/i],
+          [DATASET.atmospheres, /(cinematic|ethereal|dramatic|serene|mysterious|vibrant|romantic|melancholic|hopeful|noir-tinged|futurist)[^,.;]*/i],
+          [DATASET.colors, /(palette|colors?|grading)[^,.;]*/i],
+          [DATASET.textures, /(textures?|material)[^,.;]*/i]
+        ];
+        let out = base;
+        swaps.forEach(([pool, rx])=>{
+          if(Math.random()<0.5){
+            const token = rand(pool);
+            out = out.replace(rx, m => m.replace(/[: ]?[^,.;]*$/, ` ${token}`));
+          }
+        });
+        return refineToWindow(out, tokens, quality);
+      }
+
+      function surprise(){
+        const categories = Object.keys(DATASET.categories);
+        const styles = ['realistic','cinematic','anime','oil','digital','cyberpunk','minimal'];
+        const platforms = Object.keys(DATASET.platforms);
+        const qualities = ['low','medium','high','ultra'];
+        const cat = rand(categories);
+        const sub = rand(DATASET.categories[cat].subcategories || ['default']);
+        const quality = rand(qualities);
+        return assemble(cat, sub, rand(styles), quality, rand(platforms), []);
+      }
+
+      // UI
+      document.getElementById('themeToggle')?.addEventListener('click', ()=>{
+        document.documentElement.classList.toggle('light');
+      });
+
+      categorySelect.addEventListener('change', populateSubcategories);
+
+      generateBtn.addEventListener('click', ()=>{
+        const prompt = assemble(
+          categorySelect.value,
+          subcategorySelect.value || 'default',
+          styleSelect.value,
+          qualitySelect.value,
+          platformSelect.value,
+          []
+        );
+        setOutput(prompt);
+      });
+
+      variationBtn.addEventListener('click', ()=>{
+        if(!lastPrompt) return showToast('Generate first');
+        const tokens = keywordExtract(lastPrompt);
+        const prompt = makeVariation(lastPrompt, tokens, qualitySelect.value);
+        setOutput(prompt);
+      });
+
+      surpriseBtn.addEventListener('click', ()=>{
+        setOutput(surprise());
+      });
+
+      resetBtn.addEventListener('click', ()=>{
+        platformSelect.value = 'midjourney';
+        categorySelect.value = 'portrait';
+        populateSubcategories();
+        styleSelect.value = 'realistic';
+        qualitySelect.value = 'high';
+        promptOutput.textContent = 'Your prompt will appear here...';
+        lengthDisplay.textContent = '0';
+        lastDisplay.textContent = 'None';
+        showToast('Reset complete');
+      });
+
+      copyBtn.addEventListener('click', ()=>{
+        const text = promptOutput.textContent.trim();
+        if(!text || text==='Your prompt will appear here...') return showToast('Nothing to copy');
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+          document.execCommand('copy');
+          showToast('Copied');
+        } catch (err) {
+          showToast('Copy failed');
+        }
+        document.body.removeChild(textArea);
+      });
+
+      saveFavBtn.addEventListener('click', ()=>{
+        const text = promptOutput.textContent.trim();
+        if(!text || text==='Your prompt will appear here...') return showToast('Nothing to save');
+        favorites.unshift(text);
+        favorites = favorites.slice(0,100);
+        showToast('Saved');
+      });
+
+      // Custom input toggle
+      customToggleBtn.addEventListener('click', ()=>{ 
+        customInputSection.classList.toggle('hidden');
+        if (!customInputSection.classList.contains('hidden')) {
+          customText.focus();
+        }
+      });
+
+      customGenerateBtn.addEventListener('click', ()=>{
+        const txt = customText.value.trim();
+        if(!txt) return showToast('Enter your idea');
+        const tokens = keywordExtract(txt);
+        const detectedCategory = detectCategory(tokens);
+        const selectedCategory = (customCategory.value==='auto') ? detectedCategory : customCategory.value;
+        const detectedPlatform = detectPlatform(tokens);
+        const platform = (customPlatform.value==='auto') ? detectedPlatform : customPlatform.value;
+
+        const subs = (DATASET.categories[selectedCategory] && DATASET.categories[selectedCategory].subcategories) || [];
+        const inferredSub = subcategorySelect.value || subs[0] || 'default';
+
+        const prompt = assemble(
+          selectedCategory,
+          inferredSub,
+          styleSelect.value,
+          qualitySelect.value,
+          platform,
+          tokens
+        );
+        setOutput(prompt);
+      });
+
+      // Init
+      populateSubcategories();
+      renderHistory();
+      showToast('Dataset loaded');
+    });
+  </script>
+</body>
+</html>
+```
