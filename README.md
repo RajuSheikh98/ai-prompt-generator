@@ -64,7 +64,7 @@ This app can be deployed for free on:
 2. Upload the `index.html` file
 3. Go to Settings → Pages
 4. Select your branch and folder
-5. Your app will be live at `https://[username].github.io/[repository]/`
+5. Your app will be live at `https://rajusheikh98.github.io/ai-prompt-generator/`
 
 ## 📄 License
 
