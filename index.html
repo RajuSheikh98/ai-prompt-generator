@@ -584,4 +584,313 @@
         const typeButtons = document.querySelectorAll('.type-btn');
         const promptStyleSelect = document.getElementById('prompt-style');
         const subcategoryContainer = document.getElementById('subcategory-container');
-        const subcategoryGrid = do
+        const subcategoryGrid = document.getElementById('subcategory-grid');
+
+        // Subcategory mappings
+        const subcategories = {
+            photo: [
+                "Portrait", "Fashion", "Street", "Commercial", "Architectural", "Event"
+            ],
+            painting: [
+                "Oil", "Acrylic", "Watercolor", "Pastel", "Gouache", "Mixed Media"
+            ],
+            watercolor: [
+                "Traditional", "Modern", "Abstract", "Realistic", "Landscape", "Portrait"
+            ],
+            digital: [
+                "3D Render", "Pixel Art", "Vector", "Concept Art", "Comic", "Game Art"
+            ],
+            illustration: [
+                "Children's Book", "Book Cover", "Advertising", "Editorial", "Fantasy", "Realistic"
+            ],
+            cgi: [
+                "3D Model", "VFX", "Product", "Architecture", "Animation", "Game"
+            ],
+            unreal: [
+                "Game Engine", "Real-time", "Virtual Reality", "Architectural Visualization", "Film", "Simulation"
+            ]
+        };
+
+        // Update weight value display
+        weightSlider.addEventListener('input', function() {
+            weightValue.textContent = this.value;
+        });
+
+        // Type button selection
+        typeButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                typeButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Style selection to show subcategories
+        promptStyleSelect.addEventListener('change', function() {
+            const selectedStyle = this.value;
+            
+            if (subcategories[selectedStyle]) {
+                subcategoryContainer.classList.add('active');
+                subcategoryGrid.innerHTML = '';
+                
+                subcategories[selectedStyle].forEach(subcat => {
+                    const btn = document.createElement('button');
+                    btn.className = 'subcategory-btn';
+                    btn.textContent = subcat;
+                    btn.dataset.subcat = subcat.toLowerCase();
+                    btn.addEventListener('click', function() {
+                        this.classList.toggle('selected');
+                    });
+                    subcategoryGrid.appendChild(btn);
+                });
+            } else {
+                subcategoryContainer.classList.remove('active');
+            }
+        });
+
+        // Tag selection
+        const tagElements = document.querySelectorAll('.tag');
+        tagElements.forEach(tag => {
+            tag.addEventListener('click', function() {
+                this.classList.toggle('selected');
+            });
+        });
+
+        // Generate prompts function
+        function generatePrompts() {
+            // Show loading
+            loadingElement.style.display = 'block';
+            
+            // Simulate processing delay
+            setTimeout(() => {
+                // Get form values
+                const promptStyle = document.getElementById('prompt-style').value;
+                const subject = document.getElementById('subject').value || "Beautiful Latina woman with black hair";
+                const background = document.getElementById('background').value || "mystical forest";
+                const lighting = document.getElementById('lighting').value || "soft golden hour";
+                const cameraAngle = document.getElementById('camera-angle').value || "close-up";
+                const emphasisWeight = weightSlider.value;
+                const nationalityOccupation = document.getElementById('nationality-occupation').value || "Latina woman, professional photographer";
+                const colorPalette = document.getElementById('color-palette').value || "warm colors";
+                const atmosphere = document.getElementById('atmosphere').value || "mystical";
+                const emotion = document.getElementById('emotion').value || "contemplative";
+                const inspiration = document.getElementById('inspiration').value || "cinematic";
+                const additionalOptions = document.getElementById('additional-options').value;
+                
+                // Get selected tags
+                const selectedTags = [];
+                document.querySelectorAll('.tag.selected').forEach(tag => {
+                    selectedTags.push(tag.getAttribute('data-tag'));
+                });
+                
+                // Get selected subcategories
+                const selectedSubcats = [];
+                document.querySelectorAll('.subcategory-btn.selected').forEach(btn => {
+                    selectedSubcats.push(btn.dataset.subcat);
+                });
+                
+                // Get prompt type
+                const promptType = document.querySelector('.type-btn.active').getAttribute('data-type');
+                
+                // Generate 5 different prompts
+                const prompts = [];
+                
+                // Prompt 1: Simple
+                prompts.push(`(masterpiece, high resolution:1.4, photo-realistic:1.3) ${subject}, (${nationalityOccupation}), ${lighting} lighting, ${atmosphere} atmosphere, ${emotion} emotion, ${colorPalette} color scheme, ${background} setting, ${cameraAngle}, shot with a Nikon D850, a 50mm lens at f/2.8`);
+                
+                // Prompt 2: Detailed
+                prompts.push(`(masterpiece, high resolution:1.4, photo-realistic:1.3) A stunning portrait of ${subject} with ${nationalityOccupation}. The scene is filled with ${lighting} lighting that creates a ${atmosphere} atmosphere. Her ${emotion} expression is captured perfectly with ${colorPalette} color scheme. The background features a ${background} setting with ${inspiration} inspiration. The composition is a ${cameraAngle} shot, capturing every detail of her ${emphasisWeight} emphasis features. Shot with a Nikon D850, a 50mm lens at f/2.8, ensuring sharp details and cinematic quality.`);
+                
+                // Prompt 3: Creative
+                prompts.push(`(masterpiece, photo-realistic:1.4, cinematic:1.3) ${subject} with ${nationalityOccupation} standing in a ${background} environment. The ${lighting} lighting creates ${atmosphere} mood with ${emotion} expression. The ${colorPalette} color palette enhances the overall composition. The ${cameraAngle} angle provides perfect framing for this ${promptStyle} style image. Shot with a Canon 5D Mark IV, a 24mm lens at f/1.8, delivering professional quality results.`);
+                
+                // Prompt 4: Advanced
+                prompts.push(`(masterpiece, high resolution:1.4, photo-realistic:1.3) An extraordinary portrait of ${subject} featuring ${nationalityOccupation}. The scene is illuminated by ${lighting} lighting, creating a ${atmosphere} atmosphere with ${emotion} emotion. The ${colorPalette} color scheme provides visual harmony. The ${cameraAngle} angle showcases the subject perfectly with ${emphasisWeight} emphasis on details. This cinematic ${promptStyle} style prompt combines all elements for maximum impact. Shot with a Sony A7R IV, a 35mm lens at f/2.0, ensuring exceptional image quality.`);
+                
+                // Prompt 5: Premium
+                prompts.push(`(masterpiece, photo-realistic:1.4, best quality:1.3, 8k:1.2) ${subject} with ${nationalityOccupation} in a ${background} setting. The ${lighting} lighting creates a ${atmosphere} atmosphere with ${emotion} emotion. The ${colorPalette} color scheme provides visual harmony. The ${cameraAngle} angle showcases the subject perfectly with ${emphasisWeight} emphasis on details. This premium ${promptStyle} style prompt combines all elements for maximum impact. Shot with a Hasselblad X1D II, a 90mm lens at f/2.8, delivering ultra-high resolution results.`);
+
+                // Display prompts
+                displayPrompts(prompts);
+                
+                // Hide loading
+                loadingElement.style.display = 'none';
+            }, 1500);
+        }
+
+        // Random generate function
+        function randomGenerate() {
+            // Show loading
+            loadingElement.style.display = 'block';
+            
+            // Simulate processing delay
+            setTimeout(() => {
+                // Generate random prompts without any selections
+                const subjects = [
+                    "Beautiful Latina woman with black hair",
+                    "Stunning Latina model with brown eyes",
+                    "Elegant Latina artist with long curls",
+                    "Captivating Latina actress with expressive eyes"
+                ];
+                
+                const backgrounds = [
+                    "mystical forest", "urban cityscape", "ancient castle", "modern studio", 
+                    "tropical beach", "snowy mountains", "desert landscape", "cozy library"
+                ];
+                
+                const lighting = [
+                    "soft golden hour", "dramatic shadows", "diffused daylight", "warm ambient",
+                    "cool blue hour", "studio lighting", "natural sunlight", "ambient glow"
+                ];
+                
+                const atmospheres = [
+                    "mystical", "serene", "dramatic", "ethereal", "vibrant", "peaceful",
+                    "mysterious", "magical"
+                ];
+                
+                const emotions = [
+                    "contemplative", "powerful", "serene", "intense", "thoughtful", "focused",
+                    "calm", "energetic"
+                ];
+                
+                const colors = [
+                    "warm colors", "monochromatic", "pastel colors", "vibrant colors",
+                    "cool colors", "earth tones", "neon accents", "soft gradients"
+                ];
+                
+                const cameraAngles = [
+                    "close-up", "medium shot", "wide shot", "low angle", "high angle",
+                    "over-the-shoulder", "dynamic angle", "profile view"
+                ];
+                
+                const styles = [
+                    "photography", "oil painting", "watercolor", "digital art", "illustration",
+                    "CGI", "unreal engine", "concept art"
+                ];
+                
+                const prompts = [];
+                
+                for (let i = 0; i < 5; i++) {
+                    const randomSubject = subjects[Math.floor(Math.random() * subjects.length)];
+                    const randomBackground = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+                    const randomLighting = lighting[Math.floor(Math.random() * lighting.length)];
+                    const randomAtmosphere = atmospheres[Math.floor(Math.random() * atmospheres.length)];
+                    const randomEmotion = emotions[Math.floor(Math.random() * emotions.length)];
+                    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                    const randomAngle = cameraAngles[Math.floor(Math.random() * cameraAngles.length)];
+                    const randomStyle = styles[Math.floor(Math.random() * styles.length)];
+                    
+                    // Prompt 1: Simple
+                    prompts.push(`(masterpiece, high resolution:1.4, photo-realistic:1.3) ${randomSubject}, ${randomLighting} lighting, ${randomAtmosphere} atmosphere, ${randomEmotion} emotion, ${randomColor} color scheme, ${randomBackground} setting, ${randomAngle}, shot with a Nikon D850, a 50mm lens at f/2.8`);
+                    
+                    // Prompt 2: Detailed
+                    prompts.push(`(masterpiece, high resolution:1.4, photo-realistic:1.3) A stunning portrait of ${randomSubject} with ${randomLighting} lighting that creates a ${randomAtmosphere} atmosphere. Her ${randomEmotion} expression is captured perfectly with ${randomColor} color scheme. The background features a ${randomBackground} setting. The composition is a ${randomAngle} shot, capturing every detail. Shot with a Nikon D850, a 50mm lens at f/2.8, ensuring sharp details and cinematic quality.`);
+                    
+                    // Prompt 3: Creative
+                    prompts.push(`(masterpiece, photo-realistic:1.4, cinematic:1.3) ${randomSubject} standing in a ${randomBackground} environment. The ${randomLighting} lighting creates ${randomAtmosphere} mood with ${randomEmotion} expression. The ${randomColor} color palette enhances the overall composition. The ${randomAngle} angle provides perfect framing for this ${randomStyle} style image. Shot with a Canon 5D Mark IV, a 24mm lens at f/1.8, delivering professional quality results.`);
+                    
+                    // Prompt 4: Advanced
+                    prompts.push(`(masterpiece, high resolution:1.4, photo-realistic:1.3) An extraordinary portrait of ${randomSubject}. The scene is illuminated by ${randomLighting} lighting, creating a ${randomAtmosphere} atmosphere with ${randomEmotion} emotion. The ${randomColor} color scheme provides visual harmony. The ${randomAngle} angle showcases the subject perfectly. This cinematic ${randomStyle} style prompt combines all elements for maximum impact. Shot with a Sony A7R IV, a 35mm lens at f/2.0, ensuring exceptional image quality.`);
+                    
+                    // Prompt 5: Premium
+                    prompts.push(`(masterpiece, photo-realistic:1.4, best quality:1.3, 8k:1.2) ${randomSubject} in a ${randomBackground} setting. The ${randomLighting} lighting creates a ${randomAtmosphere} atmosphere with ${randomEmotion} emotion. The ${randomColor} color scheme provides visual harmony. The ${randomAngle} angle showcases the subject perfectly. This premium ${randomStyle} style prompt combines all elements for maximum impact. Shot with a Hasselblad X1D II, a 90mm lens at f/2.8, delivering ultra-high resolution results.`);
+                }
+
+                // Display prompts
+                displayPrompts(prompts.slice(0, 5)); // Only show first 5 for simplicity
+                
+                // Hide loading
+                loadingElement.style.display = 'none';
+            }, 1500);
+        }
+
+        // Display prompts in cards
+        function displayPrompts(prompts) {
+            promptsContainer.innerHTML = '';
+            
+            prompts.forEach((prompt, index) => {
+                const promptCard = document.createElement('div');
+                promptCard.className = 'prompt-card';
+                
+                const promptTitle = document.createElement('div');
+                promptTitle.className = 'prompt-title';
+                promptTitle.innerHTML = `<i class="fas fa-${index % 2 === 0 ? 'star' : 'star-half-alt'}"></i> Prompt ${index + 1}`;
+                
+                const promptContent = document.createElement('div');
+                promptContent.className = 'prompt-content';
+                promptContent.textContent = prompt;
+                
+                const copyBtn = document.createElement('button');
+                copyBtn.className = 'copy-btn';
+                copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy Prompt';
+                copyBtn.onclick = () => copyToClipboard(prompt);
+                
+                promptCard.appendChild(promptTitle);
+                promptCard.appendChild(promptContent);
+                promptCard.appendChild(copyBtn);
+                
+                promptsContainer.appendChild(promptCard);
+            });
+        }
+
+        // Copy to clipboard function
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                // Show notification
+                notification.classList.add('show');
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        // Reset form
+        function resetForm() {
+            document.getElementById('prompt-style').value = 'photo';
+            document.getElementById('subject').value = '';
+            document.getElementById('background').value = '';
+            document.getElementById('lighting').value = '';
+            document.getElementById('camera-angle').value = 'close-up';
+            weightSlider.value = 1.2;
+            weightValue.textContent = '1.2';
+            document.getElementById('nationality-occupation').value = '';
+            document.getElementById('color-palette').value = '';
+            document.getElementById('atmosphere').value = '';
+            document.getElementById('emotion').value = '';
+            document.getElementById('inspiration').value = '';
+            document.getElementById('additional-options').value = '';
+            
+            // Remove selected tags
+            document.querySelectorAll('.tag.selected').forEach(tag => {
+                tag.classList.remove('selected');
+            });
+            
+            // Remove selected subcategories
+            document.querySelectorAll('.subcategory-btn.selected').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // Reset type buttons
+            typeButtons.forEach(btn => btn.classList.remove('active'));
+            typeButtons[0].classList.add('active');
+            
+            // Hide subcategory container
+            subcategoryContainer.classList.remove('active');
+            
+            // Clear prompts
+            promptsContainer.innerHTML = '';
+        }
+
+        // Event listeners
+        generateBtn.addEventListener('click', generatePrompts);
+        resetBtn.addEventListener('click', resetForm);
+        randomBtn.addEventListener('click', randomGenerate);
+
+        // Initialize
+        window.addEventListener('load', function() {
+            // Set initial weight value
+            weightValue.textContent = weightSlider.value;
+        });
+    </script>
+</body>
+</html>
+```
