@@ -1,0 +1,523 @@
+# Raju's Image Prompts Generator
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raju's Image Prompts Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --accent: #f39c12;
+            --success: #27ae60;
+            --danger: #e74c3c;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            color: var(--light);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .panel-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--accent);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: none;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            font-size: 1rem;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .tag {
+            background: rgba(102, 126, 234, 0.3);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .tag:hover {
+            background: rgba(102, 126, 234, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .tag.selected {
+            background: var(--primary);
+            border-color: var(--accent);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .generate-btn {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .reset-btn {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+        }
+
+        .reset-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .random-btn {
+            background: rgba(255, 193, 7, 0.2);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+        }
+
+        .random-btn:hover {
+            background: rgba(255, 193, 7, 0.3);
+        }
+
+        .prompts-container {
+            margin-top: 30px;
+        }
+
+        .prompt-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--accent);
+            transition: transform 0.3s ease;
+        }
+
+        .prompt-card:hover {
+            transform: translateX(5px);
+        }
+
+        .prompt-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .prompt-content {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            overflow-x: auto;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .copy-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid var(--accent);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            background: var(--success);
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transform: translateX(200%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .subcategory-container {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            display: none;
+        }
+
+        .subcategory-container.active {
+            display: block;
+        }
+
+        .subcategory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .subcategory-btn {
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        .subcategory-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .subcategory-btn.selected {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Raju's Image Prompts Generator</h1>
+        </header>
+
+        <div class="main-content">
+            <div class="panel">
+                <h2 class="panel-title"><i class="fas fa-sliders-h"></i> Prompt Configuration</h2>
+                
+                <div class="input-group">
+                    <label for="artStyle"><i class="fas fa-paint-brush"></i> Art Style</label>
+                    <select id="artStyle" aria-label="Select an art style" onchange="updateSubcategories()">
+                        <option value="">Select Art Style</option>
+                        <option value="Portrait">Portrait</option>
+                        <option value="Surrealism">Surrealism</option>
+                        <option value="Cyberpunk">Cyberpunk</option>
+                        <option value="Baroque">Baroque</option>
+                        <option value="Minimalism">Minimalism</option>
+                        <option value="Pop Art">Pop Art</option>
+                        <option value="Impressionism">Impressionism</option>
+                        <option value="Abstract Expressionism">Abstract Expressionism</option>
+                        <option value="Steampunk">Steampunk</option>
+                        <option value="Fantasy">Fantasy</option>
+                        <option value="Sci-Fi">Sci-Fi</option>
+                        <option value="Realism">Realism</option>
+                        <option value="Cartoon">Cartoon</option>
+                        <option value="Watercolor">Watercolor</option>
+                        <option value="Oil Painting">Oil Painting</option>
+                        <option value="Digital Art">Digital Art</option>
+                        <option value="Pixel Art">Pixel Art</option>
+                        <option value="Graffiti">Graffiti</option>
+                        <option value="Renaissance">Renaissance</option>
+                        <option value="Gothic">Gothic</option>
+                    </select>
+                </div>
+
+                <div class="subcategory-container" id="subcategory-container">
+                    <h3>Subcategories</h3>
+                    <div class="subcategory-grid" id="subcategory-grid">
+                        <!-- Subcategories will be populated dynamically -->
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="emotion"><i class="fas fa-heart"></i> Emotion</label>
+                    <select id="emotion" aria-label="Select emotion">
+                        <option value="">None</option>
+                        <option value="Joyful">Joyful</option>
+                        <option value="Melancholic">Melancholic</option>
+                        <option value="Angry">Angry</option>
+                        <option value="Serene">Serene</option>
+                        <option value="Excited">Excited</option>
+                        <option value="Fearful">Fearful</option>
+                        <option value="Romantic">Romantic</option>
+                        <option value="Mysterious">Mysterious</option>
+                        <option value="Playful">Playful</option>
+                        <option value="Somber">Somber</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="atmosphere"><i class="fas fa-moon"></i> Atmosphere</label>
+                    <select id="atmosphere" aria-label="Select atmosphere">
+                        <option value="">None</option>
+                        <option value="Mysterious">Mysterious</option>
+                        <option value="Serene">Serene</option>
+                        <option value="Chaotic">Chaotic</option>
+                        <option value="Ethereal">Ethereal</option>
+                        <option value="Gloomy">Gloomy</option>
+                        <option value="Vibrant">Vibrant</option>
+                        <option value="Oppressive">Oppressive</option>
+                        <option value="Tranquil">Tranquil</option>
+                        <option value="Dramatic">Dramatic</option>
+                        <option value="Whimsical">Whimsical</option>
+                        <option value="Foreboding">Foreboding</option>
+                        <option value="Uplifting">Uplifting</option>
+                        <option value="Surreal">Surreal</option>
+                        <option value="Intimate">Intimate</option>
+                        <option value="Expansive">Expansive</option>
+                        <option value="Nostalgic">Nostalgic</option>
+                        <option value="Intense">Intense</option>
+                        <option value="Calm">Calm</option>
+                        <option value="Energetic">Energetic</option>
+                        <option value="Dreamy">Dreamy</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="background"><i class="fas fa-landmark"></i> Background</label>
+                    <select id="background" aria-label="Select background">
+                        <option value="">None</option>
+                        <option value="Forest">Forest</option>
+                        <option value="Urban Cityscape">Urban Cityscape</option>
+                        <option value="Ocean">Ocean</option>
+                        <option value="Desert">Desert</option>
+                        <option value="Mountain Range">Mountain Range</option>
+                        <option value="Castle">Castle</option>
+                        <option value="Library">Library</option>
+                        <option value="Studio">Studio</option>
+                        <option value="Beach">Beach</option>
+                        <option value="Snowy Mountains">Snowy Mountains</option>
+                        <option value="Tropical Island">Tropical Island</option>
+                        <option value="Ancient Ruins">Ancient Ruins</option>
+                        <option value="Underwater">Underwater</option>
+                        <option value="Space">Space</option>
+                        <option value="Countryside">Countryside</option>
+                        <option value="Laboratory">Laboratory</option>
+                        <option value="Marketplace">Marketplace</option>
+                        <option value="Garden">Garden</option>
+                        <option value="Skyscraper">Skyscraper</option>
+                        <option value="Cave">Cave</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="lighting"><i class="fas fa-lightbulb"></i> Lighting</label>
+                    <select id="lighting" aria-label="Select lighting">
+                        <option value="">None</option>
+                        <option value="Natural Daylight">Natural Daylight</option>
+                        <option value="Golden Hour">Golden Hour</option>
+                        <option value="Neon Glow">Neon Glow</option>
+                        <option value="Moonlight">Moonlight</option>
+                        <option value="Studio Lighting">Studio Lighting</option>
+                        <option value="Candlelit">Candlelit</option>
+                        <option value="Backlight">Backlight</option>
+                        <option value="Diffused">Diffused</option>
+                        <option value="Harsh Shadows">Harsh Shadows</option>
+                        <option value="Warm Ambient">Warm Ambient</option>
+                        <option value="Cool Blue">Cool Blue</option>
+                        <option value="Spotlight">Spotlight</option>
+                        <option value="Dramatic">Dramatic</option>
+                        <option value="Soft Focus">Soft Focus</option>
+                        <option value="Flash">Flash</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fas fa-tags"></i> Quality Tags</label>
+                    <div class="tag-container">
+                        <div class="tag" data-tag="masterpiece">Masterpiece</div>
+                        <div class="tag" data-tag="high resolution">High Resolution</div>
+                        <div class="tag" data-tag="photo-realistic">Photo Realistic</div>
+                        <div class="tag" data-tag="best quality">Best Quality</div>
+                        <div class="tag" data-tag="8k">8K</div>
+                        <div class="tag" data-tag="ultra high res">Ultra High Res</div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fas fa-star"></i> Emphasis Tags</label>
+                    <div class="tag-container">
+                        <div class="tag" data-tag="red eyes:1.4">Red Eyes</div>
+                        <div class="tag" data-tag="black hair:1.2">Black Hair</div>
+                        <div class="tag" data-tag="long hair:1.2">Long Hair</div>
+                        <div class="tag" data-tag="detailed face:1.3">Detailed Face</div>
+                        <div class="tag" data-tag="natural lighting:1.2">Natural Lighting</div>
+                        <div class="tag" data-tag="cinematic:1.3">Cinematic</div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="cameraAngles"><i class="fas fa-camera"></i> Camera Angles</label>
+                    <select id="cameraAngles" aria-label="Select camera angle">
+                        <option value="">None</option>
+                        <option value="Low Angle">Low Angle</option>
+                        <option value="High Angle">High Angle</option>
+                        <option value="Eye Level">Eye Level</option>
+                        <option value="Dutch Tilt">Dutch Tilt</option>
+                        <option value="Overhead">Overhead</option>
+                        <option value="Worm's Eye">Worm's Eye</option>
+                        <option value="Bird's Eye">Bird's Eye</option>
+                        <option value="Close-Up">Close-Up</option>
+                        <option value="Wide Shot">Wide Shot</option>
+                        <option value="Medium Shot">Medium Shot</option>
+                        <option value="Panning">Panning</option>
+                        <option value="Tracking">Tracking</option>
+                        <option value="Zoom In">Zoom In</option>
+                        <option value="Profile View">Profile View</option>
+                        <option value="Frontal View">Frontal View</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="colorPalette"><i class="fas fa-palette"></i> Color Palette</label>
+                    <select id="colorPalette" aria-label="Select color palette">
+                        <option value="">None</option>
+                        <option value="Monochrome">Monochrome</option>
+                        <option value="Vibrant">Vibrant</option>
+                        <option value="Pastel">Pastel</option>
+                        <option value="Warm Colors">Warm Colors</option>
+                        <option value="Cool Colors">Cool Colors</option>
+                        <option value="Earth Tones">Earth Tones</option>
+                        <option value="Neon Accents">Neon Accents</option>
+                        <option value="Soft Gradients">Soft Gradients</op
