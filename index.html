@@ -2,852 +2,586 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Advanced AI Portrait Prompt Generator</title>
-  <style>
-    :root {
-      --bg: #0a121c;
-      --surface: #111a2e;
-      --surface-2: #0f1830;
-      --text: #ecf1ff;
-      --muted: #a7b1c6;
-      --primary: #4f7cff;
-      --accent: #22d3ee;
-      --danger: #ef4444;
-      --border: #24314f;
-      --shadow: 0 10px 24px rgba(0,0,0,.35);
-      --radius: 14px;
-      --radius-sm: 10px;
-      --radius-xs: 8px;
-      --focus: 0 0 0 3px rgba(79,124,255,.35);
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced AI Prompt Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-    .theme-red-black {
-      --bg: #000000;
-      --surface: #1a0000;
-      --surface-2: #2a0000;
-      --text: #ffcccc;
-      --muted: #ff6666;
-      --primary: #ff0000;
-      --accent: #ff3333;
-      --danger: #ff4444;
-      --border: #440000;
-    }
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --accent: #f39c12;
+            --success: #27ae60;
+            --danger: #e74c3c;
+        }
 
-    .theme-gold-black {
-      --bg: #000000;
-      --surface: #1a1a00;
-      --surface-2: #2a2a00;
-      --text: #ffffcc;
-      --muted: #ffd700;
-      --primary: #ffd700;
-      --accent: #ffcc00;
-      --danger: #ffaa00;
-      --border: #444400;
-    }
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            color: var(--light);
+            min-height: 100vh;
+            padding: 20px;
+        }
 
-    .theme-purple-dark {
-      --bg: #1a0033;
-      --surface: #2a004d;
-      --surface-2: #3a0066;
-      --text: #e6ccff;
-      --muted: #cc99ff;
-      --primary: #9933ff;
-      --accent: #cc66ff;
-      --danger: #ff3366;
-      --border: #4d0099;
-    }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+        }
 
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, var(--bg), var(--surface));
-      color: var(--text);
-      line-height: 1.6;
-      min-height: 100vh;
-      padding: 20px;
-    }
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
 
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 0;
-      margin-bottom: 30px;
-      border-bottom: 1px solid var(--border);
-    }
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
 
-    h1 {
-      font-size: 2rem;
-      background: linear-gradient(90deg, var(--primary), var(--accent));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
 
-    .theme-selector {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
+        .panel {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
 
-    .theme-btn {
-      padding: 8px 12px;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text);
-      border-radius: var(--radius-xs);
-      cursor: pointer;
-      font-size: 0.8rem;
-      transition: all 0.3s ease;
-    }
+        .panel-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--accent);
+        }
 
-    .theme-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
+        .input-group {
+            margin-bottom: 20px;
+        }
 
-    .main-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 30px;
-    }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
 
-    @media (max-width: 768px) {
-      .main-grid {
-        grid-template-columns: 1fr;
-      }
-    }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: none;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            font-size: 1rem;
+        }
 
-    .panel {
-      background: linear-gradient(180deg, var(--surface), var(--surface-2));
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px;
-      box-shadow: var(--shadow);
-    }
+        input::placeholder, textarea::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
 
-    .panel-title {
-      font-size: 1.3rem;
-      margin-bottom: 20px;
-      color: var(--primary);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
 
-    .form-group {
-      margin-bottom: 15px;
-    }
+        .tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
 
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-size: 0.9rem;
-      color: var(--muted);
-    }
+        .tag {
+            background: rgba(102, 126, 234, 0.3);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
 
-    select, input, textarea {
-      width: 100%;
-      padding: 10px 12px;
-      border-radius: var(--radius-xs);
-      border: 1px solid var(--border);
-      background: rgba(0, 0, 0, 0.3);
-      color: var(--text);
-      font-size: 0.9rem;
-    }
+        .tag:hover {
+            background: rgba(102, 126, 234, 0.5);
+            transform: translateY(-2px);
+        }
 
-    select:focus, input:focus, textarea:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: var(--focus);
-    }
+        .tag.selected {
+            background: var(--primary);
+            border-color: var(--accent);
+        }
 
-    textarea {
-      min-height: 100px;
-      resize: vertical;
-    }
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
 
-    .btn-group {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-top: 20px;
-    }
+        button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
 
-    button {
-      padding: 12px;
-      border: none;
-      border-radius: var(--radius-xs);
-      background: linear-gradient(90deg, var(--surface), var(--surface-2));
-      color: var(--text);
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border: 1px solid var(--border);
-      font-size: 0.9rem;
-    }
+        .generate-btn {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+        }
 
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-      border-color: var(--primary);
-    }
+        .generate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
 
-    .btn-primary {
-      background: linear-gradient(90deg, var(--primary), #5e8bff);
-    }
+        .reset-btn {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+        }
 
-    .btn-accent {
-      background: linear-gradient(90deg, var(--accent), #36e0ff);
-    }
+        .reset-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
 
-    .output-container {
-      margin-top: 20px;
-    }
+        .random-btn {
+            background: rgba(255, 193, 7, 0.2);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+        }
 
-    #promptOutput {
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px dashed var(--border);
-      border-radius: var(--radius-xs);
-      padding: 15px;
-      min-height: 150px;
-      font-family: 'Courier New', monospace;
-      font-size: 0.9rem;
-      white-space: pre-wrap;
-      line-height: 1.5;
-    }
+        .random-btn:hover {
+            background: rgba(255, 193, 7, 0.3);
+        }
 
-    .stats {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 10px;
-      font-size: 0.8rem;
-      color: var(--muted);
-    }
+        .prompts-container {
+            margin-top: 30px;
+        }
 
-    .action-buttons {
-      display: flex;
-      gap: 10px;
-      margin-top: 15px;
-    }
+        .prompt-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--accent);
+            transition: transform 0.3s ease;
+        }
 
-    .action-buttons button {
-      flex: 1;
-    }
+        .prompt-card:hover {
+            transform: translateX(5px);
+        }
 
-    .history-panel {
-      margin-top: 30px;
-    }
+        .prompt-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-    .history-list {
-      max-height: 200px;
-      overflow-y: auto;
-    }
+        .prompt-content {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            overflow-x: auto;
+            max-height: 200px;
+            overflow-y: auto;
+        }
 
-    .history-item {
-      padding: 10px;
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: var(--radius-xs);
-      margin-bottom: 8px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      border-left: 3px solid transparent;
-    }
+        .copy-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.3s ease;
+        }
 
-    .history-item:hover {
-      border-left-color: var(--primary);
-    }
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
 
-    .toast {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: rgba(0, 0, 0, 0.8);
-      color: var(--text);
-      padding: 12px 20px;
-      border-radius: var(--radius-xs);
-      box-shadow: var(--shadow);
-      transform: translateY(100px);
-      opacity: 0;
-      transition: all 0.3s ease;
-      z-index: 1000;
-      font-size: 0.9rem;
-    }
+        .instructions {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 30px;
+        }
 
-    .toast.show {
-      transform: translateY(0);
-      opacity: 1;
-    }
+        .instructions h2 {
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
 
-    .hidden {
-      display: none;
-    }
-  </style>
+        .instructions ul {
+            padding-left: 20px;
+        }
+
+        .instructions li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid var(--accent);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            background: var(--success);
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transform: translateX(200%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .prompt-type-selector {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .type-btn {
+            flex: 1;
+            min-width: 120px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .type-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .weight-slider {
+            margin-top: 10px;
+        }
+
+        .weight-slider input {
+            width: 100%;
+        }
+
+        .weight-value {
+            text-align: center;
+            margin-top: 5px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .subcategory-container {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            display: none;
+        }
+
+        .subcategory-container.active {
+            display: block;
+        }
+
+        .subcategory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .subcategory-btn {
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        .subcategory-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .subcategory-btn.selected {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>AI Portrait Prompt Generator</h1>
-      <div class="theme-selector">
-        <button class="theme-btn" data-theme="default">Blue Theme</button>
-        <button class="theme-btn" data-theme="red-black">Red/Black</button>
-        <button class="theme-btn" data-theme="gold-black">Gold/Black</button>
-        <button class="theme-btn" data-theme="purple-dark">Purple Dark</button>
-      </div>
-    </header>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-magic"></i> Advanced AI Prompt Generator</h1>
+            <p class="subtitle">Create professional, detailed prompts for AI image generation with advanced customization and tagging system</p>
+        </header>
 
-    <div class="main-grid">
-      <div class="panel">
-        <h2 class="panel-title">⚙️ Controls</h2>
-        
-        <div class="form-group">
-          <label for="modelSelect">AI Model</label>
-          <select id="modelSelect">
-            <option value="midjourney">Midjourney v6</option>
-            <option value="dalle3">DALL-E 3</option>
-            <option value="stableDiffusion">Stable Diffusion XL</option>
-            <option value="flux">Flux.1 Pro</option>
-          </select>
+        <div class="main-content">
+            <div class="panel">
+                <h2 class="panel-title"><i class="fas fa-sliders-h"></i> Prompt Configuration</h2>
+                
+                <div class="input-group">
+                    <label for="prompt-style"><i class="fas fa-paint-brush"></i> Art Style</label>
+                    <select id="prompt-style">
+                        <option value="photo">Photography</option>
+                        <option value="painting">Oil Painting</option>
+                        <option value="watercolor">Watercolor</option>
+                        <option value="digital">Digital Art</option>
+                        <option value="illustration">Illustration</option>
+                        <option value="cgi">CGI</option>
+                        <option value="unreal">Unreal Engine</option>
+                    </select>
+                </div>
+
+                <div class="subcategory-container" id="subcategory-container">
+                    <h3>Subcategories</h3>
+                    <div class="subcategory-grid" id="subcategory-grid">
+                        <!-- Subcategories will be populated dynamically -->
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="subject"><i class="fas fa-user"></i> Subject</label>
+                    <input type="text" id="subject" placeholder="Enter subject (e.g., beautiful Latina woman)">
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fas fa-tags"></i> Quality Tags</label>
+                    <div class="tag-container">
+                        <div class="tag" data-tag="masterpiece">Masterpiece</div>
+                        <div class="tag" data-tag="high resolution">High Resolution</div>
+                        <div class="tag" data-tag="photo-realistic">Photo Realistic</div>
+                        <div class="tag" data-tag="best quality">Best Quality</div>
+                        <div class="tag" data-tag="8k">8K</div>
+                        <div class="tag" data-tag="ultra high res">Ultra High Res</div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fas fa-star"></i> Emphasis Tags</label>
+                    <div class="tag-container">
+                        <div class="tag" data-tag="red eyes:1.4">Red Eyes</div>
+                        <div class="tag" data-tag="black hair:1.2">Black Hair</div>
+                        <div class="tag" data-tag="long hair:1.2">Long Hair</div>
+                        <div class="tag" data-tag="detailed face:1.3">Detailed Face</div>
+                        <div class="tag" data-tag="natural lighting:1.2">Natural Lighting</div>
+                        <div class="tag" data-tag="cinematic:1.3">Cinematic</div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="background"><i class="fas fa-landmark"></i> Background Setting</label>
+                    <input type="text" id="background" placeholder="e.g., mystical forest, urban cityscape">
+                </div>
+
+                <div class="input-group">
+                    <label for="lighting"><i class="fas fa-lightbulb"></i> Lighting</label>
+                    <input type="text" id="lighting" placeholder="e.g., soft golden hour, dramatic shadows">
+                </div>
+
+                <div class="input-group">
+                    <label for="camera-angle"><i class="fas fa-camera"></i> Camera Angle</label>
+                    <select id="camera-angle">
+                        <option value="close-up">Close-up</option>
+                        <option value="medium shot">Medium Shot</option>
+                        <option value="wide shot">Wide Shot</option>
+                        <option value="low angle">Low Angle</option>
+                        <option value="high angle">High Angle</option>
+                        <option value="over-the-shoulder">Over-the-Shoulder</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fas fa-weight"></i> Emphasis Weight</label>
+                    <div class="weight-slider">
+                        <input type="range" id="emphasis-weight" min="1.0" max="2.0" step="0.1" value="1.2">
+                        <div class="weight-value">Weight: <span id="weight-value">1.2</span></div>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="generate-btn" id="generate-btn">
+                        <i class="fas fa-bolt"></i> Generate Prompts
+                    </button>
+                    <button class="random-btn" id="random-btn">
+                        <i class="fas fa-random"></i> Random Generate
+                    </button>
+                    <button class="reset-btn" id="reset-btn">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2 class="panel-title"><i class="fas fa-list"></i> Prompt Types</h2>
+                
+                <div class="prompt-type-selector">
+                    <button class="type-btn active" data-type="np">Portrait Photo</button>
+                    <button class="type-btn" data-type="nl">Landscape</button>
+                    <button class="type-btn" data-type="ni">Illustration</button>
+                    <button class="type-btn" data-type="nd">Drawing</button>
+                    <button class="type-btn" data-type="nc">Wildlife</button>
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fas fa-cogs"></i> Additional Options</label>
+                    <textarea id="additional-options" placeholder="Additional instructions or specific requirements..."></textarea>
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fas fa-users"></i> Nationality/Occupation</label>
+                    <input type="text" id="nationality-occupation" placeholder="e.g., Latina woman, professional photographer">
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fas fa-palette"></i> Color Palette</label>
+                    <input type="text" id="color-palette" placeholder="e.g., warm colors, monochromatic, pastel">
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fas fa-moon"></i> Atmosphere</label>
+                    <input type="text" id="atmosphere" placeholder="e.g., mystical, serene, dramatic">
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fas fa-heart"></i> Emotion</label>
+                    <input type="text" id="emotion" placeholder="e.g., contemplative, powerful, serene">
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fas fa-infinity"></i> Inspiration</label>
+                    <input type="text" id="inspiration" placeholder="e.g., movie style, photographer, artist">
+                </div>
+            </div>
         </div>
-        
-        <div class="form-group">
-          <label for="subjectSelect">Subject Type</label>
-          <select id="subjectSelect">
-            <option value="woman">Woman</option>
-            <option value="man">Man</option>
-            <option value="child">Child</option>
-            <option value="elderly">Elderly Person</option>
-            <option value="celebrity">Celebrity</option>
-            <option value="fantasy">Fantasy Character</option>
-          </select>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Generating your prompts...</p>
         </div>
-        
-        <div class="form-group">
-          <label for="styleType">Art Style</label>
-          <select id="styleType">
-            <option value="photorealistic">Photorealistic</option>
-            <option value="cinematic">Cinematic</option>
-            <option value="portrait">Classic Portrait</option>
-            <option value="fineart">Fine Art</option>
-            <option value="digital">Digital Art</option>
-            <option value="oil">Oil Painting</option>
-            <option value="watercolor">Watercolor</option>
-            <option value="anime">Anime</option>
-            <option value="cyberpunk">Cyberpunk</option>
-            <option value="steampunk">Steampunk</option>
-          </select>
+
+        <div class="prompts-container" id="prompts-container">
+            <!-- Generated prompts will appear here -->
         </div>
-        
-        <div class="form-group">
-          <label for="moodSelect">Mood & Emotion</label>
-          <select id="moodSelect">
-            <option value="serene">Serene</option>
-            <option value="mysterious">Mysterious</option>
-            <option value="joyful">Joyful</option>
-            <option value="melancholic">Melancholic</option>
-            <option value="dramatic">Dramatic</option>
-            <option value="intense">Intense</option>
-            <option value="peaceful">Peaceful</option>
-            <option value="confident">Confident</option>
-          </select>
+
+        <div class="instructions">
+            <h2><i class="fas fa-info-circle"></i> How to Use This Generator</h2>
+            <ul>
+                <li>Select your preferred <strong>Art Style</strong> from the dropdown menu</li>
+                <li>Enter your <strong>Subject</strong> (replace celebrity names with "Beautiful Latina woman with black hair")</li>
+                <li>Add <strong>Quality Tags</strong> and <strong>Emphasis Tags</strong> by clicking on them</li>
+                <li>Configure your <strong>Background Setting</strong>, <strong>Lighting</strong>, and <strong>Camera Angle</strong></li>
+                <li>Adjust the <strong>Emphasis Weight</strong> slider for additional intensity</li>
+                <li>Choose your desired <strong>Prompt Type</strong> (Portrait, Landscape, etc.)</li>
+                <li>Click <strong>Generate Prompts</strong> to create 5 unique, detailed prompts</li>
+                <li>Each prompt includes proper formatting with quality tags first, subject in the middle, and environment at the end</li>
+                <li>All prompts contain camera settings and maintain the required structure</li>
+            </ul>
         </div>
-        
-        <div class="form-group">
-          <label for="settingSelect">Setting</label>
-          <select id="settingSelect">
-            <option value="studio">Studio</option>
-            <option value="outdoor">Outdoor</option>
-            <option value="urban">Urban</option>
-            <option value="nature">Natural</option>
-            <option value="fantasy">Fantasy</option>
-            <option value="historic">Historic</option>
-          </select>
+
+        <div class="footer">
+            <p>Advanced AI Prompt Generator | Professional Prompt Engineering Tool</p>
         </div>
-        
-        <div class="form-group">
-          <label for="detailLevel">Detail Level</label>
-          <select id="detailLevel">
-            <option value="high">High Detail (800-1200 chars)</option>
-            <option value="medium">Medium Detail (500-800 chars)</option>
-            <option value="low">Low Detail (300-500 chars)</option>
-          </select>
-        </div>
-        
-        <div class="form-group">
-          <label for="customInput">Custom Elements</label>
-          <textarea id="customInput" placeholder="Add custom elements like clothing, accessories, actions..."></textarea>
-        </div>
-        
-        <div class="btn-group">
-          <button id="generateBtn" class="btn-primary">✨ Generate</button>
-          <button id="randomBtn">🎲 Random</button>
-        </div>
-      </div>
-      
-      <div class="panel">
-        <h2 class="panel-title">📝 Generated Prompt</h2>
-        
-        <div class="output-container">
-          <div id="promptOutput">Your generated prompt will appear here...</div>
-          <div class="stats">
-            <span id="charCount">Characters: 0</span>
-            <span id="wordCount">Words: 0</span>
-          </div>
-        </div>
-        
-        <div class="action-buttons">
-          <button id="copyBtn">📋 Copy</button>
-          <button id="saveBtn">💾 Save</button>
-        </div>
-        
-        <div class="history-panel">
-          <h3 style="font-size: 1.1rem; margin: 15px 0 10px 0; color: var(--accent);">🕒 Recent Prompts</h3>
-          <div id="historyList" class="history-list"></div>
-        </div>
-      </div>
     </div>
-  </div>
-  
-  <div id="toast" class="toast"></div>
-  
-  <script>
-    // Comprehensive dataset for portrait prompts
-    const DATASET = {
-      subjects: {
-        woman: [
-          "beautiful woman", "elegant lady", "graceful female", "stylish woman", "charming woman",
-          "mature woman", "young woman", "middle-aged woman", "professional woman", "artist woman"
-        ],
-        man: [
-          "handsome man", "elegant gentleman", "strong male", "charming man", "mature man",
-          "young man", "middle-aged man", "professional man", "artist man", "businessman"
-        ],
-        child: [
-          "cute child", "innocent kid", "playful child", "curious child", "happy child",
-          "young boy", "young girl", "toddler", "baby", "schoolchild"
-        ],
-        elderly: [
-          "wise elder", "experienced senior", "graceful elder", "dignified person",
-          "elderly woman", "elderly man", "grandparent", "seasoned individual"
-        ],
-        celebrity: [
-          "Hollywood actress", "A-list actor", "famous model", "celebrity", "star",
-          "iconic figure", "legendary person", "renowned individual"
-        ],
-        fantasy: [
-          "elf", "dwarf", "wizard", "sorceress", "knight", "princess", "dragon rider",
-          "fairy", "mermaid", "unicorn rider", "angel", "demon", "vampire", "werewolf"
-        ]
-      },
-      
-      styles: {
-        photorealistic: [
-          "photorealistic", "ultra-realistic", "hyperrealistic", "realistic photography",
-          "professional portrait", "studio photography", "high-resolution", "8k resolution"
-        ],
-        cinematic: [
-          "cinematic lighting", "movie still", "film grain", "dramatic lighting",
-          "Hollywood style", "cinema quality", "epic composition", "dramatic shadows"
-        ],
-        portrait: [
-          "classical portrait", "renaissance style", "oil painting portrait",
-          "formal portrait", "traditional portrait", "elegant composition"
-        ],
-        fineart: [
-          "fine art photography", "artistic composition", "gallery quality",
-          "museum worthy", "artistic vision", "creative expression"
-        ],
-        digital: [
-          "digital art", "concept art", "fantasy art", "illustration",
-          "digital painting", "matte painting", "conceptual art"
-        ],
-        oil: [
-          "oil painting", "classical oil painting", "renaissance oil painting",
-          "impressionist style", "realistic oil painting", "master oil painting"
-        ],
-        watercolor: [
-          "watercolor painting", "soft watercolor", "flowing watercolor",
-          "delicate watercolor", "artistic watercolor", "expressive watercolor"
-        ],
-        anime: [
-          "anime style", "Japanese anime", "manga style", "anime character design",
-          "cell shading", "anime art", "Japanese illustration"
-        ],
-        cyberpunk: [
-          "cyberpunk style", "neon punk", "futuristic", "tech-noir",
-          "synthwave aesthetic", "neon lighting", "high-tech low-life"
-        ],
-        steampunk: [
-          "steampunk style", "victorian futurism", "brass and copper",
-          "mechanical aesthetics", "industrial revolution", "gear-driven art"
-        ]
-      },
-      
-      moods: {
-        serene: [
-          "serene expression", "calm demeanor", "peaceful gaze", "tranquil presence",
-          "serene atmosphere", "calm and composed", "peaceful expression"
-        ],
-        mysterious: [
-          "mysterious gaze", "enigmatic expression", "cryptic smile", "puzzling demeanor",
-          "mysterious aura", "enigmatic presence", "cryptic look"
-        ],
-        joyful: [
-          "joyful expression", "happy smile", "radiant face", "cheerful demeanor",
-          "joyful atmosphere", "happy and bright", "radiant energy"
-        ],
-        melancholic: [
-          "melancholic expression", "sad gaze", "thoughtful face", "pensive demeanor",
-          "melancholic atmosphere", "sad and reflective", "thoughtful expression"
-        ],
-        dramatic: [
-          "dramatic expression", "intense gaze", "powerful presence", "commanding demeanor",
-          "dramatic lighting", "intense emotion", "powerful expression"
-        ],
-        intense: [
-          "intense expression", "fierce gaze", "passionate face", "fiery demeanor",
-          "intense atmosphere", "passionate emotion", "fierce expression"
-        ],
-        peaceful: [
-          "peaceful expression", "serene gaze", "calm face", "tranquil demeanor",
-          "peaceful atmosphere", "serene emotion", "calm expression"
-        ],
-        confident: [
-          "confident expression", "assured gaze", "self-assured face", "poised demeanor",
-          "confident atmosphere", "assured emotion", "self-assured expression"
-        ]
-      },
-      
-      settings: {
-        studio: [
-          "professional studio", "controlled environment", "studio setting",
-          "photography studio", "controlled lighting", "studio backdrop"
-        ],
-        outdoor: [
-          "outdoor setting", "natural environment", "open air", "outdoor location",
-          "natural surroundings", "outdoor scene", "natural setting"
-        ],
-        urban: [
-          "urban landscape", "city environment", "metropolitan setting",
-          "urban backdrop", "cityscape background", "metropolitan atmosphere"
-        ],
-        nature: [
-          "natural landscape", "scenic environment", "wilderness setting",
-          "natural backdrop", "scenic background", "wilderness atmosphere"
-        ],
-        fantasy: [
-          "fantasy realm", "magical environment", "enchanted setting",
-          "fantasy backdrop", "magical background", "enchanted atmosphere"
-        ],
-        historic: [
-          "historic setting", "period environment", "vintage atmosphere",
-          "historic backdrop", "period background", "vintage setting"
-        ]
-      },
-      
-      lighting: [
-        "soft lighting", "dramatic lighting", "cinematic lighting", "natural lighting",
-        "studio lighting", "golden hour lighting", "blue hour lighting", "neon lighting"
-      ],
-      
-      camera: [
-        "85mm lens", "50mm lens", "35mm lens", "100mm macro lens", "portrait lens",
-        "professional camera", "DSLR camera", "full-frame camera", "mirrorless camera"
-      ],
-      
-      composition: [
-        "rule of thirds", "centered composition", "leading lines", "symmetrical balance",
-        "asymmetrical balance", "golden ratio", "diagonal composition", "framing technique"
-      ],
-      
-      details: [
-        "intricate details", "fine details", "meticulous details", "precise details",
-        "sharp details", "clear details", "well-defined features", "detailed features"
-      ],
-      
-      quality: [
-        "highest quality", "professional quality", "studio quality", "gallery quality",
-        "museum quality", "award-winning", "masterpiece", "exquisite quality"
-      ],
-      
-      colors: [
-        "warm colors", "cool colors", "vibrant colors", "muted colors", "pastel colors",
-        "earthy tones", "monochromatic", "complementary colors", "analogous colors"
-      ],
-      
-      textures: [
-        "smooth skin", "soft fabric", "textured clothing", "delicate features",
-        "refined texture", "natural texture", "organic texture", "synthetic texture"
-      ],
-      
-      accessories: [
-        "elegant jewelry", "stylish accessories", "fashionable items", "trendy accessories",
-        "luxury items", "designer accessories", "unique items", "artistic accessories"
-      ],
-      
-      models: {
-        midjourney: {
-          suffix: "--ar 3:4 --v 6.0 --style raw --quality 2"
-        },
-        dalle3: {
-          suffix: "High detail, 8K resolution, professional quality"
-        },
-        stableDiffusion: {
-          suffix: "Detailed, high quality, photorealistic, 8K, masterpiece"
-        },
-        flux: {
-          suffix: "Flux.1 Pro: maximum fidelity, nuanced lighting, production quality"
-        }
-      }
-    };
 
-    // Utility functions
-    const rand = (arr) => arr[Math.floor(Math.random() * arr.length)];
+    <div class="notification" id="notification">
+        Prompt copied to clipboard!
+    </div>
 
-    // DOM Elements
-    const elements = {
-      modelSelect: document.getElementById('modelSelect'),
-      subjectSelect: document.getElementById('subjectSelect'),
-      styleType: document.getElementById('styleType'),
-      moodSelect: document.getElementById('moodSelect'),
-      settingSelect: document.getElementById('settingSelect'),
-      detailLevel: document.getElementById('detailLevel'),
-      customInput: document.getElementById('customInput'),
-      generateBtn: document.getElementById('generateBtn'),
-      randomBtn: document.getElementById('randomBtn'),
-      promptOutput: document.getElementById('promptOutput'),
-      copyBtn: document.getElementById('copyBtn'),
-      saveBtn: document.getElementById('saveBtn'),
-      charCount: document.getElementById('charCount'),
-      wordCount: document.getElementById('wordCount'),
-      historyList: document.getElementById('historyList'),
-      toast: document.getElementById('toast')
-    };
-
-    // State management
-    let history = [];
-    let currentPrompt = '';
-
-    // Show toast message
-    function showToast(message, duration = 3000) {
-      elements.toast.textContent = message;
-      elements.toast.classList.add('show');
-      setTimeout(() => {
-        elements.toast.classList.remove('show');
-      }, duration);
-    }
-
-    // Update character and word count
-    function updateStats(text) {
-      elements.charCount.textContent = `Characters: ${text.length}`;
-      elements.wordCount.textContent = `Words: ${text.trim().split(/\s+/).filter(Boolean).length}`;
-    }
-
-    // Generate portrait prompt
-    function generatePrompt() {
-      const model = elements.modelSelect.value;
-      const subjectType = elements.subjectSelect.value;
-      const style = elements.styleType.value;
-      const mood = elements.moodSelect.value;
-      const setting = elements.settingSelect.value;
-      const detailLevel = elements.detailLevel.value;
-      const customText = elements.customInput.value.trim();
-      
-      // Select random elements from dataset
-      const subject = rand(DATASET.subjects[subjectType]);
-      const styleElement = rand(DATASET.styles[style]);
-      const moodElement = rand(DATASET.moods[mood]);
-      const settingElement = rand(DATASET.settings[setting]);
-      const lighting = rand(DATASET.lighting);
-      const camera = rand(DATASET.camera);
-      const composition = rand(DATASET.composition);
-      const details = rand(DATASET.details);
-      const quality = rand(DATASET.quality);
-      const colors = rand(DATASET.colors);
-      const textures = rand(DATASET.textures);
-      const accessories = rand(DATASET.accessories);
-      
-      // Base prompt structure
-      let prompt = `${subject}, ${styleElement}, ${moodElement}, ${settingElement}, ${lighting}, ${camera}, ${composition}, ${details}, ${quality}, ${colors}, ${textures}, ${accessories}`;
-      
-      // Add custom text if provided
-      if (customText) {
-        prompt += `, ${customText}`;
-      }
-      
-      // Add model-specific suffix
-      const modelSuffix = DATASET.models[model].suffix;
-      prompt += `, ${modelSuffix}`;
-      
-      // Adjust length based on detail level
-      prompt = adjustPromptLength(prompt, detailLevel);
-      
-      return prompt;
-    }
-
-    // Adjust prompt length based on detail level
-    function adjustPromptLength(prompt, detailLevel) {
-      const wordCount = prompt.split(' ').length;
-      
-      switch (detailLevel) {
-        case 'low':
-          // Reduce to 300-500 characters
-          if (prompt.length > 500) {
-            prompt = prompt.substring(0, 450) + '...';
-          }
-          break;
-          
-        case 'medium':
-          // Keep between 500-800 characters
-          if (prompt.length > 800) {
-            prompt = prompt.substring(0, 750) + '...';
-          } else if (prompt.length < 500) {
-            prompt += ' ' + rand(DATASET.details) + ' ' + rand(DATASET.quality);
-          }
-          break;
-          
-        case 'high':
-          // Expand to 800-1200 characters
-          if (prompt.length < 800) {
-            prompt += ' ' + rand(DATASET.lighting) + ', ' + rand(DATASET.composition) + ', ' + rand(DATASET.textures) + ', ' + rand(DATASET.colors);
-          }
-          break;
-      }
-      
-      return prompt;
-    }
-
-    // Add prompt to history
-    function addToHistory(prompt) {
-      history.unshift({
-        text: prompt,
-        timestamp: new Date().toLocaleTimeString()
-      });
-      
-      // Keep only last 10 prompts
-      if (history.length > 10) {
-        history.pop();
-      }
-      
-      updateHistoryDisplay();
-    }
-
-    // Update history display
-    function updateHistoryDisplay() {
-      if (history.length === 0) {
-        elements.historyList.innerHTML = '<div class="history-item">No prompts generated yet</div>';
-        return;
-      }
-      
-      elements.historyList.innerHTML = '';
-      history.forEach((item, index) => {
-        const historyItem = document.createElement('div');
-        historyItem.className = 'history-item';
-        historyItem.textContent = `${item.text.substring(0, 80)}...`;
-        historyItem.title = item.text;
-        historyItem.addEventListener('click', () => {
-          currentPrompt = item.text;
-          elements.promptOutput.textContent = currentPrompt;
-          updateStats(currentPrompt);
-        });
-        elements.historyList.appendChild(historyItem);
-      });
-    }
-
-    // Copy prompt to clipboard
-    function copyToClipboard() {
-      if (!currentPrompt || currentPrompt === 'Your generated prompt will appear here...') {
-        showToast('Generate a prompt first!');
-        return;
-      }
-      
-      navigator.clipboard.writeText(currentPrompt).then(() => {
-        showToast('Prompt copied to clipboard!');
-      }).catch(err => {
-        showToast('Failed to copy prompt');
-        console.error('Failed to copy: ', err);
-      });
-    }
-
-    // Save prompt
-    function savePrompt() {
-      if (!currentPrompt || currentPrompt === 'Your generated prompt will appear here...') {
-        showToast('Generate a prompt first!');
-        return;
-      }
-      
-      // In a real app, this would save to localStorage or a database
-      showToast('Prompt saved successfully!');
-    }
-
-    // Generate random settings
-    function generateRandomSettings() {
-      elements.subjectSelect.value = rand(Object.keys(DATASET.subjects));
-      elements.styleType.value = rand(Object.keys(DATASET.styles));
-      elements.moodSelect.value = rand(Object.keys(DATASET.moods));
-      elements.settingSelect.value = rand(Object.keys(DATASET.settings));
-      elements.detailLevel.value = rand(['low', 'medium', 'high']);
-    }
-
-    // Theme switching
-    function switchTheme(theme) {
-      document.body.className = `theme-${theme}`;
-    }
-
-    // Event Listeners
-    elements.generateBtn.addEventListener('click', () => {
-      currentPrompt = generatePrompt();
-      elements.promptOutput.textContent = currentPrompt;
-      updateStats(currentPrompt);
-      addToHistory(currentPrompt);
-      showToast('Prompt generated successfully!');
-    });
-
-    elements.randomBtn.addEventListener('click', () => {
-      generateRandomSettings();
-      showToast('Random settings applied!');
-    });
-
-    elements.copyBtn.addEventListener('click', copyToClipboard);
-    elements.saveBtn.addEventListener('click', savePrompt);
-
-    // Theme buttons
-    document.querySelectorAll('.theme-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const theme = btn.dataset.theme;
-        switchTheme(theme);
-        showToast(`Theme switched to ${theme.replace('-', ' ')}`);
-      });
-    });
-
-    // Initialize
-    updateHistoryDisplay();
-    updateStats('Your generated prompt will appear here...');
-    
-    // Add some sample prompts to history for demo
-    setTimeout(() => {
-      const samplePrompts = [
-        "Beautiful woman, photorealistic, serene expression, studio setting, soft lighting, 85mm lens, rule of thirds, intricate details, highest quality, warm colors, smooth skin, elegant jewelry, --ar 3:4 --v 6.0 --style raw --quality 2",
-        "Handsome man, cinematic lighting, dramatic expression, urban landscape, neon lighting, 50mm lens, leading lines, fine details, professional quality, cool colors, refined texture, stylish accessories, High detail, 8K resolution, professional quality"
-      ];
-      
-      samplePrompts.forEach(prompt => {
-        addToHistory(prompt);
-      });
-    }, 1000);
-  </script>
-</body>
-</html>
-```
+    <script>
+        // DOM Elements
+        const generateBtn = document.getElementById('generate-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const randomBtn = document.getElementById('random-btn');
+        const loadingElement = document.getElementById('loading');
+        const promptsContainer = document.getElementById('prompts-container');
+        const notification = document.getElementById('notification');
+        const weightSlider = document.getElementById('emphasis-weight');
+        const weightValue = document.getElementById('weight-value');
+        const typeButtons = document.querySelectorAll('.type-btn');
+        const promptStyleSelect = document.getElementById('prompt-style');
+        const subcategoryContainer = document.getElementById('subcategory-container');
+        const subcategoryGrid = do
