@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,11 +22,14 @@
             --accent: #f39c12;
             --success: #27ae60;
             --danger: #e74c3c;
+            --panel-bg: rgba(255, 255, 255, 0.15);
+            --panel-border: rgba(255, 255, 255, 0.2);
+            --text-light: rgba(255, 255, 255, 0.9);
         }
 
         body {
             background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
-            color: var(--light);
+            color: var(--text-light);
             min-height: 100vh;
             padding: 20px;
         }
@@ -45,6 +49,16 @@
             font-size: 2.8rem;
             margin-bottom: 10px;
             text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            background: linear-gradient(to right, #f39c12, #667eea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
         }
 
         .main-content {
@@ -61,12 +75,17 @@
         }
 
         .panel {
-            background: rgba(255, 255, 255, 0.1);
+            background: var(--panel-bg);
             backdrop-filter: blur(10px);
             border-radius: 15px;
             padding: 25px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.18);
+            border: 1px solid var(--panel-border);
+            transition: transform 0.3s ease;
+        }
+
+        .panel:hover {
+            transform: translateY(-5px);
         }
 
         .panel-title {
@@ -76,6 +95,8 @@
             align-items: center;
             gap: 10px;
             color: var(--accent);
+            border-bottom: 1px solid var(--panel-border);
+            padding-bottom: 15px;
         }
 
         .input-group {
@@ -86,6 +107,7 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
+            color: var(--light);
         }
 
         input, select {
@@ -96,6 +118,15 @@
             background: rgba(255, 255, 255, 0.15);
             color: white;
             font-size: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 0 2px rgba(243, 156, 18, 0.3);
         }
 
         input::placeholder {
@@ -117,6 +148,9 @@
             cursor: pointer;
             transition: all 0.3s ease;
             border: 1px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .tag:hover {
@@ -127,6 +161,7 @@
         .tag.selected {
             background: var(--primary);
             border-color: var(--accent);
+            box-shadow: 0 0 8px rgba(243, 156, 18, 0.5);
         }
 
         .btn-group {
@@ -153,30 +188,35 @@
         .generate-btn {
             background: linear-gradient(45deg, var(--primary), var(--secondary));
             color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
 
         .generate-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 7px 20px rgba(102, 126, 234, 0.4);
         }
 
         .reset-btn {
             background: rgba(255, 255, 255, 0.15);
             color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .reset-btn:hover {
             background: rgba(255, 255, 255, 0.25);
+            border-color: var(--accent);
         }
 
         .random-btn {
             background: rgba(255, 193, 7, 0.2);
             color: var(--accent);
             border: 1px solid var(--accent);
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
         }
 
         .random-btn:hover {
             background: rgba(255, 193, 7, 0.3);
+            box-shadow: 0 7px 20px rgba(243, 156, 18, 0.4);
         }
 
         .prompts-container {
@@ -189,11 +229,13 @@
             padding: 20px;
             margin-bottom: 20px;
             border-left: 4px solid var(--accent);
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
         .prompt-card:hover {
             transform: translateX(5px);
+            background: rgba(255, 255, 255, 0.08);
         }
 
         .prompt-title {
@@ -225,11 +267,37 @@
             border-radius: 5px;
             cursor: pointer;
             margin-top: 10px;
-            transition: background 0.3s ease;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .copy-btn:hover {
             background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .instructions {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .instructions h2 {
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .instructions ul {
+            padding-left: 20px;
+        }
+
+        .instructions li {
+            margin-bottom: 10px;
+            line-height: 1.6;
         }
 
         .footer {
@@ -272,6 +340,9 @@
             transform: translateX(200%);
             transition: transform 0.3s ease;
             z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .notification.show {
@@ -284,6 +355,7 @@
             background: rgba(0, 0, 0, 0.2);
             border-radius: 8px;
             display: none;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .subcategory-container.active {
@@ -311,22 +383,62 @@
 
         .subcategory-btn:hover {
             background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
         }
 
         .subcategory-btn.selected {
             background: var(--accent);
             border-color: var(--accent);
+            box-shadow: 0 0 8px rgba(243, 156, 18, 0.5);
         }
 
         .hidden {
             display: none;
+        }
+
+        .advanced-options {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .advanced-options h3 {
+            margin-bottom: 15px;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .advanced-options .input-group {
+            margin-bottom: 15px;
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(243, 156, 18, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(243, 156, 18, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(243, 156, 18, 0); }
+        }
+
+        .highlight {
+            background: linear-gradient(45deg, var(--accent), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Raju's Image Prompts Generator</h1>
+            <h1><i class="fas fa-magic"></i> Raju's Image Prompts Generator</h1>
+            <p class="subtitle">Create professional, detailed prompts for AI image generation with advanced customization and tagging system</p>
         </header>
 
         <div class="main-content">
@@ -361,7 +473,7 @@
                 </div>
 
                 <div class="subcategory-container" id="subcategory-container">
-                    <h3>Subcategories</h3>
+                    <h3><i class="fas fa-layer-group"></i> Subcategories</h3>
                     <div class="subcategory-grid" id="subcategory-grid">
                         <!-- Subcategories will be populated dynamically -->
                     </div>
@@ -595,7 +707,7 @@
                 </div>
 
                 <div class="btn-group">
-                    <button class="generate-btn" id="generate-btn">
+                    <button class="generate-btn pulse" id="generate-btn">
                         <i class="fas fa-bolt"></i> Generate Prompts
                     </button>
                     <button class="random-btn" id="random-btn">
@@ -610,24 +722,33 @@
             <div class="panel">
                 <h2 class="panel-title"><i class="fas fa-list"></i> Advanced Options</h2>
                 
-                <div class="input-group">
-                    <label for="inspiration"><i class="fas fa-infinity"></i> Inspiration</label>
-                    <input type="text" id="inspiration" placeholder="e.g., movie style, photographer, artist">
-                </div>
+                <div class="advanced-options">
+                    <h3><i class="fas fa-cogs"></i> Additional Parameters</h3>
+                    
+                    <div class="input-group">
+                        <label for="inspiration"><i class="fas fa-infinity"></i> Inspiration</label>
+                        <input type="text" id="inspiration" placeholder="e.g., movie style, photographer, artist">
+                    </div>
 
-                <div class="input-group">
-                    <label for="location"><i class="fas fa-map-marker-alt"></i> Location</label>
-                    <input type="text" id="location" placeholder="e.g., studio, outdoor, historical building">
-                </div>
+                    <div class="input-group">
+                        <label for="location"><i class="fas fa-map-marker-alt"></i> Location</label>
+                        <input type="text" id="location" placeholder="e.g., studio, outdoor, historical building">
+                    </div>
 
-                <div class="input-group">
-                    <label for="pose"><i class="fas fa-hands"></i> Pose/Action</label>
-                    <input type="text" id="pose" placeholder="e.g., standing confidently, sitting relaxed, walking">
-                </div>
+                    <div class="input-group">
+                        <label for="pose"><i class="fas fa-hands"></i> Pose/Action</label>
+                        <input type="text" id="pose" placeholder="e.g., standing confidently, sitting relaxed, walking">
+                    </div>
 
+                    <div class="input-group">
+                        <label for="additional-options"><i class="fas fa-cogs"></i> Additional Options</label>
+                        <input type="text" id="additional-options" placeholder="Additional instructions or specific requirements...">
+                    </div>
+                </div>
+                
                 <div class="input-group">
-                    <label for="additional-options"><i class="fas fa-cogs"></i> Additional Options</label>
-                    <input type="text" id="additional-options" placeholder="Additional instructions or specific requirements...">
+                    <label><i class="fas fa-info-circle"></i> <span class="highlight">Pro Tip:</span> Click on tags to select multiple options</label>
+                    <p>Selected tags will be included in your generated prompts</p>
                 </div>
             </div>
         </div>
@@ -641,13 +762,27 @@
             <!-- Generated prompts will appear here -->
         </div>
 
+        <div class="instructions">
+            <h2><i class="fas fa-info-circle"></i> How to Use This Generator</h2>
+            <ul>
+                <li>Select your preferred <strong>Art Style</strong> from the dropdown menu</li>
+                <li>Choose <strong>Emotion</strong>, <strong>Atmosphere</strong>, and <strong>Background</strong> options</li>
+                <li>Add <strong>Quality Tags</strong> and <strong>Emphasis Tags</strong> by clicking on them</li>
+                <li>Configure other parameters like <strong>Lighting</strong>, <strong>Camera Angle</strong>, etc.</li>
+                <li>Click <strong>Generate Prompts</strong> to create 5 unique, detailed prompts</li>
+                <li>Each prompt includes proper formatting with quality tags first, subject in the middle, and environment at the end</li>
+                <li>All prompts contain camera settings and maintain the required structure</li>
+                <li>Click <strong>Random Generate</strong> to create completely random prompts</li>
+            </ul>
+        </div>
+
         <div class="footer">
             <p>Advanced AI Prompt Generator | Professional Prompt Engineering Tool</p>
         </div>
     </div>
 
     <div class="notification" id="notification">
-        Prompt copied to clipboard!
+        <i class="fas fa-check-circle"></i> Prompt copied to clipboard!
     </div>
 
     <script>
@@ -1166,7 +1301,19 @@
                 option.textContent = style;
                 artStyleSelect.appendChild(option);
             });
+            
+            // Add hover effect to panels
+            const panels = document.querySelectorAll('.panel');
+            panels.forEach(panel => {
+                panel.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                });
+                panel.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
         });
     </script>
 </body>
 </html>
+```
