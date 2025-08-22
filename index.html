@@ -335,6 +335,18 @@
             box-shadow: 0 7px 20px rgba(243, 156, 18, 0.4);
         }
 
+        .ai-btn {
+            background: rgba(52, 152, 219, 0.2);
+            color: #3498db;
+            border: 1px solid #3498db;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .ai-btn:hover {
+            background: rgba(52, 152, 219, 0.3);
+            box-shadow: 0 7px 20px rgba(52, 152, 219, 0.4);
+        }
+
         .prompts-container {
             margin-top: 30px;
         }
@@ -571,6 +583,92 @@
             transform: rotate(30deg);
         }
 
+        /* Image upload styles */
+        .image-upload-container {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            border: 1px dashed rgba(255, 255, 255, 0.3);
+        }
+
+        .image-upload-label {
+            display: block;
+            text-align: center;
+            padding: 20px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .image-upload-label:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .image-preview {
+            max-width: 100%;
+            max-height: 200px;
+            margin: 15px auto;
+            display: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .ai-enhancement-section {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .ai-enhancement-section h3 {
+            margin-bottom: 15px;
+            color: #3498db;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ai-prompts-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+            min-height: 100px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .ai-prompt-card {
+            background: rgba(52, 152, 219, 0.2);
+            border-radius: 8px;
+            padding: 10px;
+            flex: 1;
+            min-width: 200px;
+            border: 1px solid rgba(52, 152, 219, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .ai-prompt-card:hover {
+            background: rgba(52, 152, 219, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .ai-prompt-content {
+            font-size: 0.85rem;
+            word-break: break-word;
+        }
+
+        .ai-prompt-card .copy-btn {
+            margin-top: 8px;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+        }
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .btn-group {
@@ -600,889 +698,4 @@
 
         <div class="main-content">
             <div class="panel">
-                <h2 class="panel-title"><i class="fas fa-sliders-h"></i> Prompt Configuration</h2>
-                
-                <div class="input-group">
-                    <label for="artStyle"><i class="fas fa-paint-brush"></i> Art Style</label>
-                    <select id="artStyle" aria-label="Select an art style" onchange="updateSubcategories()">
-                        <option value="">Select Art Style</option>
-                        <option value="Portrait">Portrait</option>
-                        <option value="Surrealism">Surrealism</option>
-                        <option value="Cyberpunk">Cyberpunk</option>
-                        <option value="Baroque">Baroque</option>
-                        <option value="Minimalism">Minimalism</option>
-                        <option value="Pop Art">Pop Art</option>
-                        <option value="Impressionism">Impressionism</option>
-                        <option value="Abstract Expressionism">Abstract Expressionism</option>
-                        <option value="Steampunk">Steampunk</option>
-                        <option value="Fantasy">Fantasy</option>
-                        <option value="Sci-Fi">Sci-Fi</option>
-                        <option value="Realism">Realism</option>
-                        <option value="Cartoon">Cartoon</option>
-                        <option value="Watercolor">Watercolor</option>
-                        <option value="Oil Painting">Oil Painting</option>
-                        <option value="Digital Art">Digital Art</option>
-                        <option value="Pixel Art">Pixel Art</option>
-                        <option value="Graffiti">Graffiti</option>
-                        <option value="Renaissance">Renaissance</option>
-                        <option value="Gothic">Gothic</option>
-                    </select>
-                </div>
-
-                <div class="subcategory-container" id="subcategory-container">
-                    <h3><i class="fas fa-layer-group"></i> Subcategories</h3>
-                    <div class="subcategory-grid" id="subcategory-grid">
-                        <!-- Subcategories will be populated dynamically -->
-                    </div>
-                </div>
-
-                <div class="input-group">
-                    <label for="emotion"><i class="fas fa-heart"></i> Emotion</label>
-                    <select id="emotion" aria-label="Select emotion">
-                        <option value="">None</option>
-                        <option value="Joyful">Joyful</option>
-                        <option value="Melancholic">Melancholic</option>
-                        <option value="Angry">Angry</option>
-                        <option value="Serene">Serene</option>
-                        <option value="Excited">Excited</option>
-                        <option value="Fearful">Fearful</option>
-                        <option value="Romantic">Romantic</option>
-                        <option value="Mysterious">Mysterious</option>
-                        <option value="Playful">Playful</option>
-                        <option value="Somber">Somber</option>
-                    </select>
-                </div>
-
-                <div class="input-group">
-                    <label for="atmosphere"><i class="fas fa-moon"></i> Atmosphere</label>
-                    <select id="atmosphere" aria-label="Select atmosphere">
-                        <option value="">None</option>
-                        <option value="Mysterious">Mysterious</option>
-                        <option value="Serene">Serene</option>
-                        <option value="Chaotic">Chaotic</option>
-                        <option value="Ethereal">Ethereal</option>
-                        <option value="Gloomy">Gloomy</option>
-                        <option value="Vibrant">Vibrant</option>
-                        <option value="Oppressive">Oppressive</option>
-                        <option value="Tranquil">Tranquil</option>
-                        <option value="Dramatic">Dramatic</option>
-                        <option value="Whimsical">Whimsical</option>
-                        <option value="Foreboding">Foreboding</option>
-                        <option value="Uplifting">Uplifting</option>
-                        <option value="Surreal">Surreal</option>
-                        <option value="Intimate">Intimate</option>
-                        <option value="Expansive">Expansive</option>
-                        <option value="Nostalgic">Nostalgic</option>
-                        <option value="Intense">Intense</option>
-                        <option value="Calm">Calm</option>
-                        <option value="Energetic">Energetic</option>
-                        <option value="Dreamy">Dreamy</option>
-                    </select>
-                </div>
-
-                <div class="input-group">
-                    <label for="background"><i class="fas fa-landmark"></i> Background</label>
-                    <select id="background" aria-label="Select background">
-                        <option value="">None</option>
-                        <option value="Forest">Forest</option>
-                        <option value="Urban Cityscape">Urban Cityscape</option>
-                        <option value="Ocean">Ocean</option>
-                        <option value="Desert">Desert</option>
-                        <option value="Mountain Range">Mountain Range</option>
-                        <option value="Castle">Castle</option>
-                        <option value="Library">Library</option>
-                        <option value="Studio">Studio</option>
-                        <option value="Beach">Beach</option>
-                        <option value="Snowy Mountains">Snowy Mountains</option>
-                        <option value="Tropical Island">Tropical Island</option>
-                        <option value="Ancient Ruins">Ancient Ruins</option>
-                        <option value="Underwater">Underwater</option>
-                        <option value="Space">Space</option>
-                        <option value="Countryside">Countryside</option>
-                        <option value="Laboratory">Laboratory</option>
-                        <option value="Marketplace">Marketplace</option>
-                        <option value="Garden">Garden</option>
-                        <option value="Skyscraper">Skyscraper</option>
-                        <option value="Cave">Cave</option>
-                    </select>
-                </div>
-
-                <div class="input-group">
-                    <label for="lighting"><i class="fas fa-lightbulb"></i> Lighting</label>
-                    <select id="lighting" aria-label="Select lighting">
-                        <option value="">None</option>
-                        <option value="Natural Daylight">Natural Daylight</option>
-                        <option value="Golden Hour">Golden Hour</option>
-                        <option value="Neon Glow">Neon Glow</option>
-                        <option value="Moonlight">Moonlight</option>
-                        <option value="Studio Lighting">Studio Lighting</option>
-                        <option value="Candlelit">Candlelit</option>
-                        <option value="Backlight">Backlight</option>
-                        <option value="Diffused">Diffused</option>
-                        <option value="Harsh Shadows">Harsh Shadows</option>
-                        <option value="Warm Ambient">Warm Ambient</option>
-                        <option value="Cool Blue">Cool Blue</option>
-                        <option value="Spotlight">Spotlight</option>
-                        <option value="Dramatic">Dramatic</option>
-                        <option value="Soft Focus">Soft Focus</option>
-                        <option value="Flash">Flash</option>
-                    </select>
-                </div>
-
-                <div class="input-group">
-                    <label><i class="fas fa-tags"></i> Quality Tags</label>
-                    <div class="tag-container">
-                        <div class="tag" data-tag="masterpiece">Masterpiece</div>
-                        <div class="tag" data-tag="high resolution">High Resolution</div>
-                        <div class="tag" data-tag="photo-realistic">Photo Realistic</div>
-                        <div class="tag" data-tag="best quality">Best Quality</div>
-                        <div class="tag" data-tag="8k">8K</div>
-                        <div class="tag" data-tag="ultra high res">Ultra High Res</div>
-                    </div>
-                </div>
-
-                <div class="input-group">
-                    <label><i class="fas fa-star"></i> Emphasis Tags</label>
-                    <div class="tag-container">
-                        <div class="tag" data-tag="red eyes:1.4">Red Eyes</div>
-                        <div class="tag" data-tag="black hair:1.2">Black Hair</div>
-                        <div class="tag" data-tag="long hair:1.2">Long Hair</div>
-                        <div class="tag" data-tag="detailed face:1.3">Detailed Face</div>
-                        <div class="tag" data-tag="natural lighting:1.2">Natural Lighting</div>
-                        <div class="tag" data-tag="cinematic:1.3">Cinematic</div>
-                    </div>
-                </div>
-
-                <div class="input-group">
-                    <label for="cameraAngles"><i class="fas fa-camera"></i> Camera Angles</label>
-                    <select id="cameraAngles" aria-label="Select camera angle">
-                        <option value="">None</option>
-                        <option value="Low Angle">Low Angle</option>
-                        <option value="High Angle">High Angle</option>
-                        <option value="Eye Level">Eye Level</option>
-                        <option value="Dutch Tilt">Dutch Tilt</option>
-                        <option value="Overhead">Overhead</option>
-                        <option value="Worm's Eye">Worm's Eye</option>
-                        <option value="Bird's Eye">Bird's Eye</option>
-                        <option value="Close-Up">Close-Up</option>
-                        <option value="Wide Shot">Wide Shot</option>
-                        <option value="Medium Shot">Medium Shot</option>
-                        <option value="Panning">Panning</option>
-                        <option value="Tracking">Tracking</option>
-                        <option value="Zoom In">Zoom In</option>
-                        <option value="Profile View">Profile View</option>
-                        <option value="Frontal View">Frontal View</option>
-                    </select>
-                </div>
-
-                <div class="input-group">
-                    <label for="colorPalette"><i class="fas fa-palette"></i> Color Palette</label>
-                    <select id="colorPalette" aria-label="Select color palette">
-                        <option value="">None</option>
-                        <option value="Monochrome">Monochrome</option>
-                        <option value="Vibrant">Vibrant</option>
-                        <option value="Pastel">Pastel</option>
-                        <option value="Warm Colors">Warm Colors</option>
-                        <option value="Cool Colors">Cool Colors</option>
-                        <option value="Earth Tones">Earth Tones</option>
-                        <option value="Neon Accents">Neon Accents</option>
-                        <option value="Soft Gradients">Soft Gradients</option>
-                        <option value="High Contrast">High Contrast</option>
-                        <option value="Low Contrast">Low Contrast</option>
-                        <option value="Complementary">Complementary</option>
-                        <option value="Analogous">Analogous</option>
-                        <option value="Triadic">Triadic</option>
-                        <option value="Split Complementary">Split Complementary</option>
-                        <option value="Tetradic">Tetradic</option>
-                    </select>
-                </div>
-
-                <div class="input-group">
-                    <label for="composition"><i class="fas fa-object-group"></i> Composition</label>
-                    <select id="composition" aria-label="Select composition">
-                        <option value="">None</option>
-                        <option value="Rule of Thirds">Rule of Thirds</option>
-                        <option value="Centered">Centered</option>
-                        <option value="Symmetrical">Symmetrical</option>
-                        <option value="Asymmetrical">Asymmetrical</option>
-                        <option value="Diagonal">Diagonal</option>
-                        <option value="Framing">Framing</option>
-                        <option value="Leading Lines">Leading Lines</option>
-                        <option value="Golden Ratio">Golden Ratio</option>
-                        <option value="Negative Space">Negative Space</option>
-                        <option value="Depth of Field">Depth of Field</option>
-                        <option value="Foreground Focus">Foreground Focus</option>
-                        <option value="Background Blur">Background Blur</option>
-                        <option value="High Contrast">High Contrast</option>
-                        <option value="Low Contrast">Low Contrast</option>
-                        <option value="Dynamic Angle">Dynamic Angle</option>
-                    </select>
-                </div>
-
-                <div class="input-group">
-                    <label for="clothing"><i class="fas fa-tshirt"></i> Clothing</label>
-                    <select id="clothing" aria-label="Select clothing">
-                        <option value="">None</option>
-                        <option value="Victorian">Victorian</option>
-                        <option value="Modern Casual">Modern Casual</option>
-                        <option value="Futuristic">Futuristic</option>
-                        <option value="Formal Wear">Formal Wear</option>
-                        <option value="Cultural Attire">Cultural Attire</option>
-                        <option value="Athletic">Athletic</option>
-                        <option value="Casual Sportswear">Casual Sportswear</option>
-                        <option value="Elegant Dress">Elegant Dress</option>
-                        <option value="Workwear">Workwear</option>
-                        <option value="Traditional Costume">Traditional Costume</option>
-                        <option value="Street Fashion">Street Fashion</option>
-                        <option value="Military Uniform">Military Uniform</option>
-                        <option value="Haute Couture">Haute Couture</option>
-                        <option value="Bohemian">Bohemian</option>
-                        <option value="Minimalist">Minimalist</option>
-                    </select>
-                </div>
-
-                <div class="input-group">
-                    <label for="accessories"><i class="fas fa-gem"></i> Accessories</label>
-                    <select id="accessories" aria-label="Select accessories">
-                        <option value="">None</option>
-                        <option value="Jewelry">Jewelry</option>
-                        <option value="Hats">Hats</option>
-                        <option value="Glasses">Glasses</option>
-                        <option value="Scarves">Scarves</option>
-                        <option value="Belts">Belts</option>
-                        <option value="Footwear">Footwear</option>
-                        <option value="Handbags">Handbags</option>
-                        <option value="Watches">Watches</option>
-                        <option value="Necklaces">Necklaces</option>
-                        <option value="Earrings">Earrings</option>
-                        <option value="Rings">Rings</option>
-                        <option value="Bracelets">Bracelets</option>
-                        <option value="Tattoos">Tattoos</option>
-                        <option value="Makeup">Makeup</option>
-                        <option value="Hair Accessories">Hair Accessories</option>
-                    </select>
-                </div>
-
-                <div class="btn-group">
-                    <button class="generate-btn pulse" id="generate-btn">
-                        <i class="fas fa-bolt"></i> Generate Prompts
-                    </button>
-                    <button class="random-btn" id="random-btn">
-                        <i class="fas fa-random"></i> Random Generate
-                    </button>
-                    <button class="reset-btn" id="reset-btn">
-                        <i class="fas fa-redo"></i> Reset
-                    </button>
-                </div>
-            </div>
-
-            <div class="panel">
-                <h2 class="panel-title"><i class="fas fa-list"></i> Advanced Options</h2>
-                
-                <div class="advanced-options">
-                    <h3><i class="fas fa-cogs"></i> Additional Parameters</h3>
-                    
-                    <div class="input-group">
-                        <label for="inspiration"><i class="fas fa-infinity"></i> Inspiration</label>
-                        <input type="text" id="inspiration" placeholder="e.g., movie style, photographer, artist">
-                    </div>
-
-                    <div class="input-group">
-                        <label for="location"><i class="fas fa-map-marker-alt"></i> Location</label>
-                        <input type="text" id="location" placeholder="e.g., studio, outdoor, historical building">
-                    </div>
-
-                    <div class="input-group">
-                        <label for="pose"><i class="fas fa-hands"></i> Pose/Action</label>
-                        <input type="text" id="pose" placeholder="e.g., standing confidently, sitting relaxed, walking">
-                    </div>
-
-                    <div class="input-group">
-                        <label for="additional-options"><i class="fas fa-cogs"></i> Additional Options</label>
-                        <input type="text" id="additional-options" placeholder="Additional instructions or specific requirements...">
-                    </div>
-                </div>
-                
-                <div class="input-group">
-                    <label><i class="fas fa-info-circle"></i> <span class="highlight">Pro Tip:</span> Click on tags to select multiple options</label>
-                    <p>Selected tags will be included in your generated prompts</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p>Generating your prompts...</p>
-        </div>
-
-        <div class="prompts-container" id="prompts-container">
-            <!-- Generated prompts will appear here -->
-        </div>
-
-        <div class="instructions">
-            <h2><i class="fas fa-info-circle"></i> How to Use This Generator</h2>
-            <ul>
-                <li>Select your preferred <strong>Art Style</strong> from the dropdown menu</li>
-                <li>Choose <strong>Emotion</strong>, <strong>Atmosphere</strong>, and <strong>Background</strong> options</li>
-                <li>Add <strong>Quality Tags</strong> and <strong>Emphasis Tags</strong> by clicking on them</li>
-                <li>Configure other parameters like <strong>Lighting</strong>, <strong>Camera Angle</strong>, etc.</li>
-                <li>Click <strong>Generate Prompts</strong> to create 5 unique, detailed prompts</li>
-                <li>Each prompt includes proper formatting with quality tags first, subject in the middle, and environment at the end</li>
-                <li>All prompts contain camera settings and maintain the required structure</li>
-                <li>Click <strong>Random Generate</strong> to create completely random prompts</li>
-            </ul>
-        </div>
-
-        <div class="footer">
-            <p>Advanced AI Prompt Generator | Professional Prompt Engineering Tool</p>
-        </div>
-    </div>
-
-    <div class="notification" id="notification">
-        <i class="fas fa-check-circle"></i> Prompt copied to clipboard!
-    </div>
-
-    <script>
-        // DOM Elements
-        const generateBtn = document.getElementById('generate-btn');
-        const resetBtn = document.getElementById('reset-btn');
-        const randomBtn = document.getElementById('random-btn');
-        const loadingElement = document.getElementById('loading');
-        const promptsContainer = document.getElementById('prompts-container');
-        const notification = document.getElementById('notification');
-        const artStyleSelect = document.getElementById('artStyle');
-        const subcategoryContainer = document.getElementById('subcategory-container');
-        const subcategoryGrid = document.getElementById('subcategory-grid');
-        const themeToggle = document.getElementById('themeToggle');
-
-        // Theme toggle functionality
-        themeToggle.addEventListener('click', function() {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', newTheme);
-            this.innerHTML = newTheme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-        });
-
-        // Art style subcategories mapping
-        const subcategories = {
-            Portrait: [
-                "Realistic Portrait", "Abstract Portrait", "Cartoon Portrait", 
-                "Historical Portrait", "Fantasy Portrait", "Sci-Fi Portrait", 
-                "Emotional Portrait", "Group Portrait", "Self Portrait", 
-                "Environmental Portrait"
-            ],
-            Surrealism: [
-                "Dreamlike", "Distorted Reality", "Symbolic", "Unconscious Mind", 
-                "Metaphysical", "Paradox", "Absurd", "Fantastic", "Psychedelic", 
-                "Morphing"
-            ],
-            Cyberpunk: [
-                "Futuristic City", "Neon Glow", "Mechanical", "Dark Future", 
-                "Urban Decay", "Tech Fusion", "Virtual Reality", "Retro Futurism", 
-                "Clockwork", "Inventive Design"
-            ],
-            Baroque: [
-                "Dramatic Lighting", "Rich Colors", "Ornate Details", "Grandeur", 
-                "Dramatic Movement", "Contrast", "Luxury", "Theatrical", 
-                "Opulence", "Complex Composition"
-            ],
-            Minimalism: [
-                "Clean Lines", "Simple Forms", "Neutral Colors", "Space", 
-                "Functional Design", "Essential Elements", "Monochrome", 
-                "Geometric Shapes", "Uncluttered", "Subtle"
-            ],
-            "Pop Art": [
-                "Bold Colors", "Graphic Style", "Commercial Imagery", "Mass Culture", 
-                "Repetition", "Iconic Symbols", "Comic Style", "Bright Contrast", 
-                "Bold Typography", "Urban Theme"
-            ],
-            Impressionism: [
-                "Brush Strokes", "Light Effects", "Outdoor Scenes", "Color Harmony", 
-                "Movement", "Natural Light", "Soft Edges", "Vibrant Colors", 
-                "Painted Texture", "Capturing Moment"
-            ],
-            "Abstract Expressionism": [
-                "Emotional Expression", "Large Scale", "Free Flow", "Gestural Brushwork", 
-                "Color Field", "Spontaneity", "Non-Representational", "Emotional Impact", 
-                "Bold Colors", "Abstract Forms"
-            ],
-            Steampunk: [
-                "Victorian Era", "Steam Power", "Mechanical Parts", "Industrial", 
-                "Inventive Design", "Brass & Copper", "Clockwork", "Adventure", 
-                "Vintage Futurism", "Ornate Machinery"
-            ],
-            Fantasy: [
-                "Mythical Creatures", "Enchanted Forest", "Magical World", "Dragon", 
-                "Wizard", "Fairy Tale", "Magic", "Wonderland", "Mystical", 
-                "Ethereal"
-            ],
-            "Sci-Fi": [
-                "Futuristic Technology", "Alien Worlds", "Space Exploration", 
-                "Robotics", "Cybernetics", "Time Travel", "Spaceship", 
-                "Alien Civilization", "Science Fiction", "Future Society"
-            ],
-            Realism: [
-                "Accurate Depiction", "Everyday Life", "Social Commentary", 
-                "Naturalistic", "Detailed Observation", "True Representation", 
-                "Ordinary Objects", "Realistic Lighting", "Authentic", 
-                "Observable Truth"
-            ],
-            Cartoon: [
-                "Exaggerated Features", "Playful", "Humorous", "Animated", 
-                "Colorful", "Simple Shapes", "Expressive Characters", 
-                "Storytelling", "Whimsical", "Childlike"
-            ],
-            Watercolor: [
-                "Translucent Layers", "Soft Edges", "Flowing Colors", "Light Touch", 
-                "Blending", "Wet-on-Wet", "Gentle Washes", "Delicate Details", 
-                "Natural Texture", "Fluid Movement"
-            ],
-            "Oil Painting": [
-                "Thick Application", "Rich Pigments", "Layered Technique", 
-                "Slow Drying", "Deep Shadows", "Smooth Blend", "Texture", 
-                "Vibrant Colors", "Classic Medium", "Masterpiece Quality"
-            ],
-            "Digital Art": [
-                "Computer Generated", "Pixel Perfect", "Layered Editing", 
-                "Digital Painting", "3D Modeling", "Vector Art", "Color Correction", 
-                "High Resolution", "Modern Techniques", "Post-Processing"
-            ],
-            "Pixel Art": [
-                "Retro Gaming", "Limited Palette", "Grid Based", "Blocky", 
-                "Chibi Style", "Nostalgia", "8-Bit", "16-Bit", "Low Resolution", 
-                "Iconic Design"
-            ],
-            Graffiti: [
-                "Street Art", "Spray Paint", "Urban Culture", "Tagging", 
-                "Mural", "Abstract", "Bold Lines", "Colorful", "Political Message", 
-                "Cultural Expression"
-            ],
-            Renaissance: [
-                "Classical Proportion", "Humanism", "Religious Themes", 
-                "Perspective", "Ideal Beauty", "Scientific Accuracy", 
-                "Golden Ratio", "Divine Light", "Masterpiece", "Cultural Revival"
-            ],
-            Gothic: [
-                "Dark Atmosphere", "Mysterious", "Mysticism", "Dramatic", 
-                "Romantic", "Medieval", "Shadow Play", "Ornate Details", 
-                "Gothic Architecture", "Melancholy"
-            ]
-        };
-
-        // Tag selection
-        const tagElements = document.querySelectorAll('.tag');
-        tagElements.forEach(tag => {
-            tag.addEventListener('click', function() {
-                this.classList.toggle('selected');
-            });
-        });
-
-        // Update subcategories when art style changes
-        function updateSubcategories() {
-            const style = artStyleSelect.value;
-            
-            if (subcategories[style]) {
-                subcategoryContainer.classList.add('active');
-                subcategoryGrid.innerHTML = '';
-                
-                subcategories[style].forEach(subcat => {
-                    const btn = document.createElement('button');
-                    btn.className = 'subcategory-btn';
-                    btn.textContent = subcat;
-                    btn.dataset.subcat = subcat.toLowerCase();
-                    btn.addEventListener('click', function() {
-                        this.classList.toggle('selected');
-                    });
-                    subcategoryGrid.appendChild(btn);
-                });
-            } else {
-                subcategoryContainer.classList.remove('active');
-            }
-        }
-
-        // Generate prompts function
-        function generatePrompts() {
-            // Show loading
-            loadingElement.style.display = 'block';
-            
-            // Simulate processing delay
-            setTimeout(() => {
-                // Get form values
-                const artStyle = document.getElementById('artStyle').value || "Portrait";
-                const emotion = document.getElementById('emotion').value || "";
-                const atmosphere = document.getElementById('atmosphere').value || "";
-                const background = document.getElementById('background').value || "";
-                const lighting = document.getElementById('lighting').value || "";
-                const cameraAngle = document.getElementById('cameraAngles').value || "";
-                const colorPalette = document.getElementById('colorPalette').value || "";
-                const composition = document.getElementById('composition').value || "";
-                const clothing = document.getElementById('clothing').value || "";
-                const accessories = document.getElementById('accessories').value || "";
-                const inspiration = document.getElementById('inspiration').value || "cinematic";
-                const location = document.getElementById('location').value || "studio";
-                const pose = document.getElementById('pose').value || "standing confidently";
-                const additionalOptions = document.getElementById('additional-options').value;
-                
-                // Get selected tags
-                const selectedTags = [];
-                document.querySelectorAll('.tag.selected').forEach(tag => {
-                    selectedTags.push(tag.getAttribute('data-tag'));
-                });
-                
-                // Get selected subcategories
-                const selectedSubcats = [];
-                document.querySelectorAll('.subcategory-btn.selected').forEach(btn => {
-                    selectedSubcats.push(btn.dataset.subcat);
-                });
-                
-                // Generate 5 different prompts
-                const prompts = [];
-                
-                // Prompt 1: Simple (50-70 words)
-                let simplePrompt = "(masterpiece, high resolution:1.4, photo-realistic:1.3)";
-                
-                // Add quality tags
-                if (selectedTags.length > 0) {
-                    simplePrompt += " " + selectedTags.join(", ");
-                }
-                
-                // Add subject and modifiers
-                simplePrompt += " Beautiful Latina woman with black hair";
-                
-                if (emotion) simplePrompt += ", " + emotion + " emotion";
-                if (atmosphere) simplePrompt += ", " + atmosphere + " atmosphere";
-                if (background) simplePrompt += ", " + background + " background";
-                if (lighting) simplePrompt += ", " + lighting + " lighting";
-                if (cameraAngle) simplePrompt += ", " + cameraAngle + " camera angle";
-                if (colorPalette) simplePrompt += ", " + colorPalette + " color palette";
-                if (composition) simplePrompt += ", " + composition + " composition";
-                if (clothing) simplePrompt += ", " + clothing + " clothing";
-                if (accessories) simplePrompt += ", " + accessories + " accessories";
-                if (inspiration) simplePrompt += ", inspired by " + inspiration;
-                if (location) simplePrompt += ", in " + location + " setting";
-                if (pose) simplePrompt += ", " + pose;
-                
-                simplePrompt += ", close-up portrait, shot with a Nikon D850, a 50mm lens at f/2.8";
-                
-                // Add to prompts array
-                prompts.push(simplePrompt);
-                
-                // Prompt 2: Detailed (200+ words)
-                let detailedPrompt = "(masterpiece, high resolution:1.4, photo-realistic:1.3) ";
-                
-                // Add quality tags
-                if (selectedTags.length > 0) {
-                    detailedPrompt += selectedTags.join(", ") + ", ";
-                }
-                
-                // Add subject and modifiers
-                detailedPrompt += "A stunning close-up portrait of a beautiful Latina woman with black hair. ";
-                
-                if (emotion) detailedPrompt += "Her " + emotion + " expression conveys deep emotion. ";
-                if (atmosphere) detailedPrompt += "The scene is filled with " + atmosphere + " atmosphere. ";
-                if (background) detailedPrompt += "The background features a " + background + " setting. ";
-                if (lighting) detailedPrompt += "The " + lighting + " lighting creates dramatic effects. ";
-                if (cameraAngle) detailedPrompt += "The " + cameraAngle + " angle provides a unique perspective. ";
-                if (colorPalette) detailedPrompt += "The " + colorPalette + " color palette adds visual harmony. ";
-                if (composition) detailedPrompt += "The " + composition + " composition guides the viewer's eye. ";
-                if (clothing) detailedPrompt += "She wears " + clothing + " that complements the scene. ";
-                if (accessories) detailedPrompt += "Her " + accessories + " add subtle detail. ";
-                if (inspiration) detailedPrompt += "The style is inspired by " + inspiration + ". ";
-                if (location) detailedPrompt += "The setting is " + location + ". ";
-                if (pose) detailedPrompt += "She poses with " + pose + ". ";
-                
-                detailedPrompt += "The portrait captures her in a close-up format, showing every detail of her face and expression. ";
-                detailedPrompt += "The camera work emphasizes her features with a Nikon D850, a 50mm lens at f/2.8, ensuring sharp details and cinematic quality.";
-                
-                // Add to prompts array
-                prompts.push(detailedPrompt);
-                
-                // Prompt 3: Creative (50-70 words)
-                let creativePrompt = "(masterpiece, photo-realistic:1.4, cinematic:1.3)";
-                
-                // Add quality tags
-                if (selectedTags.length > 0) {
-                    creativePrompt += " " + selectedTags.join(", ");
-                }
-                
-                // Add subject and modifiers
-                creativePrompt += " Beautiful Latina woman with black hair";
-                
-                if (emotion) creativePrompt += ", " + emotion + " emotion";
-                if (atmosphere) creativePrompt += ", " + atmosphere + " atmosphere";
-                if (background) creativePrompt += ", " + background + " background";
-                if (lighting) creativePrompt += ", " + lighting + " lighting";
-                if (cameraAngle) creativePrompt += ", " + cameraAngle + " camera angle";
-                if (colorPalette) creativePrompt += ", " + colorPalette + " color palette";
-                if (composition) creativePrompt += ", " + composition + " composition";
-                if (clothing) creativePrompt += ", " + clothing + " clothing";
-                if (accessories) creativePrompt += ", " + accessories + " accessories";
-                if (inspiration) creativePrompt += ", inspired by " + inspiration;
-                if (location) creativePrompt += ", in " + location + " setting";
-                if (pose) creativePrompt += ", " + pose;
-                
-                creativePrompt += ", close-up portrait, shot with a Canon 5D Mark IV, a 24mm lens at f/1.8";
-                
-                // Add to prompts array
-                prompts.push(creativePrompt);
-                
-                // Prompt 4: Advanced (200+ words)
-                let advancedPrompt = "(masterpiece, high resolution:1.4, photo-realistic:1.3) ";
-                
-                // Add quality tags
-                if (selectedTags.length > 0) {
-                    advancedPrompt += selectedTags.join(", ") + ", ";
-                }
-                
-                // Add subject and modifiers
-                advancedPrompt += "An extraordinary portrait of a beautiful Latina woman with black hair. ";
-                
-                if (emotion) advancedPrompt += "The scene is illuminated by " + emotion + " emotion, creating a " + atmosphere + " atmosphere. ";
-                if (background) advancedPrompt += "The " + background + " background provides a rich setting. ";
-                if (lighting) advancedPrompt += "The " + lighting + " lighting creates dramatic shadows. ";
-                if (cameraAngle) advancedPrompt += "The " + cameraAngle + " angle showcases the subject perfectly. ";
-                if (colorPalette) advancedPrompt += "The " + colorPalette + " color scheme provides visual harmony. ";
-                if (composition) advancedPrompt += "The " + composition + " composition guides the viewer's eye. ";
-                if (clothing) advancedPrompt += "She wears " + clothing + " that complements the scene. ";
-                if (accessories) advancedPrompt += "Her " + accessories + " add subtle detail. ";
-                if (inspiration) advancedPrompt += "The style is inspired by " + inspiration + ". ";
-                if (location) advancedPrompt += "The setting is " + location + ". ";
-                if (pose) advancedPrompt += "She poses with " + pose + ". ";
-                
-                advancedPrompt += "This cinematic " + artStyle + " style prompt combines all elements for maximum impact. ";
-                advancedPrompt += "The portrait captures her in a close-up format, showing every detail of her face and expression. ";
-                advancedPrompt += "Shot with a Sony A7R IV, a 35mm lens at f/2.0, ensuring exceptional image quality.";
-                
-                // Add to prompts array
-                prompts.push(advancedPrompt);
-                
-                // Prompt 5: Premium (50-70 words)
-                let premiumPrompt = "(masterpiece, photo-realistic:1.4, best quality:1.3, 8k:1.2)";
-                
-                // Add quality tags
-                if (selectedTags.length > 0) {
-                    premiumPrompt += " " + selectedTags.join(", ");
-                }
-                
-                // Add subject and modifiers
-                premiumPrompt += " Beautiful Latina woman with black hair";
-                
-                if (emotion) premiumPrompt += ", " + emotion + " emotion";
-                if (atmosphere) premiumPrompt += ", " + atmosphere + " atmosphere";
-                if (background) premiumPrompt += ", " + background + " background";
-                if (lighting) premiumPrompt += ", " + lighting + " lighting";
-                if (cameraAngle) premiumPrompt += ", " + cameraAngle + " camera angle";
-                if (colorPalette) premiumPrompt += ", " + colorPalette + " color palette";
-                if (composition) premiumPrompt += ", " + composition + " composition";
-                if (clothing) premiumPrompt += ", " + clothing + " clothing";
-                if (accessories) premiumPrompt += ", " + accessories + " accessories";
-                if (inspiration) premiumPrompt += ", inspired by " + inspiration;
-                if (location) premiumPrompt += ", in " + location + " setting";
-                if (pose) premiumPrompt += ", " + pose;
-                
-                premiumPrompt += ", close-up portrait, shot with a Hasselblad X1D II, a 90mm lens at f/2.8";
-                
-                // Add to prompts array
-                prompts.push(premiumPrompt);
-
-                // Display prompts
-                displayPrompts(prompts);
-                
-                // Hide loading
-                loadingElement.style.display = 'none';
-            }, 1500);
-        }
-
-        // Random generate function
-        function randomGenerate() {
-            // Show loading
-            loadingElement.style.display = 'block';
-            
-            // Simulate processing delay
-            setTimeout(() => {
-                // Generate random prompts without any selections
-                const emotions = ['Joyful', 'Melancholic', 'Angry', 'Serene', 'Excited', 'Fearful', 'Romantic', 'Mysterious', 'Playful', 'Somber'];
-                const atmospheres = ['Mysterious', 'Serene', 'Chaotic', 'Ethereal', 'Gloomy', 'Vibrant', 'Oppressive', 'Tranquil', 'Dramatic', 'Whimsical', 'Foreboding', 'Uplifting', 'Surreal', 'Intimate', 'Expansive', 'Nostalgic', 'Intense', 'Calm', 'Energetic', 'Dreamy'];
-                const backgrounds = ['Forest', 'Urban Cityscape', 'Ocean', 'Desert', 'Mountain Range', 'Castle', 'Library', 'Studio', 'Beach', 'Snowy Mountains', 'Tropical Island', 'Ancient Ruins', 'Underwater', 'Space', 'Countryside', 'Laboratory', 'Marketplace', 'Garden', 'Skyscraper', 'Cave'];
-                const lighting = ['Natural Daylight', 'Golden Hour', 'Neon Glow', 'Moonlight', 'Studio Lighting', 'Candlelit', 'Backlight', 'Diffused', 'Harsh Shadows', 'Warm Ambient', 'Cool Blue', 'Spotlight', 'Dramatic', 'Soft Focus', 'Flash'];
-                const cameraAngles = ['Low Angle', 'High Angle', 'Eye Level', 'Dutch Tilt', 'Overhead', 'Worm\'s Eye', 'Bird\'s Eye', 'Close-Up', 'Wide Shot', 'Medium Shot', 'Panning', 'Tracking', 'Zoom In', 'Profile View', 'Frontal View'];
-                const colorPalettes = ['Monochrome', 'Vibrant', 'Pastel', 'Warm Colors', 'Cool Colors', 'Earth Tones', 'Neon Accents', 'Soft Gradients', 'High Contrast', 'Low Contrast', 'Complementary', 'Analogous', 'Triadic', 'Split Complementary', 'Tetradic'];
-                const compositions = ['Rule of Thirds', 'Centered', 'Symmetrical', 'Asymmetrical', 'Diagonal', 'Framing', 'Leading Lines', 'Golden Ratio', 'Negative Space', 'Depth of Field', 'Foreground Focus', 'Background Blur', 'High Contrast', 'Low Contrast', 'Dynamic Angle'];
-                const clothing = ['Victorian', 'Modern Casual', 'Futuristic', 'Formal Wear', 'Cultural Attire', 'Athletic', 'Casual Sportswear', 'Elegant Dress', 'Workwear', 'Traditional Costume', 'Street Fashion', 'Military Uniform', 'Haute Couture', 'Bohemian', 'Minimalist'];
-                const accessories = ['Jewelry', 'Hats', 'Glasses', 'Scarves', 'Belts', 'Footwear', 'Handbags', 'Watches', 'Necklaces', 'Earrings', 'Rings', 'Bracelets', 'Tattoos', 'Makeup', 'Hair Accessories'];
-                const inspirations = ['movie style', 'photographer', 'artist', 'cinematic', 'editorial', 'fashion', 'advertising', 'architectural', 'documentary', 'science fiction'];
-                const locations = ['studio', 'outdoor', 'historical building', 'urban environment', 'nature setting', 'industrial area', 'luxury hotel', 'museum', 'gallery', 'theater'];
-                const poses = ['standing confidently', 'sitting relaxed', 'walking', 'posing dramatically', 'looking directly at viewer', 'with hands on hips', 'leaning against wall', 'in motion', 'with arms raised', 'in contemplative pose'];
-                
-                const prompts = [];
-                
-                for (let i = 0; i < 5; i++) {
-                    // Prompt 1: Simple
-                    const randomEmotion = emotions[Math.floor(Math.random() * emotions.length)];
-                    const randomAtmosphere = atmospheres[Math.floor(Math.random() * atmospheres.length)];
-                    const randomBackground = backgrounds[Math.floor(Math.random() * backgrounds.length)];
-                    const randomLighting = lighting[Math.floor(Math.random() * lighting.length)];
-                    const randomCameraAngle = cameraAngles[Math.floor(Math.random() * cameraAngles.length)];
-                    const randomColorPalette = colorPalettes[Math.floor(Math.random() * colorPalettes.length)];
-                    const randomComposition = compositions[Math.floor(Math.random() * compositions.length)];
-                    const randomClothing = clothing[Math.floor(Math.random() * clothing.length)];
-                    const randomAccessory = accessories[Math.floor(Math.random() * accessories.length)];
-                    const randomInspiration = inspirations[Math.floor(Math.random() * inspirations.length)];
-                    const randomLocation = locations[Math.floor(Math.random() * locations.length)];
-                    const randomPose = poses[Math.floor(Math.random() * poses.length)];
-                    
-                    let simplePrompt = "(masterpiece, high resolution:1.4, photo-realistic:1.3)";
-                    simplePrompt += " Beautiful Latina woman with black hair";
-                    simplePrompt += ", " + randomEmotion + " emotion";
-                    simplePrompt += ", " + randomAtmosphere + " atmosphere";
-                    simplePrompt += ", " + randomBackground + " background";
-                    simplePrompt += ", " + randomLighting + " lighting";
-                    simplePrompt += ", " + randomCameraAngle + " camera angle";
-                    simplePrompt += ", " + randomColorPalette + " color palette";
-                    simplePrompt += ", " + randomComposition + " composition";
-                    simplePrompt += ", " + randomClothing + " clothing";
-                    simplePrompt += ", " + randomAccessory + " accessories";
-                    simplePrompt += ", inspired by " + randomInspiration;
-                    simplePrompt += ", in " + randomLocation + " setting";
-                    simplePrompt += ", " + randomPose;
-                    simplePrompt += ", close-up portrait, shot with a Nikon D850, a 50mm lens at f/2.8";
-                    
-                    prompts.push(simplePrompt);
-                    
-                    // Prompt 2: Detailed
-                    let detailedPrompt = "(masterpiece, high resolution:1.4, photo-realistic:1.3) ";
-                    detailedPrompt += "A stunning close-up portrait of a beautiful Latina woman with black hair. ";
-                    detailedPrompt += "Her " + randomEmotion + " expression conveys deep emotion. ";
-                    detailedPrompt += "The scene is filled with " + randomAtmosphere + " atmosphere. ";
-                    detailedPrompt += "The background features a " + randomBackground + " setting. ";
-                    detailedPrompt += "The " + randomLighting + " lighting creates dramatic effects. ";
-                    detailedPrompt += "The " + randomCameraAngle + " angle provides a unique perspective. ";
-                    detailedPrompt += "The " + randomColorPalette + " color palette adds visual harmony. ";
-                    detailedPrompt += "The " + randomComposition + " composition guides the viewer's eye. ";
-                    detailedPrompt += "She wears " + randomClothing + " that complements the scene. ";
-                    detailedPrompt += "Her " + randomAccessory + " add subtle detail. ";
-                    detailedPrompt += "The style is inspired by " + randomInspiration + ". ";
-                    detailedPrompt += "The setting is " + randomLocation + ". ";
-                    detailedPrompt += "She poses with " + randomPose + ". ";
-                    detailedPrompt += "The portrait captures her in a close-up format, showing every detail of her face and expression. ";
-                    detailedPrompt += "The camera work emphasizes her features with a Nikon D850, a 50mm lens at f/2.8, ensuring sharp details and cinematic quality.";
-                    
-                    prompts.push(detailedPrompt);
-                }
-
-                // Display prompts
-                displayPrompts(prompts.slice(0, 5)); // Only show first 5 for simplicity
-                
-                // Hide loading
-                loadingElement.style.display = 'none';
-            }, 1500);
-        }
-
-        // Display prompts in cards
-        function displayPrompts(prompts) {
-            promptsContainer.innerHTML = '';
-            
-            prompts.forEach((prompt, index) => {
-                const promptCard = document.createElement('div');
-                promptCard.className = 'prompt-card';
-                
-                const promptTitle = document.createElement('div');
-                promptTitle.className = 'prompt-title';
-                promptTitle.innerHTML = `<i class="fas fa-${index % 2 === 0 ? 'star' : 'star-half-alt'}"></i> Prompt ${index + 1}`;
-                
-                const promptContent = document.createElement('div');
-                promptContent.className = 'prompt-content';
-                promptContent.textContent = prompt;
-                
-                const copyBtn = document.createElement('button');
-                copyBtn.className = 'copy-btn';
-                copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy Prompt';
-                copyBtn.onclick = () => copyToClipboard(prompt);
-                
-                promptCard.appendChild(promptTitle);
-                promptCard.appendChild(promptContent);
-                promptCard.appendChild(copyBtn);
-                
-                promptsContainer.appendChild(promptCard);
-            });
-        }
-
-        // Copy to clipboard function
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                // Show notification
-                notification.classList.add('show');
-                setTimeout(() => {
-                    notification.classList.remove('show');
-                }, 2000);
-            });
-        }
-
-        // Reset form
-        function resetForm() {
-            document.getElementById('artStyle').value = '';
-            document.getElementById('emotion').value = '';
-            document.getElementById('atmosphere').value = '';
-            document.getElementById('background').value = '';
-            document.getElementById('lighting').value = '';
-            document.getElementById('cameraAngles').value = '';
-            document.getElementById('colorPalette').value = '';
-            document.getElementById('composition').value = '';
-            document.getElementById('clothing').value = '';
-            document.getElementById('accessories').value = '';
-            document.getElementById('inspiration').value = '';
-            document.getElementById('location').value = '';
-            document.getElementById('pose').value = '';
-            document.getElementById('additional-options').value = '';
-            
-            // Remove selected tags
-            document.querySelectorAll('.tag.selected').forEach(tag => {
-                tag.classList.remove('selected');
-            });
-            
-            // Remove selected subcategories
-            document.querySelectorAll('.subcategory-btn.selected').forEach(btn => {
-                btn.classList.remove('selected');
-            });
-            
-            // Hide subcategory container
-            subcategoryContainer.classList.remove('active');
-            
-            // Clear prompts
-            promptsContainer.innerHTML = '';
-        }
-
-        // Event listeners
-        generateBtn.addEventListener('click', generatePrompts);
-        resetBtn.addEventListener('click', resetForm);
-        randomBtn.addEventListener('click', randomGenerate);
-
-        // Initialize
-        window.addEventListener('load', function() {
-            // Populate art styles dropdown
-            const artStyles = Object.keys(subcategories);
-            artStyles.forEach(style => {
-                const option = document.createElement('option');
-                option.value = style;
-                option.textContent = style;
-                artStyleSelect.appendChild(option);
-            });
-            
-            // Add hover effect to panels
-            const panels = document.querySelectorAll('.panel');
-            panels.forEach(panel => {
-                panel.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-5px)';
-                });
-                panel.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0)';
-                });
-            });
-            
-            // Set initial theme icon
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            themeToggle.innerHTML = currentTheme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-        });
-    </script>
-</body>
-</html>
+                <h2 class="panel-title"><i class="
