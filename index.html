@@ -7,14 +7,13 @@
     <title>Raju's Image Prompts Generator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
+        /* Theme tokens */
         :root {
+            --bg: #ffffff;
+            --text: #111111;
+            --muted-bg: #f3f4f6;
+            --border: #d1d5db;
+            --focus: #2563eb;
             --primary: #667eea;
             --secondary: #764ba2;
             --dark: #2c3e50;
@@ -25,6 +24,124 @@
             --panel-bg: rgba(255, 255, 255, 0.15);
             --panel-border: rgba(255, 255, 255, 0.2);
             --text-light: rgba(255, 255, 255, 0.9);
+        }
+
+        [data-theme="dark"] {
+            --bg: #0b0f14;
+            --text: #e6e6e6;
+            --muted-bg: #131a22;
+            --border: #263241;
+            --focus: #60a5fa;
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --accent: #f39c12;
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --panel-bg: rgba(255, 255, 255, 0.15);
+            --panel-border: rgba(255, 255, 255, 0.2);
+            --text-light: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Let OS dark mode auto-apply if you don’t set data-theme */
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme]) {
+                --bg: #0b0f14;
+                --text: #e6e6e6;
+                --muted-bg: #131a22;
+                --border: #263241;
+                --focus: #60a5fa;
+                --primary: #667eea;
+                --secondary: #764ba2;
+                --dark: #2c3e50;
+                --light: #ecf0f1;
+                --accent: #f39c12;
+                --success: #27ae60;
+                --danger: #e74c3c;
+                --panel-bg: rgba(255, 255, 255, 0.15);
+                --panel-border: rgba(255, 255, 255, 0.2);
+                --text-light: rgba(255, 255, 255, 0.9);
+            }
+        }
+
+        /* Base select look */
+        select {
+            color: var(--select-text, var(--text));
+            background-color: var(--select-bg, var(--bg));
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 10px 12px;
+            width: 100%;
+            appearance: none; /* hide native arrow to style consistently */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image:
+                linear-gradient(45deg, transparent 50%, var(--text) 50%),
+                linear-gradient(135deg, var(--text) 50%, transparent 50%),
+                linear-gradient(to right, transparent, transparent);
+            background-position:
+                calc(100% - 18px) calc(50% - 3px),
+                calc(100% - 12px) calc(50% - 3px),
+                calc(100% - 2.4em) 0.5em;
+            background-size: 6px 6px, 6px 6px, 1px 1.6em;
+            background-repeat: no-repeat;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--focus);
+            box-shadow: 0 0 0 3px color-mix(in oklab, var(--focus) 25%, transparent);
+        }
+
+        /* Option text when the list is open */
+        select option {
+            color: var(--select-list-text, var(--text));
+            background-color: var(--select-list-bg, var(--bg));
+        }
+
+        /* Selected and hovered options */
+        select option:checked,
+        select option:focus,
+        select option:hover {
+            color: var(--select-list-text, var(--text));
+            background-color: color-mix(in oklab, var(--focus) 20%, var(--select-list-bg, var(--bg)));
+        }
+
+        /* High-contrast fallback if color-mix unsupported */
+        @supports not (color: color-mix(in oklab, black, white)) {
+            select option:checked,
+            select option:focus,
+            select option:hover {
+                background-color: var(--focus);
+                color: #fff;
+            }
+        }
+
+        /* WebKit-specific */
+        @media screen and (-webkit-min-device-pixel-ratio:0) {
+            select,
+            select option {
+                background-color: var(--select-bg, var(--bg));
+                color: var(--select-text, var(--text));
+            }
+        }
+
+        /* Windows High Contrast/Forced Colors support */
+        @media (forced-colors: active) {
+            select {
+                forced-color-adjust: auto;
+            }
+            select option {
+                forced-color-adjust: auto;
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
@@ -432,9 +549,50 @@
             -webkit-text-fill-color: transparent;
             font-weight: bold;
         }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(30deg);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            .panel {
+                padding: 20px 15px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+        }
     </style>
 </head>
 <body>
+    <div class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+    </div>
+    
     <div class="container">
         <header>
             <h1><i class="fas fa-magic"></i> Raju's Image Prompts Generator</h1>
@@ -796,6 +954,15 @@
         const artStyleSelect = document.getElementById('artStyle');
         const subcategoryContainer = document.getElementById('subcategory-container');
         const subcategoryGrid = document.getElementById('subcategory-grid');
+        const themeToggle = document.getElementById('themeToggle');
+
+        // Theme toggle functionality
+        themeToggle.addEventListener('click', function() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            this.innerHTML = newTheme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+        });
 
         // Art style subcategories mapping
         const subcategories = {
@@ -1312,6 +1479,10 @@
                     this.style.transform = 'translateY(0)';
                 });
             });
+            
+            // Set initial theme icon
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            themeToggle.innerHTML = currentTheme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
         });
     </script>
 </body>
