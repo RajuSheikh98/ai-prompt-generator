@@ -24,7 +24,6 @@
             --panel-border: rgba(255, 255, 255, 0.2);
             --text-light: rgba(255, 255, 255, 0.9);
         }
-
         [data-theme="dark"] {
             --bg: #0b0f14;
             --text: #e6e6e6;
@@ -42,7 +41,6 @@
             --panel-border: rgba(255, 255, 255, 0.2);
             --text-light: rgba(255, 255, 255, 0.9);
         }
-
         /* Let OS dark mode auto-apply if you don’t set data-theme */
         @media (prefers-color-scheme: dark) {
             :root:not([data-theme]) {
@@ -63,7 +61,6 @@
                 --text-light: rgba(255, 255, 255, 0.9);
             }
         }
-
         /* Base select look */
         select {
             color: var(--select-text, var(--text));
@@ -86,19 +83,16 @@
             background-size: 6px 6px, 6px 6px, 1px 1.6em;
             background-repeat: no-repeat;
         }
-
         select:focus {
             outline: none;
             border-color: var(--focus);
             box-shadow: 0 0 0 3px color-mix(in oklab, var(--focus) 25%, transparent);
         }
-
         /* Option text when the list is open */
         select option {
             color: var(--select-list-text, var(--text));
             background-color: var(--select-list-bg, var(--bg));
         }
-
         /* Selected and hovered options */
         select option:checked,
         select option:focus,
@@ -106,7 +100,6 @@
             color: var(--select-list-text, var(--text));
             background-color: color-mix(in oklab, var(--focus) 20%, var(--select-list-bg, var(--bg)));
         }
-
         /* High-contrast fallback if color-mix unsupported */
         @supports not (color: color-mix(in oklab, black, white)) {
             select option:checked,
@@ -116,7 +109,6 @@
                 color: #fff;
             }
         }
-
         /* WebKit-specific */
         @media screen and (-webkit-min-device-pixel-ratio:0) {
             select,
@@ -125,7 +117,6 @@
                 color: var(--select-text, var(--text));
             }
         }
-
         /* Windows High Contrast/Forced Colors support */
         @media (forced-colors: active) {
             select {
@@ -135,32 +126,27 @@
                 forced-color-adjust: auto;
             }
         }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
         body {
             background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
             color: var(--text-light);
             min-height: 100vh;
             padding: 20px;
         }
-
         .container {
             max-width: 1200px;
             margin: 0 auto;
         }
-
         header {
             text-align: center;
             padding: 30px 0;
             margin-bottom: 30px;
         }
-
         h1 {
             font-size: 2.8rem;
             margin-bottom: 10px;
@@ -169,27 +155,23 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-
         .subtitle {
             font-size: 1.2rem;
             opacity: 0.9;
             max-width: 700px;
             margin: 0 auto;
         }
-
         .main-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 30px;
             margin-bottom: 30px;
         }
-
         @media (max-width: 768px) {
             .main-content {
                 grid-template-columns: 1fr;
             }
         }
-
         .panel {
             background: var(--panel-bg);
             backdrop-filter: blur(10px);
@@ -199,11 +181,9 @@
             border: 1px solid var(--panel-border);
             transition: transform 0.3s ease;
         }
-
         .panel:hover {
             transform: translateY(-5px);
         }
-
         .panel-title {
             font-size: 1.5rem;
             margin-bottom: 20px;
@@ -214,18 +194,15 @@
             border-bottom: 1px solid var(--panel-border);
             padding-bottom: 15px;
         }
-
         .input-group {
             margin-bottom: 20px;
         }
-
         label {
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
             color: var(--light);
         }
-
         input, select {
             width: 100%;
             padding: 12px 15px;
@@ -237,25 +214,21 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             transition: all 0.3s ease;
         }
-
         input:focus, select:focus {
             outline: none;
             border-color: var(--accent);
             background: rgba(255, 255, 255, 0.2);
             box-shadow: 0 0 0 2px rgba(243, 156, 18, 0.3);
         }
-
         input::placeholder {
             color: rgba(255, 255, 255, 0.7);
         }
-
         .tag-container {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
             margin-top: 10px;
         }
-
         .tag {
             background: rgba(102, 126, 234, 0.3);
             padding: 6px 12px;
@@ -268,24 +241,20 @@
             align-items: center;
             gap: 5px;
         }
-
         .tag:hover {
             background: rgba(102, 126, 234, 0.5);
             transform: translateY(-2px);
         }
-
         .tag.selected {
             background: var(--primary);
             border-color: var(--accent);
             box-shadow: 0 0 8px rgba(243, 156, 18, 0.5);
         }
-
         .btn-group {
             display: flex;
             gap: 15px;
             margin-top: 20px;
         }
-
         button {
             flex: 1;
             padding: 15px;
@@ -300,57 +269,47 @@
             justify-content: center;
             gap: 10px;
         }
-
         .generate-btn {
             background: linear-gradient(45deg, var(--primary), var(--secondary));
             color: white;
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
-
         .generate-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 7px 20px rgba(102, 126, 234, 0.4);
         }
-
         .reset-btn {
             background: rgba(255, 255, 255, 0.15);
             color: white;
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
-
         .reset-btn:hover {
             background: rgba(255, 255, 255, 0.25);
             border-color: var(--accent);
         }
-
         .random-btn {
             background: rgba(255, 193, 7, 0.2);
             color: var(--accent);
             border: 1px solid var(--accent);
             box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
         }
-
         .random-btn:hover {
             background: rgba(255, 193, 7, 0.3);
             box-shadow: 0 7px 20px rgba(243, 156, 18, 0.4);
         }
-
         .ai-btn {
             background: rgba(52, 152, 219, 0.2);
             color: #3498db;
             border: 1px solid #3498db;
             box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
         }
-
         .ai-btn:hover {
             background: rgba(52, 152, 219, 0.3);
             box-shadow: 0 7px 20px rgba(52, 152, 219, 0.4);
         }
-
         .prompts-container {
             margin-top: 30px;
         }
-
         .prompt-card {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 12px;
@@ -360,12 +319,10 @@
             transition: all 0.3s ease;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
-
         .prompt-card:hover {
             transform: translateX(5px);
             background: rgba(255, 255, 255, 0.08);
         }
-
         .prompt-title {
             font-size: 1.2rem;
             margin-bottom: 15px;
@@ -374,7 +331,6 @@
             align-items: center;
             gap: 10px;
         }
-
         .prompt-content {
             background: rgba(0, 0, 0, 0.3);
             padding: 15px;
@@ -386,13 +342,11 @@
             max-height: 200px;
             overflow-y: auto;
         }
-
         .prompt-actions {
             display: flex;
             gap: 10px;
             margin-top: 10px;
         }
-
         .copy-btn, .enhance-btn {
             background: rgba(255, 255, 255, 0.1);
             color: white;
@@ -405,22 +359,18 @@
             align-items: center;
             gap: 5px;
         }
-
         .copy-btn:hover, .enhance-btn:hover {
             background: rgba(255, 255, 255, 0.2);
             transform: scale(1.05);
         }
-
         .enhance-btn {
             background: rgba(52, 152, 219, 0.2);
             color: #3498db;
             border: 1px solid #3498db;
         }
-
         .enhance-btn:hover {
             background: rgba(52, 152, 219, 0.3);
         }
-
         .instructions {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 12px;
@@ -429,34 +379,28 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             display: none;
         }
-
         .instructions h2 {
             margin-bottom: 15px;
             color: var(--accent);
         }
-
         .instructions ul {
             padding-left: 20px;
         }
-
         .instructions li {
             margin-bottom: 10px;
             line-height: 1.6;
         }
-
         .footer {
             text-align: center;
             padding: 30px 0;
             margin-top: 30px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
-
         .loading {
             display: none;
             text-align: center;
             padding: 20px;
         }
-
         .spinner {
             border: 4px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
@@ -466,12 +410,10 @@
             animation: spin 1s linear infinite;
             margin: 0 auto 15px;
         }
-
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
         .notification {
             position: fixed;
             top: 20px;
@@ -488,11 +430,9 @@
             align-items: center;
             gap: 10px;
         }
-
         .notification.show {
             transform: translateX(0);
         }
-
         .subcategory-container {
             margin-top: 15px;
             padding: 15px;
@@ -501,18 +441,15 @@
             display: none;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-
         .subcategory-container.active {
             display: block;
         }
-
         .subcategory-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
             gap: 10px;
             margin-top: 10px;
         }
-
         .subcategory-btn {
             padding: 8px;
             background: rgba(255, 255, 255, 0.1);
@@ -524,22 +461,18 @@
             text-align: center;
             font-size: 0.85rem;
         }
-
         .subcategory-btn:hover {
             background: rgba(255, 255, 255, 0.2);
             transform: translateY(-2px);
         }
-
         .subcategory-btn.selected {
             background: var(--accent);
             border-color: var(--accent);
             box-shadow: 0 0 8px rgba(243, 156, 18, 0.5);
         }
-
         .hidden {
             display: none;
         }
-
         .advanced-options {
             background: rgba(0, 0, 0, 0.2);
             border-radius: 10px;
@@ -547,7 +480,6 @@
             margin-top: 20px;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-
         .advanced-options h3 {
             margin-bottom: 15px;
             color: var(--accent);
@@ -555,28 +487,23 @@
             align-items: center;
             gap: 8px;
         }
-
         .advanced-options .input-group {
             margin-bottom: 15px;
         }
-
         .pulse {
             animation: pulse 2s infinite;
         }
-
         @keyframes pulse {
             0% { box-shadow: 0 0 0 0 rgba(243, 156, 18, 0.4); }
             70% { box-shadow: 0 0 0 10px rgba(243, 156, 18, 0); }
             100% { box-shadow: 0 0 0 0 rgba(243, 156, 18, 0); }
         }
-
         .highlight {
             background: linear-gradient(45deg, var(--accent), var(--primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: bold;
         }
-
         .theme-toggle {
             position: fixed;
             top: 20px;
@@ -593,12 +520,10 @@
             transition: all 0.3s ease;
             z-index: 100;
         }
-
         .theme-toggle:hover {
             background: rgba(255, 255, 255, 0.2);
             transform: rotate(30deg);
         }
-
         /* Image upload styles */
         .image-upload-container {
             margin-top: 20px;
@@ -607,7 +532,6 @@
             border-radius: 10px;
             border: 1px dashed rgba(255, 255, 255, 0.3);
         }
-
         .image-upload-label {
             display: block;
             text-align: center;
@@ -618,11 +542,9 @@
             transition: all 0.3s ease;
             margin-bottom: 15px;
         }
-
         .image-upload-label:hover {
             background: rgba(255, 255, 255, 0.1);
         }
-
         .image-preview {
             max-width: 100%;
             max-height: 200px;
@@ -631,7 +553,6 @@
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
-
         .ai-enhancement-section {
             margin-top: 20px;
             padding: 15px;
@@ -639,7 +560,6 @@
             border-radius: 10px;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-
         .ai-enhancement-section h3 {
             margin-bottom: 15px;
             color: #3498db;
@@ -647,7 +567,6 @@
             align-items: center;
             gap: 8px;
         }
-
         .ai-prompts-container {
             display: flex;
             flex-wrap: wrap;
@@ -658,7 +577,6 @@
             border-radius: 8px;
             padding: 15px;
         }
-
         .ai-prompt-card {
             background: rgba(52, 152, 219, 0.2);
             border-radius: 8px;
@@ -668,36 +586,45 @@
             border: 1px solid rgba(52, 152, 219, 0.3);
             transition: all 0.3s ease;
         }
-
         .ai-prompt-card:hover {
             background: rgba(52, 152, 219, 0.3);
             transform: translateY(-3px);
         }
-
         .ai-prompt-content {
             font-size: 0.85rem;
             word-break: break-word;
         }
-
         .ai-prompt-card .copy-btn, .ai-prompt-card .enhance-btn {
             margin-top: 8px;
             padding: 5px 10px;
             font-size: 0.8rem;
         }
-
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .btn-group {
                 flex-direction: column;
             }
-            
             .panel {
                 padding: 20px 15px;
             }
-            
             h1 {
                 font-size: 2.2rem;
             }
+        }
+        /* TensorFlow.js styles */
+        .classification-result {
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            display: none;
+        }
+        .classification-result.active {
+            display: block;
+        }
+        .classification-result strong {
+            color: var(--accent);
         }
     </style>
 </head>
@@ -705,17 +632,14 @@
     <div class="theme-toggle" id="themeToggle">
         <i class="fas fa-moon"></i>
     </div>
-    
     <div class="container">
         <header>
             <h1><i class="fas fa-magic"></i> Raju's Image Prompts Generator</h1>
             <p class="subtitle">Create professional, detailed prompts for AI image generation with advanced customization and tagging system</p>
         </header>
-
         <div class="main-content">
             <div class="panel">
                 <h2 class="panel-title"><i class="fas fa-sliders-h"></i> Prompt Configuration</h2>
-                
                 <div class="input-group">
                     <label for="artStyle"><i class="fas fa-paint-brush"></i> Art Style</label>
                     <select id="artStyle" aria-label="Select an art style" onchange="updateSubcategories()">
@@ -742,14 +666,12 @@
                         <option value="Gothic">Gothic</option>
                     </select>
                 </div>
-
                 <div class="subcategory-container" id="subcategory-container">
                     <h3><i class="fas fa-layer-group"></i> Subcategories</h3>
                     <div class="subcategory-grid" id="subcategory-grid">
                         <!-- Subcategories will be populated dynamically -->
                     </div>
                 </div>
-
                 <div class="input-group">
                     <label for="emotion"><i class="fas fa-heart"></i> Emotion</label>
                     <select id="emotion" aria-label="Select emotion">
@@ -766,7 +688,6 @@
                         <option value="Somber">Somber</option>
                     </select>
                 </div>
-
                 <div class="input-group">
                     <label for="atmosphere"><i class="fas fa-moon"></i> Atmosphere</label>
                     <select id="atmosphere" aria-label="Select atmosphere">
@@ -793,7 +714,6 @@
                         <option value="Dreamy">Dreamy</option>
                     </select>
                 </div>
-
                 <div class="input-group">
                     <label for="background"><i class="fas fa-landmark"></i> Background</label>
                     <select id="background" aria-label="Select background">
@@ -820,7 +740,6 @@
                         <option value="Cave">Cave</option>
                     </select>
                 </div>
-
                 <div class="input-group">
                     <label for="lighting"><i class="fas fa-lightbulb"></i> Lighting</label>
                     <select id="lighting" aria-label="Select lighting">
@@ -842,7 +761,6 @@
                         <option value="Flash">Flash</option>
                     </select>
                 </div>
-
                 <div class="input-group">
                     <label><i class="fas fa-tags"></i> Quality Tags</label>
                     <div class="tag-container">
@@ -854,7 +772,6 @@
                         <div class="tag" data-tag="ultra high res">Ultra High Res</div>
                     </div>
                 </div>
-
                 <div class="input-group">
                     <label><i class="fas fa-star"></i> Emphasis Tags</label>
                     <div class="tag-container">
@@ -866,7 +783,6 @@
                         <div class="tag" data-tag="cinematic:1.3">Cinematic</div>
                     </div>
                 </div>
-
                 <div class="input-group">
                     <label for="cameraAngles"><i class="fas fa-camera"></i> Camera Angles</label>
                     <select id="cameraAngles" aria-label="Select camera angle">
@@ -888,7 +804,6 @@
                         <option value="Frontal View">Frontal View</option>
                     </select>
                 </div>
-
                 <div class="input-group">
                     <label for="colorPalette"><i class="fas fa-palette"></i> Color Palette</label>
                     <select id="colorPalette" aria-label="Select color palette">
@@ -910,7 +825,6 @@
                         <option value="Tetradic">Tetradic</option>
                     </select>
                 </div>
-
                 <div class="input-group">
                     <label for="composition"><i class="fas fa-object-group"></i> Composition</label>
                     <select id="composition" aria-label="Select composition">
@@ -932,7 +846,6 @@
                         <option value="Dynamic Angle">Dynamic Angle</option>
                     </select>
                 </div>
-
                 <div class="input-group">
                     <label for="clothing"><i class="fas fa-tshirt"></i> Clothing</label>
                     <select id="clothing" aria-label="Select clothing">
@@ -954,7 +867,6 @@
                         <option value="Minimalist">Minimalist</option>
                     </select>
                 </div>
-
                 <div class="input-group">
                     <label for="accessories"><i class="fas fa-gem"></i> Accessories</label>
                     <select id="accessories" aria-label="Select accessories">
@@ -976,7 +888,6 @@
                         <option value="Hair Accessories">Hair Accessories</option>
                     </select>
                 </div>
-
                 <div class="btn-group">
                     <button class="generate-btn pulse" id="generate-btn">
                         <i class="fas fa-bolt"></i> Generate Prompts
@@ -989,39 +900,31 @@
                     </button>
                 </div>
             </div>
-
             <div class="panel">
                 <h2 class="panel-title"><i class="fas fa-list"></i> Advanced Options</h2>
-                
                 <div class="advanced-options">
                     <h3><i class="fas fa-cogs"></i> Additional Parameters</h3>
-                    
                     <div class="input-group">
                         <label for="inspiration"><i class="fas fa-infinity"></i> Inspiration</label>
                         <input type="text" id="inspiration" placeholder="e.g., movie style, photographer, artist">
                     </div>
-
                     <div class="input-group">
                         <label for="location"><i class="fas fa-map-marker-alt"></i> Location</label>
                         <input type="text" id="location" placeholder="e.g., studio, outdoor, historical building">
                     </div>
-
                     <div class="input-group">
                         <label for="pose"><i class="fas fa-hands"></i> Pose/Action</label>
                         <input type="text" id="pose" placeholder="e.g., standing confidently, sitting relaxed, walking">
                     </div>
-
                     <div class="input-group">
                         <label for="additional-options"><i class="fas fa-cogs"></i> Additional Options</label>
                         <input type="text" id="additional-options" placeholder="Additional instructions or specific requirements...">
                     </div>
                 </div>
-                
                 <div class="input-group">
                     <label><i class="fas fa-info-circle"></i> <span class="highlight">Pro Tip:</span> Click on tags to select multiple options</label>
                     <p>Selected tags will be included in your generated prompts</p>
                 </div>
-                
                 <!-- Image Upload Section -->
                 <div class="image-upload-container">
                     <h3><i class="fas fa-image"></i> Image to Prompt</h3>
@@ -1035,8 +938,11 @@
                     <button class="ai-btn" id="analyze-btn">
                         <i class="fas fa-robot"></i> Analyze Image with AI
                     </button>
+                    <!-- TensorFlow.js Classification Result -->
+                    <div id="classification-result" class="classification-result">
+                        <strong>Classification Result:</strong> <span id="classification-text"></span>
+                    </div>
                 </div>
-                
                 <!-- AI Enhancement Section -->
                 <div class="ai-enhancement-section">
                     <h3><i class="fas fa-robot"></i> AI Enhancement</h3>
@@ -1063,25 +969,22 @@
                 </div>
             </div>
         </div>
-
         <div class="loading" id="loading">
             <div class="spinner"></div>
             <p>Generating your prompts...</p>
         </div>
-
         <div class="prompts-container" id="prompts-container">
             <!-- Generated prompts will appear here -->
         </div>
-
         <div class="footer">
             <p>Advanced AI Prompt Generator | Professional Prompt Engineering Tool</p>
         </div>
     </div>
-
     <div class="notification" id="notification">
         <i class="fas fa-check-circle"></i> Prompt copied to clipboard!
     </div>
-
+    <!-- TensorFlow.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
     <script>
         // DOM Elements
         const generateBtn = document.getElementById('generate-btn');
@@ -1102,6 +1005,157 @@
         const aiPromptsContainer = document.getElementById('ai-prompts-container');
         const aiPromptInput = document.getElementById('ai-prompt');
         const aiModelSelect = document.getElementById('ai-model');
+        const classificationResult = document.getElementById('classification-result');
+        const classificationText = document.getElementById('classification-text');
+
+        // TensorFlow.js variables
+        let model = null;
+
+        // Load the MobileNet model
+        async function loadModel() {
+            try {
+                model = await tf.loadLayersModel('https://storage.googleapis.com/tfjs-models/savedmodel/mobilenet_v2/100_224/feature_extractor/model-stride16.json');
+                console.log('MobileNet model loaded successfully');
+            } catch (error) {
+                console.error('Error loading model:', error);
+                // Optionally show a message to user
+                // classificationText.textContent = 'Error loading model. Please try again.';
+                // classificationResult.classList.add('active');
+            }
+        }
+
+        // Preprocess the image for MobileNet
+        function preprocessImage(imageElement) {
+            // Create a canvas element
+            const canvas = document.createElement('canvas');
+            canvas.width = 224;
+            canvas.height = 224;
+            const ctx = canvas.getContext('2d');
+
+            // Draw the image onto the canvas
+            ctx.drawImage(imageElement, 0, 0, 224, 224);
+
+            // Get image data
+            const imageData = ctx.getImageData(0, 0, 224, 224);
+            const imageTensor = tf.browser.fromPixels(imageData);
+
+            // Normalize pixel values to [-1, 1]
+            const normalized = imageTensor.div(127.5).sub(1);
+
+            // Expand dimensions to [1, 224, 224, 3]
+            const batched = normalized.expandDims(0);
+
+            return batched;
+        }
+
+        // Classify the image
+        async function classifyImage(imageElement) {
+            if (!model) {
+                console.error('Model not loaded yet.');
+                return;
+            }
+
+            try {
+                const imageTensor = preprocessImage(imageElement);
+                const predictions = model.predict(imageTensor);
+
+                // Get the top 5 predictions
+                const top5 = Array.from(predictions.dataSync()).map((prob, index) => ({
+                    probability: prob,
+                    className: getClassName(index)
+                })).sort((a, b) => b.probability - a.probability).slice(0, 5);
+
+                // Display results
+                let resultHtml = '';
+                top5.forEach(pred => {
+                    resultHtml += `<div>${pred.className}: ${(pred.probability * 100).toFixed(2)}%</div>`;
+                });
+
+                classificationText.innerHTML = resultHtml;
+                classificationResult.classList.add('active');
+            } catch (error) {
+                console.error('Error during classification:', error);
+                classificationText.textContent = 'Error during classification. Please try again.';
+                classificationResult.classList.add('active');
+            } finally {
+                // Dispose tensors to prevent memory leaks
+                if (imageTensor) {
+                    imageTensor.dispose();
+                }
+            }
+        }
+
+        // Helper function to get class names (simplified example)
+        function getClassName(index) {
+            // In a real application, you'd load a full list of ImageNet class names
+            // For this demo, we'll use a simplified mapping
+            const classNames = [
+                'tench', 'goldfish', 'great_white_shark', 'tiger_shark', 'hammerhead',
+                'electric_ray', 'stingray', 'cock', 'hen', 'ostrich', 'brambling',
+                'goldfinch', 'house_finch', 'junco', 'indigo_bunting', 'robin',
+                'bulbul', 'jay', 'magpie', 'chickadee', 'water_ouzel', 'kite',
+                'bald_eagle', 'vulture', 'great_grey_owl', 'European_fire_salamander',
+                'common_newt', 'eft', 'spotted_salamander', 'axolotl', 'bullfrog',
+                'tree_frog', 'tailed_frog', 'loggerhead', 'leatherback_turtle',
+                'mud_turtle', 'terrapin', 'box_turtle', 'banded_gecko', 'common_iguana',
+                'American_chameleon', 'whiptail', 'agama', 'frilled_lizard', 'alligator_lizard',
+                'Gila_monster', 'green_lizard', 'African_chameleon', 'Komodo_dragon',
+                'African_crocodile', 'American_alligator', 'triceratops', 'thunder_snake',
+                'ringneck_snake', 'hognose_snake', 'green_snake', 'king_snake',
+                'garter_snake', 'water_snake', 'vine_snake', 'night_snake',
+                'boa_constrictor', 'rock_python', 'Indian_cobra', 'green_mamba',
+                'sea_snake', 'horned_viper', 'diamondback', 'sidewinder', 'trilobite',
+                'harvestman', 'scorpion', 'black_and_gold_garden_spider', 'barn_spider',
+                'garden_spider', 'black_widow', 'tarantula', 'wolf_spider', 'tick',
+                'centipede', 'black_grouse', 'ptarmigan', 'ruffed_grouse', 'prairie_chicken',
+                'peacock', 'quail', 'partridge', 'African_gray', 'macaw', 'sulphur-crested_cockatoo',
+                'lorikeet', 'coucal', 'bee_eater', 'hornbill', 'hummingbird', 'jacamar',
+                'toucan', 'drake', 'red-breasted_merganser', 'goose', 'black_swan',
+                'tusker', 'echidna', 'platypus', 'wallaby', 'koala', 'wombat', 'jellyfish',
+                'sea_anemone', 'brain_coral', 'flatworm', 'nematode', 'conch', 'snail',
+                'slug', 'sea_slug', 'chiton', 'chambered_nautilus', 'Dungeness_crab',
+                'rock_crab', 'fiddler_crab', 'king_crab', 'American_lobster', 'spiny_lobster',
+                'crayfish', 'hermit_crab', 'isopod', 'white_stork', 'black_stork',
+                'spoonbill', 'flamingo', 'little_blue_heron', 'American_egret',
+                'bittern', 'crane', 'limpkin', 'European_gallinule', 'American_coot',
+                'bustard', 'ruddy_turnstone', 'red-backed_sandpiper', 'redshank',
+                'dowitcher', 'oystercatcher', 'pelican', 'king_penguin', 'albatross',
+                'grey_whale', 'killer_whale', 'dugong', 'sea_lion', 'Chihuahua',
+                'Japanese_spaniel', 'Maltese_dog', 'Pekinese', 'Shih-Tzu', 'Blenheim_spaniel',
+                'papillon', 'toy_terrier', 'Rhodesian_ridgeback', 'Afghan_hound',
+                'basset', 'beagle', 'bloodhound', 'bluetick', 'black-and-tan_coonhound',
+                'Walker_hound', 'English_foxhound', 'redbone', 'borzoi', 'Irish_wolfhound',
+                'Italian_greyhound', 'whippet', 'Ibizan_hound', 'Norwegian_elkhound',
+                'otterhound', 'Saluki', 'Scottish_deerhound', 'Weimaraner', 'Staffordshire_bullterrier',
+                'American_Staffordshire_terrier', 'Bedlington_terrier', 'Border_terrier',
+                'Kerry_blue_terrier', 'Irish_terrier', 'Norfolk_terrier', 'Norwich_terrier',
+                'Yorkshire_terrier', 'wire-haired_fox_terrier', 'Lakeland_terrier',
+                'Sealyham_terrier', 'Airedale', 'cairn', 'Australian_terrier', 'Dandie_Dinmont',
+                'Boston_bull', 'miniature_schnauzer', 'giant_schnauzer', 'standard_schnauzer',
+                'Scotch_terrier', 'Tibetan_terrier', 'silky_terrier', 'soft-coated_wheaten_terrier',
+                'West_Highland_white_terrier', 'Lhasa', 'flat-coated_retriever', 'curly-coated_retriever',
+                'golden_retriever', 'Labrador_retriever', 'Chesapeake_Bay_retriever', 'German_short-haired_pointer',
+                'vizsla', 'English_setter', 'Irish_setter', 'Gordon_setter', 'Brittany_spaniel',
+                'clumber', 'English_springer', 'Welsh_springer_spaniel', 'cocker_spaniel',
+                'Sussex_spaniel', 'Irish_water_spaniel', 'kuvasz', 'schipperke', 'groenendael',
+                'malinois', 'briard', 'kelpie', 'komondor', 'Old_English_sheepdog', 'Shetland_sheepdog',
+                'collie', 'Border_collie', 'Bouvier_des_Flandres', 'Rottweiler', 'German_shepherd',
+                'Doberman', 'miniature_pinscher', 'Greater_Swiss_Mountain_dog', 'Bernese_mountain_dog',
+                'Appenzeller', 'EntleBucher', 'boxer', 'bull_mastiff', 'Tibetan_mastiff',
+                'French_bulldog', 'Great_Dane', 'Saint_Bernard', 'Eskimo_dog', 'malamute',
+                'Siberian_husky', 'dalmatian', 'affenpinscher', 'basenji', 'pug', 'Leonberg',
+                'Newfoundland', 'Great_Pyrenees', 'Samoyed', 'Pomeranian', 'chow', 'keeshond',
+                'Brabancon_griffon', 'Pembroke', 'Cardigan', 'toy_poodle', 'miniature_poodle',
+                'standard_poodle', 'Mexican_hairless', 'timber_wolf', 'white_wolf', 'red_wolf',
+                'coyote', 'dingo', 'dhole', 'African_hunting_dog'
+            ];
+
+            if (index >= 0 && index < classNames.length) {
+                return classNames[index];
+            } else {
+                return `Unknown (${index})`;
+            }
+        }
 
         // Theme toggle functionality
         themeToggle.addEventListener('click', function() {
@@ -1115,16 +1169,17 @@
         imageUploadLabel.addEventListener('click', () => {
             imageUpload.click();
         });
-
         imageUpload.addEventListener('change', function(e) {
             if (this.files && this.files[0]) {
                 const reader = new FileReader();
-                
                 reader.onload = function(e) {
                     imagePreview.src = e.target.result;
                     imagePreview.style.display = 'block';
+                    // Clear previous classification
+                    classificationResult.classList.remove('active');
+                    // Classify the image after a short delay to allow rendering
+                    setTimeout(() => classifyImage(imagePreview), 500);
                 }
-                
                 reader.readAsDataURL(this.files[0]);
             }
         });
@@ -1134,27 +1189,25 @@
             e.preventDefault();
             imageUploadLabel.style.background = 'rgba(255, 255, 255, 0.15)';
         });
-
         imageUploadLabel.addEventListener('dragleave', () => {
             imageUploadLabel.style.background = 'rgba(255, 255, 255, 0.05)';
         });
-
         imageUploadLabel.addEventListener('drop', (e) => {
             e.preventDefault();
             imageUploadLabel.style.background = 'rgba(255, 255, 255, 0.05)';
-            
             if (e.dataTransfer.files && e.dataTransfer.files[0]) {
                 imageUpload.files = e.dataTransfer.files;
                 const file = e.dataTransfer.files[0];
-                
                 if (file.type.startsWith('image/')) {
                     const reader = new FileReader();
-                    
                     reader.onload = function(e) {
                         imagePreview.src = e.target.result;
                         imagePreview.style.display = 'block';
+                        // Clear previous classification
+                        classificationResult.classList.remove('active');
+                        // Classify the image after a short delay to allow rendering
+                        setTimeout(() => classifyImage(imagePreview), 500);
                     }
-                    
                     reader.readAsDataURL(file);
                 }
             }
@@ -1169,105 +1222,105 @@
         // Art style subcategories mapping
         const subcategories = {
             Portrait: [
-                "Realistic Portrait", "Abstract Portrait", "Cartoon Portrait", 
-                "Historical Portrait", "Fantasy Portrait", "Sci-Fi Portrait", 
-                "Emotional Portrait", "Group Portrait", "Self Portrait", 
+                "Realistic Portrait", "Abstract Portrait", "Cartoon Portrait",
+                "Historical Portrait", "Fantasy Portrait", "Sci-Fi Portrait",
+                "Emotional Portrait", "Group Portrait", "Self Portrait",
                 "Environmental Portrait"
             ],
             Surrealism: [
-                "Dreamlike", "Distorted Reality", "Symbolic", "Unconscious Mind", 
-                "Metaphysical", "Paradox", "Absurd", "Fantastic", "Psychedelic", 
+                "Dreamlike", "Distorted Reality", "Symbolic", "Unconscious Mind",
+                "Metaphysical", "Paradox", "Absurd", "Fantastic", "Psychedelic",
                 "Morphing"
             ],
             Cyberpunk: [
-                "Futuristic City", "Neon Glow", "Mechanical", "Dark Future", 
-                "Urban Decay", "Tech Fusion", "Virtual Reality", "Retro Futurism", 
+                "Futuristic City", "Neon Glow", "Mechanical", "Dark Future",
+                "Urban Decay", "Tech Fusion", "Virtual Reality", "Retro Futurism",
                 "Clockwork", "Inventive Design"
             ],
             Baroque: [
-                "Dramatic Lighting", "Rich Colors", "Ornate Details", "Grandeur", 
-                "Dramatic Movement", "Contrast", "Luxury", "Theatrical", 
+                "Dramatic Lighting", "Rich Colors", "Ornate Details", "Grandeur",
+                "Dramatic Movement", "Contrast", "Luxury", "Theatrical",
                 "Opulence", "Complex Composition"
             ],
             Minimalism: [
-                "Clean Lines", "Simple Forms", "Neutral Colors", "Space", 
-                "Functional Design", "Essential Elements", "Monochrome", 
+                "Clean Lines", "Simple Forms", "Neutral Colors", "Space",
+                "Functional Design", "Essential Elements", "Monochrome",
                 "Geometric Shapes", "Uncluttered", "Subtle"
             ],
             "Pop Art": [
-                "Bold Colors", "Graphic Style", "Commercial Imagery", "Mass Culture", 
-                "Repetition", "Iconic Symbols", "Comic Style", "Bright Contrast", 
+                "Bold Colors", "Graphic Style", "Commercial Imagery", "Mass Culture",
+                "Repetition", "Iconic Symbols", "Comic Style", "Bright Contrast",
                 "Bold Typography", "Urban Theme"
             ],
             Impressionism: [
-                "Brush Strokes", "Light Effects", "Outdoor Scenes", "Color Harmony", 
-                "Movement", "Natural Light", "Soft Edges", "Vibrant Colors", 
+                "Brush Strokes", "Light Effects", "Outdoor Scenes", "Color Harmony",
+                "Movement", "Natural Light", "Soft Edges", "Vibrant Colors",
                 "Painted Texture", "Capturing Moment"
             ],
             "Abstract Expressionism": [
-                "Emotional Expression", "Large Scale", "Free Flow", "Gestural Brushwork", 
-                "Color Field", "Spontaneity", "Non-Representational", "Emotional Impact", 
+                "Emotional Expression", "Large Scale", "Free Flow", "Gestural Brushwork",
+                "Color Field", "Spontaneity", "Non-Representational", "Emotional Impact",
                 "Bold Colors", "Abstract Forms"
             ],
             Steampunk: [
-                "Victorian Era", "Steam Power", "Mechanical Parts", "Industrial", 
-                "Inventive Design", "Brass & Copper", "Clockwork", "Adventure", 
+                "Victorian Era", "Steam Power", "Mechanical Parts", "Industrial",
+                "Inventive Design", "Brass & Copper", "Clockwork", "Adventure",
                 "Vintage Futurism", "Ornate Machinery"
             ],
             Fantasy: [
-                "Mythical Creatures", "Enchanted Forest", "Magical World", "Dragon", 
-                "Wizard", "Fairy Tale", "Magic", "Wonderland", "Mystical", 
+                "Mythical Creatures", "Enchanted Forest", "Magical World", "Dragon",
+                "Wizard", "Fairy Tale", "Magic", "Wonderland", "Mystical",
                 "Ethereal"
             ],
             "Sci-Fi": [
-                "Futuristic Technology", "Alien Worlds", "Space Exploration", 
-                "Robotics", "Cybernetics", "Time Travel", "Spaceship", 
+                "Futuristic Technology", "Alien Worlds", "Space Exploration",
+                "Robotics", "Cybernetics", "Time Travel", "Spaceship",
                 "Alien Civilization", "Science Fiction", "Future Society"
             ],
             Realism: [
-                "Accurate Depiction", "Everyday Life", "Social Commentary", 
-                "Naturalistic", "Detailed Observation", "True Representation", 
-                "Ordinary Objects", "Realistic Lighting", "Authentic", 
+                "Accurate Depiction", "Everyday Life", "Social Commentary",
+                "Naturalistic", "Detailed Observation", "True Representation",
+                "Ordinary Objects", "Realistic Lighting", "Authentic",
                 "Observable Truth"
             ],
             Cartoon: [
-                "Exaggerated Features", "Playful", "Humorous", "Animated", 
-                "Colorful", "Simple Shapes", "Expressive Characters", 
+                "Exaggerated Features", "Playful", "Humorous", "Animated",
+                "Colorful", "Simple Shapes", "Expressive Characters",
                 "Storytelling", "Whimsical", "Childlike"
             ],
             Watercolor: [
-                "Translucent Layers", "Soft Edges", "Flowing Colors", "Light Touch", 
-                "Blending", "Wet-on-Wet", "Gentle Washes", "Delicate Details", 
+                "Translucent Layers", "Soft Edges", "Flowing Colors", "Light Touch",
+                "Blending", "Wet-on-Wet", "Gentle Washes", "Delicate Details",
                 "Natural Texture", "Fluid Movement"
             ],
             "Oil Painting": [
-                "Thick Application", "Rich Pigments", "Layered Technique", 
-                "Slow Drying", "Deep Shadows", "Smooth Blend", "Texture", 
+                "Thick Application", "Rich Pigments", "Layered Technique",
+                "Slow Drying", "Deep Shadows", "Smooth Blend", "Texture",
                 "Vibrant Colors", "Classic Medium", "Masterpiece Quality"
             ],
             "Digital Art": [
-                "Computer Generated", "Pixel Perfect", "Layered Editing", 
-                "Digital Painting", "3D Modeling", "Vector Art", "Color Correction", 
+                "Computer Generated", "Pixel Perfect", "Layered Editing",
+                "Digital Painting", "3D Modeling", "Vector Art", "Color Correction",
                 "High Resolution", "Modern Techniques", "Post-Processing"
             ],
             "Pixel Art": [
-                "Retro Gaming", "Limited Palette", "Grid Based", "Blocky", 
-                "Chibi Style", "Nostalgia", "8-Bit", "16-Bit", "Low Resolution", 
+                "Retro Gaming", "Limited Palette", "Grid Based", "Blocky",
+                "Chibi Style", "Nostalgia", "8-Bit", "16-Bit", "Low Resolution",
                 "Iconic Design"
             ],
             Graffiti: [
-                "Street Art", "Spray Paint", "Urban Culture", "Tagging", 
-                "Mural", "Abstract", "Bold Lines", "Colorful", "Political Message", 
+                "Street Art", "Spray Paint", "Urban Culture", "Tagging",
+                "Mural", "Abstract", "Bold Lines", "Colorful", "Political Message",
                 "Cultural Expression"
             ],
             Renaissance: [
-                "Classical Proportion", "Humanism", "Religious Themes", 
-                "Perspective", "Ideal Beauty", "Scientific Accuracy", 
+                "Classical Proportion", "Humanism", "Religious Themes",
+                "Perspective", "Ideal Beauty", "Scientific Accuracy",
                 "Golden Ratio", "Divine Light", "Masterpiece", "Cultural Revival"
             ],
             Gothic: [
-                "Dark Atmosphere", "Mysterious", "Mysticism", "Dramatic", 
-                "Romantic", "Medieval", "Shadow Play", "Ornate Details", 
+                "Dark Atmosphere", "Mysterious", "Mysticism", "Dramatic",
+                "Romantic", "Medieval", "Shadow Play", "Ornate Details",
                 "Gothic Architecture", "Melancholy"
             ]
         };
@@ -1283,11 +1336,9 @@
         // Update subcategories when art style changes
         function updateSubcategories() {
             const style = artStyleSelect.value;
-            
             if (subcategories[style]) {
                 subcategoryContainer.classList.add('active');
                 subcategoryGrid.innerHTML = '';
-                
                 subcategories[style].forEach(subcat => {
                     const btn = document.createElement('button');
                     btn.className = 'subcategory-btn';
@@ -1307,7 +1358,6 @@
         function generatePrompts() {
             // Show loading
             loadingElement.style.display = 'block';
-            
             // Simulate processing delay
             setTimeout(() => {
                 // Get form values
@@ -1325,33 +1375,26 @@
                 const location = document.getElementById('location').value || "studio";
                 const pose = document.getElementById('pose').value || "standing confidently";
                 const additionalOptions = document.getElementById('additional-options').value;
-                
                 // Get selected tags
                 const selectedTags = [];
                 document.querySelectorAll('.tag.selected').forEach(tag => {
                     selectedTags.push(tag.getAttribute('data-tag'));
                 });
-                
                 // Get selected subcategories
                 const selectedSubcats = [];
                 document.querySelectorAll('.subcategory-btn.selected').forEach(btn => {
                     selectedSubcats.push(btn.dataset.subcat);
                 });
-                
                 // Generate 5 different prompts
                 const prompts = [];
-                
                 // Prompt 1: Simple (50-70 words)
                 let simplePrompt = "(masterpiece, high resolution:1.4, photo-realistic:1.3)";
-                
                 // Add quality tags
                 if (selectedTags.length > 0) {
                     simplePrompt += " " + selectedTags.join(", ");
                 }
-                
                 // Add subject and modifiers
                 simplePrompt += " Beautiful Latina woman with black hair";
-                
                 if (emotion) simplePrompt += ", " + emotion + " emotion";
                 if (atmosphere) simplePrompt += ", " + atmosphere + " atmosphere";
                 if (background) simplePrompt += ", " + background + " background";
@@ -1364,23 +1407,17 @@
                 if (inspiration) simplePrompt += ", inspired by " + inspiration;
                 if (location) simplePrompt += ", in " + location + " setting";
                 if (pose) simplePrompt += ", " + pose;
-                
                 simplePrompt += ", close-up portrait, shot with a Nikon D850, a 50mm lens at f/2.8";
-                
                 // Add to prompts array
                 prompts.push(simplePrompt);
-                
                 // Prompt 2: Detailed (200+ words)
                 let detailedPrompt = "(masterpiece, high resolution:1.4, photo-realistic:1.3) ";
-                
                 // Add quality tags
                 if (selectedTags.length > 0) {
                     detailedPrompt += selectedTags.join(", ") + ", ";
                 }
-                
                 // Add subject and modifiers
                 detailedPrompt += "A stunning close-up portrait of a beautiful Latina woman with black hair. ";
-                
                 if (emotion) detailedPrompt += "Her " + emotion + " expression conveys deep emotion. ";
                 if (atmosphere) detailedPrompt += "The scene is filled with " + atmosphere + " atmosphere. ";
                 if (background) detailedPrompt += "The background features a " + background + " setting. ";
@@ -1393,24 +1430,18 @@
                 if (inspiration) detailedPrompt += "The style is inspired by " + inspiration + ". ";
                 if (location) detailedPrompt += "The setting is " + location + ". ";
                 if (pose) detailedPrompt += "She poses with " + pose + ". ";
-                
                 detailedPrompt += "The portrait captures her in a close-up format, showing every detail of her face and expression. ";
                 detailedPrompt += "The camera work emphasizes her features with a Nikon D850, a 50mm lens at f/2.8, ensuring sharp details and cinematic quality.";
-                
                 // Add to prompts array
                 prompts.push(detailedPrompt);
-                
                 // Prompt 3: Creative (50-70 words)
                 let creativePrompt = "(masterpiece, photo-realistic:1.4, cinematic:1.3)";
-                
                 // Add quality tags
                 if (selectedTags.length > 0) {
                     creativePrompt += " " + selectedTags.join(", ");
                 }
-                
                 // Add subject and modifiers
                 creativePrompt += " Beautiful Latina woman with black hair";
-                
                 if (emotion) creativePrompt += ", " + emotion + " emotion";
                 if (atmosphere) creativePrompt += ", " + atmosphere + " atmosphere";
                 if (background) creativePrompt += ", " + background + " background";
@@ -1423,23 +1454,17 @@
                 if (inspiration) creativePrompt += ", inspired by " + inspiration;
                 if (location) creativePrompt += ", in " + location + " setting";
                 if (pose) creativePrompt += ", " + pose;
-                
                 creativePrompt += ", close-up portrait, shot with a Canon 5D Mark IV, a 24mm lens at f/1.8";
-                
                 // Add to prompts array
                 prompts.push(creativePrompt);
-                
                 // Prompt 4: Advanced (200+ words)
                 let advancedPrompt = "(masterpiece, high resolution:1.4, photo-realistic:1.3) ";
-                
                 // Add quality tags
                 if (selectedTags.length > 0) {
                     advancedPrompt += selectedTags.join(", ") + ", ";
                 }
-                
                 // Add subject and modifiers
                 advancedPrompt += "An extraordinary portrait of a beautiful Latina woman with black hair. ";
-                
                 if (emotion) advancedPrompt += "The scene is illuminated by " + emotion + " emotion, creating a " + atmosphere + " atmosphere. ";
                 if (background) advancedPrompt += "The " + background + " background provides a rich setting. ";
                 if (lighting) advancedPrompt += "The " + lighting + " lighting creates dramatic shadows. ";
@@ -1451,25 +1476,19 @@
                 if (inspiration) advancedPrompt += "The style is inspired by " + inspiration + ". ";
                 if (location) advancedPrompt += "The setting is " + location + ". ";
                 if (pose) advancedPrompt += "She poses with " + pose + ". ";
-                
                 advancedPrompt += "This cinematic " + artStyle + " style prompt combines all elements for maximum impact. ";
                 advancedPrompt += "The portrait captures her in a close-up format, showing every detail of her face and expression. ";
                 advancedPrompt += "Shot with a Sony A7R IV, a 35mm lens at f/2.0, ensuring exceptional image quality.";
-                
                 // Add to prompts array
                 prompts.push(advancedPrompt);
-                
                 // Prompt 5: Premium (50-70 words)
                 let premiumPrompt = "(masterpiece, photo-realistic:1.4, best quality:1.3, 8k:1.2)";
-                
                 // Add quality tags
                 if (selectedTags.length > 0) {
                     premiumPrompt += " " + selectedTags.join(", ");
                 }
-                
                 // Add subject and modifiers
                 premiumPrompt += " Beautiful Latina woman with black hair";
-                
                 if (emotion) premiumPrompt += ", " + emotion + " emotion";
                 if (atmosphere) premiumPrompt += ", " + atmosphere + " atmosphere";
                 if (background) premiumPrompt += ", " + background + " background";
@@ -1482,15 +1501,11 @@
                 if (inspiration) premiumPrompt += ", inspired by " + inspiration;
                 if (location) premiumPrompt += ", in " + location + " setting";
                 if (pose) premiumPrompt += ", " + pose;
-                
                 premiumPrompt += ", close-up portrait, shot with a Hasselblad X1D II, a 90mm lens at f/2.8";
-                
                 // Add to prompts array
                 prompts.push(premiumPrompt);
-
                 // Display prompts
                 displayPrompts(prompts);
-                
                 // Hide loading
                 loadingElement.style.display = 'none';
             }, 1500);
@@ -1502,19 +1517,15 @@
                 alert("Please upload an image first");
                 return;
             }
-            
             // Show loading state
             analyzeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
             analyzeBtn.disabled = true;
-            
             try {
                 // In a real implementation, you would send the image to your backend
                 // which would then send it to DeepSeek API
                 // For this demo, we'll simulate the response
-                
                 // Simulate API call delay
                 await new Promise(resolve => setTimeout(resolve, 2000));
-                
                 // Simulated AI analysis response
                 const simulatedAnalysis = [
                     "Beautiful Latina woman with black hair in a professional studio setting",
@@ -1523,10 +1534,8 @@
                     "Elegant pose with confident expression and natural makeup",
                     "High-resolution image with detailed facial features and textures"
                 ];
-                
                 // Display simulated prompts
                 displayAIPrompts(simulatedAnalysis);
-                
             } catch (error) {
                 console.error('Error analyzing image:', error);
                 alert('Error analyzing image. Please try again.');
@@ -1541,23 +1550,18 @@
         async function generateAIPrompts() {
             const prompt = aiPromptInput.value.trim();
             const model = aiModelSelect.value;
-            
             if (!prompt) {
                 alert("Please enter a prompt description");
                 return;
             }
-            
             // Show loading state
             aiGenerateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
             aiGenerateBtn.disabled = true;
-            
             try {
                 // In a real implementation, you would call the DeepSeek API
                 // For this demo, we'll simulate the response
-                
                 // Simulate API call delay
                 await new Promise(resolve => setTimeout(resolve, 2000));
-                
                 // Simulated AI response based on the prompt
                 const simulatedPrompts = [
                     `(masterpiece, high resolution:1.4, photo-realistic:1.3) Beautiful Latina woman with black hair, ${prompt}, close-up portrait, studio lighting, natural skin tones, professional photography, cinematic composition, shot with a Nikon D850, a 50mm lens at f/2.8`,
@@ -1566,10 +1570,8 @@
                     `(masterpiece, high resolution:1.4, photo-realistic:1.3) An extraordinary portrait of a beautiful Latina woman with black hair. The scene is illuminated by ${prompt} with natural lighting creating dramatic shadows. The composition showcases the subject with elegant pose and studio setting. The detailed facial features are highlighted with high-resolution quality. This cinematic style prompt combines all elements for maximum impact. Shot with a Sony A7R IV, a 35mm lens at f/2.0, ensuring exceptional image quality.`,
                     `(masterpiece, photo-realistic:1.4, best quality:1.3, 8k:1.2) Beautiful Latina woman with black hair, ${prompt}, close-up portrait, professional photography, natural lighting, detailed facial features, high-resolution, studio setting, cinematic composition, shot with a Hasselblad X1D II, a 90mm lens at f/2.8`
                 ];
-                
                 // Display AI-generated prompts
                 displayAIPrompts(simulatedPrompts);
-                
             } catch (error) {
                 console.error('Error generating AI prompts:', error);
                 alert('Error generating AI prompts. Please check your connection.');
@@ -1583,29 +1585,23 @@
         // Display AI prompts in cards
         function displayAIPrompts(prompts) {
             aiPromptsContainer.innerHTML = '';
-            
             prompts.forEach((prompt, index) => {
                 // Clean up prompt formatting
                 const cleanPrompt = prompt.replace(/^[\d.-]+/, '').trim();
-                
                 if (cleanPrompt && cleanPrompt.length > 10) {
                     const promptCard = document.createElement('div');
                     promptCard.className = 'ai-prompt-card';
-                    
                     const promptContent = document.createElement('div');
                     promptContent.className = 'ai-prompt-content';
                     promptContent.textContent = cleanPrompt;
-                    
                     const copyBtn = document.createElement('button');
                     copyBtn.className = 'copy-btn';
                     copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy';
                     copyBtn.onclick = () => copyToClipboard(cleanPrompt);
-                    
                     const enhanceBtn = document.createElement('button');
                     enhanceBtn.className = 'enhance-btn';
                     enhanceBtn.innerHTML = '<i class="fas fa-bolt"></i> Enhance';
                     enhanceBtn.onclick = () => enhancePrompt(cleanPrompt);
-                    
                     promptCard.appendChild(promptContent);
                     promptCard.appendChild(copyBtn);
                     promptCard.appendChild(enhanceBtn);
@@ -1628,39 +1624,30 @@
         // Display prompts in cards with enhance buttons
         function displayPrompts(prompts) {
             promptsContainer.innerHTML = '';
-            
             prompts.forEach((prompt, index) => {
                 const promptCard = document.createElement('div');
                 promptCard.className = 'prompt-card';
-                
                 const promptTitle = document.createElement('div');
                 promptTitle.className = 'prompt-title';
                 promptTitle.innerHTML = `<i class="fas fa-${index % 2 === 0 ? 'star' : 'star-half-alt'}"></i> Prompt ${index + 1}`;
-                
                 const promptContent = document.createElement('div');
                 promptContent.className = 'prompt-content';
                 promptContent.textContent = prompt;
-                
                 const promptActions = document.createElement('div');
                 promptActions.className = 'prompt-actions';
-                
                 const copyBtn = document.createElement('button');
                 copyBtn.className = 'copy-btn';
                 copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy';
                 copyBtn.onclick = () => copyToClipboard(prompt);
-                
                 const enhanceBtn = document.createElement('button');
                 enhanceBtn.className = 'enhance-btn';
                 enhanceBtn.innerHTML = '<i class="fas fa-bolt"></i> Enhance';
                 enhanceBtn.onclick = () => enhancePrompt(prompt);
-                
                 promptActions.appendChild(copyBtn);
                 promptActions.appendChild(enhanceBtn);
-                
                 promptCard.appendChild(promptTitle);
                 promptCard.appendChild(promptContent);
                 promptCard.appendChild(promptActions);
-                
                 promptsContainer.appendChild(promptCard);
             });
         }
@@ -1692,39 +1679,33 @@
             document.getElementById('location').value = '';
             document.getElementById('pose').value = '';
             document.getElementById('additional-options').value = '';
-            
             // Remove selected tags
             document.querySelectorAll('.tag.selected').forEach(tag => {
                 tag.classList.remove('selected');
             });
-            
             // Remove selected subcategories
             document.querySelectorAll('.subcategory-btn.selected').forEach(btn => {
                 btn.classList.remove('selected');
             });
-            
             // Hide subcategory container
             subcategoryContainer.classList.remove('active');
-            
             // Clear image preview
             imagePreview.style.display = 'none';
             imageUpload.value = '';
-            
             // Clear AI prompts
             aiPromptsContainer.innerHTML = '';
-            
             // Clear AI prompt input
             aiPromptInput.value = '';
-            
             // Clear prompts
             promptsContainer.innerHTML = '';
+            // Clear classification result
+            classificationResult.classList.remove('active');
         }
 
         // Event listeners
         generateBtn.addEventListener('click', generatePrompts);
         resetBtn.addEventListener('click', resetForm);
         randomBtn.addEventListener('click', generateRandomPrompts);
-
         // Initialize
         window.addEventListener('load', function() {
             // Populate art styles dropdown
@@ -1735,7 +1716,6 @@
                 option.textContent = style;
                 artStyleSelect.appendChild(option);
             });
-            
             // Add hover effect to panels
             const panels = document.querySelectorAll('.panel');
             panels.forEach(panel => {
@@ -1746,17 +1726,17 @@
                     this.style.transform = 'translateY(0)';
                 });
             });
-            
             // Set initial theme icon
             const currentTheme = document.documentElement.getAttribute('data-theme');
             themeToggle.innerHTML = currentTheme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            // Load TensorFlow.js model
+            loadModel();
         });
 
         // Generate random prompts function
         function generateRandomPrompts() {
             // Show loading
             loadingElement.style.display = 'block';
-            
             // Simulate processing delay
             setTimeout(() => {
                 // Generate random prompts without any selections
@@ -1772,9 +1752,7 @@
                 const inspirations = ['movie style', 'photographer', 'artist', 'cinematic', 'editorial', 'fashion', 'advertising', 'architectural', 'documentary', 'science fiction'];
                 const locations = ['studio', 'outdoor', 'historical building', 'urban environment', 'nature setting', 'industrial area', 'luxury hotel', 'museum', 'gallery', 'theater'];
                 const poses = ['standing confidently', 'sitting relaxed', 'walking', 'posing dramatically', 'looking directly at viewer', 'with hands on hips', 'leaning against wall', 'in motion', 'with arms raised', 'in contemplative pose'];
-                
                 const prompts = [];
-                
                 for (let i = 0; i < 5; i++) {
                     // Prompt 1: Simple
                     const randomEmotion = emotions[Math.floor(Math.random() * emotions.length)];
@@ -1789,7 +1767,6 @@
                     const randomInspiration = inspirations[Math.floor(Math.random() * inspirations.length)];
                     const randomLocation = locations[Math.floor(Math.random() * locations.length)];
                     const randomPose = poses[Math.floor(Math.random() * poses.length)];
-                    
                     let simplePrompt = "(masterpiece, high resolution:1.4, photo-realistic:1.3)";
                     simplePrompt += " Beautiful Latina woman with black hair";
                     simplePrompt += ", " + randomEmotion + " emotion";
@@ -1805,9 +1782,7 @@
                     simplePrompt += ", in " + randomLocation + " setting";
                     simplePrompt += ", " + randomPose;
                     simplePrompt += ", close-up portrait, shot with a Nikon D850, a 50mm lens at f/2.8";
-                    
                     prompts.push(simplePrompt);
-                    
                     // Prompt 2: Detailed
                     let detailedPrompt = "(masterpiece, high resolution:1.4, photo-realistic:1.3) ";
                     detailedPrompt += "A stunning close-up portrait of a beautiful Latina woman with black hair. ";
@@ -1825,13 +1800,10 @@
                     detailedPrompt += "She poses with " + randomPose + ". ";
                     detailedPrompt += "The portrait captures her in a close-up format, showing every detail of her face and expression. ";
                     detailedPrompt += "The camera work emphasizes her features with a Nikon D850, a 50mm lens at f/2.8, ensuring sharp details and cinematic quality.";
-                    
                     prompts.push(detailedPrompt);
                 }
-
                 // Display prompts
                 displayPrompts(prompts.slice(0, 5)); // Only show first 5 for simplicity
-                
                 // Hide loading
                 loadingElement.style.display = 'none';
             }, 1500);
