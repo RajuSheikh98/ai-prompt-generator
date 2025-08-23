@@ -1,4 +1,19 @@
-<!DOCTYPE html>
+
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <style>
+                body {
+                  background-color: white; /* Ensure the iframe has a white background */
+                }
+    
+                
+              </style>
+                        </head>
+                        <body>
+                            <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -626,6 +641,36 @@
         .classification-result strong {
             color: var(--accent);
         }
+        /* Mume AI API Status */
+        .api-status {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            display: none;
+        }
+        .api-status.active {
+            display: block;
+        }
+        .api-status.success {
+            background: rgba(39, 174, 96, 0.2);
+            border: 1px solid var(--success);
+        }
+        .api-status.error {
+            background: rgba(231, 76, 60, 0.2);
+            border: 1px solid var(--danger);
+        }
+        /* Spinner for AI enhancement */
+        .spinner-small {
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 2px solid var(--accent);
+            width: 16px;
+            height: 16px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 5px;
+        }
     </style>
 </head>
 <body>
@@ -942,6 +987,10 @@
                     <div id="classification-result" class="classification-result">
                         <strong>Classification Result:</strong> <span id="classification-text"></span>
                     </div>
+                    <!-- API Status Indicator -->
+                    <div id="api-status" class="api-status">
+                        <strong>Mume AI API Status:</strong> <span id="api-status-text"></span>
+                    </div>
                 </div>
                 <!-- AI Enhancement Section -->
                 <div class="ai-enhancement-section">
@@ -1007,9 +1056,28 @@
         const aiModelSelect = document.getElementById('ai-model');
         const classificationResult = document.getElementById('classification-result');
         const classificationText = document.getElementById('classification-text');
+        const apiStatus = document.getElementById('api-status');
+        const apiStatusText = document.getElementById('api-status-text');
+
+        // API Configuration
+        const API_KEY = "d4mly2vshcxmstd73a0zcwfk90bl124r";
+        const API_URL = "https://api.mumengai.com/v1/chat/completions";
 
         // TensorFlow.js variables
         let model = null;
+
+        // Show API status
+        function showApiStatus(message, isSuccess = true) {
+            apiStatusText.textContent = message;
+            apiStatus.classList.add('active');
+            apiStatus.classList.toggle('success', isSuccess);
+            apiStatus.classList.toggle('error', !isSuccess);
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                apiStatus.classList.remove('active');
+            }, 5000);
+        }
 
         // Load the MobileNet model
         async function loadModel() {
@@ -1213,304 +1281,6 @@
             }
         });
 
-        // Analyze image button
-        analyzeBtn.addEventListener('click', analyzeImageWithAI);
-
-        // AI Prompt Generation Function
-        aiGenerateBtn.addEventListener('click', generateAIPrompts);
-
-        // Art style subcategories mapping
-        const subcategories = {
-            Portrait: [
-                "Realistic Portrait", "Abstract Portrait", "Cartoon Portrait",
-                "Historical Portrait", "Fantasy Portrait", "Sci-Fi Portrait",
-                "Emotional Portrait", "Group Portrait", "Self Portrait",
-                "Environmental Portrait"
-            ],
-            Surrealism: [
-                "Dreamlike", "Distorted Reality", "Symbolic", "Unconscious Mind",
-                "Metaphysical", "Paradox", "Absurd", "Fantastic", "Psychedelic",
-                "Morphing"
-            ],
-            Cyberpunk: [
-                "Futuristic City", "Neon Glow", "Mechanical", "Dark Future",
-                "Urban Decay", "Tech Fusion", "Virtual Reality", "Retro Futurism",
-                "Clockwork", "Inventive Design"
-            ],
-            Baroque: [
-                "Dramatic Lighting", "Rich Colors", "Ornate Details", "Grandeur",
-                "Dramatic Movement", "Contrast", "Luxury", "Theatrical",
-                "Opulence", "Complex Composition"
-            ],
-            Minimalism: [
-                "Clean Lines", "Simple Forms", "Neutral Colors", "Space",
-                "Functional Design", "Essential Elements", "Monochrome",
-                "Geometric Shapes", "Uncluttered", "Subtle"
-            ],
-            "Pop Art": [
-                "Bold Colors", "Graphic Style", "Commercial Imagery", "Mass Culture",
-                "Repetition", "Iconic Symbols", "Comic Style", "Bright Contrast",
-                "Bold Typography", "Urban Theme"
-            ],
-            Impressionism: [
-                "Brush Strokes", "Light Effects", "Outdoor Scenes", "Color Harmony",
-                "Movement", "Natural Light", "Soft Edges", "Vibrant Colors",
-                "Painted Texture", "Capturing Moment"
-            ],
-            "Abstract Expressionism": [
-                "Emotional Expression", "Large Scale", "Free Flow", "Gestural Brushwork",
-                "Color Field", "Spontaneity", "Non-Representational", "Emotional Impact",
-                "Bold Colors", "Abstract Forms"
-            ],
-            Steampunk: [
-                "Victorian Era", "Steam Power", "Mechanical Parts", "Industrial",
-                "Inventive Design", "Brass & Copper", "Clockwork", "Adventure",
-                "Vintage Futurism", "Ornate Machinery"
-            ],
-            Fantasy: [
-                "Mythical Creatures", "Enchanted Forest", "Magical World", "Dragon",
-                "Wizard", "Fairy Tale", "Magic", "Wonderland", "Mystical",
-                "Ethereal"
-            ],
-            "Sci-Fi": [
-                "Futuristic Technology", "Alien Worlds", "Space Exploration",
-                "Robotics", "Cybernetics", "Time Travel", "Spaceship",
-                "Alien Civilization", "Science Fiction", "Future Society"
-            ],
-            Realism: [
-                "Accurate Depiction", "Everyday Life", "Social Commentary",
-                "Naturalistic", "Detailed Observation", "True Representation",
-                "Ordinary Objects", "Realistic Lighting", "Authentic",
-                "Observable Truth"
-            ],
-            Cartoon: [
-                "Exaggerated Features", "Playful", "Humorous", "Animated",
-                "Colorful", "Simple Shapes", "Expressive Characters",
-                "Storytelling", "Whimsical", "Childlike"
-            ],
-            Watercolor: [
-                "Translucent Layers", "Soft Edges", "Flowing Colors", "Light Touch",
-                "Blending", "Wet-on-Wet", "Gentle Washes", "Delicate Details",
-                "Natural Texture", "Fluid Movement"
-            ],
-            "Oil Painting": [
-                "Thick Application", "Rich Pigments", "Layered Technique",
-                "Slow Drying", "Deep Shadows", "Smooth Blend", "Texture",
-                "Vibrant Colors", "Classic Medium", "Masterpiece Quality"
-            ],
-            "Digital Art": [
-                "Computer Generated", "Pixel Perfect", "Layered Editing",
-                "Digital Painting", "3D Modeling", "Vector Art", "Color Correction",
-                "High Resolution", "Modern Techniques", "Post-Processing"
-            ],
-            "Pixel Art": [
-                "Retro Gaming", "Limited Palette", "Grid Based", "Blocky",
-                "Chibi Style", "Nostalgia", "8-Bit", "16-Bit", "Low Resolution",
-                "Iconic Design"
-            ],
-            Graffiti: [
-                "Street Art", "Spray Paint", "Urban Culture", "Tagging",
-                "Mural", "Abstract", "Bold Lines", "Colorful", "Political Message",
-                "Cultural Expression"
-            ],
-            Renaissance: [
-                "Classical Proportion", "Humanism", "Religious Themes",
-                "Perspective", "Ideal Beauty", "Scientific Accuracy",
-                "Golden Ratio", "Divine Light", "Masterpiece", "Cultural Revival"
-            ],
-            Gothic: [
-                "Dark Atmosphere", "Mysterious", "Mysticism", "Dramatic",
-                "Romantic", "Medieval", "Shadow Play", "Ornate Details",
-                "Gothic Architecture", "Melancholy"
-            ]
-        };
-
-        // Tag selection
-        const tagElements = document.querySelectorAll('.tag');
-        tagElements.forEach(tag => {
-            tag.addEventListener('click', function() {
-                this.classList.toggle('selected');
-            });
-        });
-
-        // Update subcategories when art style changes
-        function updateSubcategories() {
-            const style = artStyleSelect.value;
-            if (subcategories[style]) {
-                subcategoryContainer.classList.add('active');
-                subcategoryGrid.innerHTML = '';
-                subcategories[style].forEach(subcat => {
-                    const btn = document.createElement('button');
-                    btn.className = 'subcategory-btn';
-                    btn.textContent = subcat;
-                    btn.dataset.subcat = subcat.toLowerCase();
-                    btn.addEventListener('click', function() {
-                        this.classList.toggle('selected');
-                    });
-                    subcategoryGrid.appendChild(btn);
-                });
-            } else {
-                subcategoryContainer.classList.remove('active');
-            }
-        }
-
-        // Generate prompts function
-        function generatePrompts() {
-            // Show loading
-            loadingElement.style.display = 'block';
-            // Simulate processing delay
-            setTimeout(() => {
-                // Get form values
-                const artStyle = document.getElementById('artStyle').value || "Portrait";
-                const emotion = document.getElementById('emotion').value || "";
-                const atmosphere = document.getElementById('atmosphere').value || "";
-                const background = document.getElementById('background').value || "";
-                const lighting = document.getElementById('lighting').value || "";
-                const cameraAngle = document.getElementById('cameraAngles').value || "";
-                const colorPalette = document.getElementById('colorPalette').value || "";
-                const composition = document.getElementById('composition').value || "";
-                const clothing = document.getElementById('clothing').value || "";
-                const accessories = document.getElementById('accessories').value || "";
-                const inspiration = document.getElementById('inspiration').value || "cinematic";
-                const location = document.getElementById('location').value || "studio";
-                const pose = document.getElementById('pose').value || "standing confidently";
-                const additionalOptions = document.getElementById('additional-options').value;
-                // Get selected tags
-                const selectedTags = [];
-                document.querySelectorAll('.tag.selected').forEach(tag => {
-                    selectedTags.push(tag.getAttribute('data-tag'));
-                });
-                // Get selected subcategories
-                const selectedSubcats = [];
-                document.querySelectorAll('.subcategory-btn.selected').forEach(btn => {
-                    selectedSubcats.push(btn.dataset.subcat);
-                });
-                // Generate 5 different prompts
-                const prompts = [];
-                // Prompt 1: Simple (50-70 words)
-                let simplePrompt = "(masterpiece, high resolution:1.4, photo-realistic:1.3)";
-                // Add quality tags
-                if (selectedTags.length > 0) {
-                    simplePrompt += " " + selectedTags.join(", ");
-                }
-                // Add subject and modifiers
-                simplePrompt += " Beautiful Latina woman with black hair";
-                if (emotion) simplePrompt += ", " + emotion + " emotion";
-                if (atmosphere) simplePrompt += ", " + atmosphere + " atmosphere";
-                if (background) simplePrompt += ", " + background + " background";
-                if (lighting) simplePrompt += ", " + lighting + " lighting";
-                if (cameraAngle) simplePrompt += ", " + cameraAngle + " camera angle";
-                if (colorPalette) simplePrompt += ", " + colorPalette + " color palette";
-                if (composition) simplePrompt += ", " + composition + " composition";
-                if (clothing) simplePrompt += ", " + clothing + " clothing";
-                if (accessories) simplePrompt += ", " + accessories + " accessories";
-                if (inspiration) simplePrompt += ", inspired by " + inspiration;
-                if (location) simplePrompt += ", in " + location + " setting";
-                if (pose) simplePrompt += ", " + pose;
-                simplePrompt += ", close-up portrait, shot with a Nikon D850, a 50mm lens at f/2.8";
-                // Add to prompts array
-                prompts.push(simplePrompt);
-                // Prompt 2: Detailed (200+ words)
-                let detailedPrompt = "(masterpiece, high resolution:1.4, photo-realistic:1.3) ";
-                // Add quality tags
-                if (selectedTags.length > 0) {
-                    detailedPrompt += selectedTags.join(", ") + ", ";
-                }
-                // Add subject and modifiers
-                detailedPrompt += "A stunning close-up portrait of a beautiful Latina woman with black hair. ";
-                if (emotion) detailedPrompt += "Her " + emotion + " expression conveys deep emotion. ";
-                if (atmosphere) detailedPrompt += "The scene is filled with " + atmosphere + " atmosphere. ";
-                if (background) detailedPrompt += "The background features a " + background + " setting. ";
-                if (lighting) detailedPrompt += "The " + lighting + " lighting creates dramatic effects. ";
-                if (cameraAngle) detailedPrompt += "The " + cameraAngle + " angle provides a unique perspective. ";
-                if (colorPalette) detailedPrompt += "The " + colorPalette + " color palette adds visual harmony. ";
-                if (composition) detailedPrompt += "The " + composition + " composition guides the viewer's eye. ";
-                if (clothing) detailedPrompt += "She wears " + clothing + " that complements the scene. ";
-                if (accessories) detailedPrompt += "Her " + accessories + " add subtle detail. ";
-                if (inspiration) detailedPrompt += "The style is inspired by " + inspiration + ". ";
-                if (location) detailedPrompt += "The setting is " + location + ". ";
-                if (pose) detailedPrompt += "She poses with " + pose + ". ";
-                detailedPrompt += "The portrait captures her in a close-up format, showing every detail of her face and expression. ";
-                detailedPrompt += "The camera work emphasizes her features with a Nikon D850, a 50mm lens at f/2.8, ensuring sharp details and cinematic quality.";
-                // Add to prompts array
-                prompts.push(detailedPrompt);
-                // Prompt 3: Creative (50-70 words)
-                let creativePrompt = "(masterpiece, photo-realistic:1.4, cinematic:1.3)";
-                // Add quality tags
-                if (selectedTags.length > 0) {
-                    creativePrompt += " " + selectedTags.join(", ");
-                }
-                // Add subject and modifiers
-                creativePrompt += " Beautiful Latina woman with black hair";
-                if (emotion) creativePrompt += ", " + emotion + " emotion";
-                if (atmosphere) creativePrompt += ", " + atmosphere + " atmosphere";
-                if (background) creativePrompt += ", " + background + " background";
-                if (lighting) creativePrompt += ", " + lighting + " lighting";
-                if (cameraAngle) creativePrompt += ", " + cameraAngle + " camera angle";
-                if (colorPalette) creativePrompt += ", " + colorPalette + " color palette";
-                if (composition) creativePrompt += ", " + composition + " composition";
-                if (clothing) creativePrompt += ", " + clothing + " clothing";
-                if (accessories) creativePrompt += ", " + accessories + " accessories";
-                if (inspiration) creativePrompt += ", inspired by " + inspiration;
-                if (location) creativePrompt += ", in " + location + " setting";
-                if (pose) creativePrompt += ", " + pose;
-                creativePrompt += ", close-up portrait, shot with a Canon 5D Mark IV, a 24mm lens at f/1.8";
-                // Add to prompts array
-                prompts.push(creativePrompt);
-                // Prompt 4: Advanced (200+ words)
-                let advancedPrompt = "(masterpiece, high resolution:1.4, photo-realistic:1.3) ";
-                // Add quality tags
-                if (selectedTags.length > 0) {
-                    advancedPrompt += selectedTags.join(", ") + ", ";
-                }
-                // Add subject and modifiers
-                advancedPrompt += "An extraordinary portrait of a beautiful Latina woman with black hair. ";
-                if (emotion) advancedPrompt += "The scene is illuminated by " + emotion + " emotion, creating a " + atmosphere + " atmosphere. ";
-                if (background) advancedPrompt += "The " + background + " background provides a rich setting. ";
-                if (lighting) advancedPrompt += "The " + lighting + " lighting creates dramatic shadows. ";
-                if (cameraAngle) advancedPrompt += "The " + cameraAngle + " angle showcases the subject perfectly. ";
-                if (colorPalette) advancedPrompt += "The " + colorPalette + " color scheme provides visual harmony. ";
-                if (composition) advancedPrompt += "The " + composition + " composition guides the viewer's eye. ";
-                if (clothing) advancedPrompt += "She wears " + clothing + " that complements the scene. ";
-                if (accessories) advancedPrompt += "Her " + accessories + " add subtle detail. ";
-                if (inspiration) advancedPrompt += "The style is inspired by " + inspiration + ". ";
-                if (location) advancedPrompt += "The setting is " + location + ". ";
-                if (pose) advancedPrompt += "She poses with " + pose + ". ";
-                advancedPrompt += "This cinematic " + artStyle + " style prompt combines all elements for maximum impact. ";
-                advancedPrompt += "The portrait captures her in a close-up format, showing every detail of her face and expression. ";
-                advancedPrompt += "Shot with a Sony A7R IV, a 35mm lens at f/2.0, ensuring exceptional image quality.";
-                // Add to prompts array
-                prompts.push(advancedPrompt);
-                // Prompt 5: Premium (50-70 words)
-                let premiumPrompt = "(masterpiece, photo-realistic:1.4, best quality:1.3, 8k:1.2)";
-                // Add quality tags
-                if (selectedTags.length > 0) {
-                    premiumPrompt += " " + selectedTags.join(", ");
-                }
-                // Add subject and modifiers
-                premiumPrompt += " Beautiful Latina woman with black hair";
-                if (emotion) premiumPrompt += ", " + emotion + " emotion";
-                if (atmosphere) premiumPrompt += ", " + atmosphere + " atmosphere";
-                if (background) premiumPrompt += ", " + background + " background";
-                if (lighting) premiumPrompt += ", " + lighting + " lighting";
-                if (cameraAngle) premiumPrompt += ", " + cameraAngle + " camera angle";
-                if (colorPalette) premiumPrompt += ", " + colorPalette + " color palette";
-                if (composition) premiumPrompt += ", " + composition + " composition";
-                if (clothing) premiumPrompt += ", " + clothing + " clothing";
-                if (accessories) premiumPrompt += ", " + accessories + " accessories";
-                if (inspiration) premiumPrompt += ", inspired by " + inspiration;
-                if (location) premiumPrompt += ", in " + location + " setting";
-                if (pose) premiumPrompt += ", " + pose;
-                premiumPrompt += ", close-up portrait, shot with a Hasselblad X1D II, a 90mm lens at f/2.8";
-                // Add to prompts array
-                prompts.push(premiumPrompt);
-                // Display prompts
-                displayPrompts(prompts);
-                // Hide loading
-                loadingElement.style.display = 'none';
-            }, 1500);
-        }
-
         // Analyze image with AI function
         async function analyzeImageWithAI() {
             if (!imagePreview.src || imagePreview.src === window.location.href) {
@@ -1522,7 +1292,7 @@
             analyzeBtn.disabled = true;
             try {
                 // In a real implementation, you would send the image to your backend
-                // which would then send it to DeepSeek API
+                // which would then send it to Mume AI API
                 // For this demo, we'll simulate the response
                 // Simulate API call delay
                 await new Promise(resolve => setTimeout(resolve, 2000));
@@ -1536,13 +1306,55 @@
                 ];
                 // Display simulated prompts
                 displayAIPrompts(simulatedAnalysis);
+                showApiStatus("Image analyzed successfully!", true);
             } catch (error) {
                 console.error('Error analyzing image:', error);
                 alert('Error analyzing image. Please try again.');
+                showApiStatus("Error analyzing image", false);
             } finally {
                 // Reset button state
                 analyzeBtn.innerHTML = '<i class="fas fa-robot"></i> Analyze Image with AI';
                 analyzeBtn.disabled = false;
+            }
+        }
+
+        // Function to enhance a prompt using the Mume AI API
+        async function enhancePromptWithMumeAI(originalPrompt) {
+            showApiStatus("Enhancing prompt with Mume AI...", true);
+            
+            try {
+                const payload = {
+                    model: "deepseek-chat",
+                    messages: [
+                        {
+                            role: "user",
+                            content: `Enhance the following text to make it a more detailed and creative prompt for an AI image generator. Add more specific details about lighting, composition, style, and atmosphere, but do not change the core subject or theme. Do not use phrases like "A photorealistic image of" or "A professional photograph of". Just provide the descriptive text.\n\nOriginal Prompt: "${originalPrompt}"\n\nEnhanced Prompt:`
+                        }
+                    ],
+                    stream: false
+                };
+
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${API_KEY}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const enhancedPrompt = data.choices[0].message.content.trim();
+                showApiStatus("Prompt enhanced successfully!", true);
+                return enhancedPrompt;
+            } catch (error) {
+                console.error('Error enhancing prompt:', error);
+                showApiStatus("Error enhancing prompt: " + error.message, false);
+                throw error;
             }
         }
 
@@ -1558,10 +1370,11 @@
             aiGenerateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
             aiGenerateBtn.disabled = true;
             try {
-                // In a real implementation, you would call the DeepSeek API
+                // In a real implementation, you would call the Mume AI API
                 // For this demo, we'll simulate the response
                 // Simulate API call delay
                 await new Promise(resolve => setTimeout(resolve, 2000));
+                
                 // Simulated AI response based on the prompt
                 const simulatedPrompts = [
                     `(masterpiece, high resolution:1.4, photo-realistic:1.3) Beautiful Latina woman with black hair, ${prompt}, close-up portrait, studio lighting, natural skin tones, professional photography, cinematic composition, shot with a Nikon D850, a 50mm lens at f/2.8`,
@@ -1570,11 +1383,14 @@
                     `(masterpiece, high resolution:1.4, photo-realistic:1.3) An extraordinary portrait of a beautiful Latina woman with black hair. The scene is illuminated by ${prompt} with natural lighting creating dramatic shadows. The composition showcases the subject with elegant pose and studio setting. The detailed facial features are highlighted with high-resolution quality. This cinematic style prompt combines all elements for maximum impact. Shot with a Sony A7R IV, a 35mm lens at f/2.0, ensuring exceptional image quality.`,
                     `(masterpiece, photo-realistic:1.4, best quality:1.3, 8k:1.2) Beautiful Latina woman with black hair, ${prompt}, close-up portrait, professional photography, natural lighting, detailed facial features, high-resolution, studio setting, cinematic composition, shot with a Hasselblad X1D II, a 90mm lens at f/2.8`
                 ];
+                
                 // Display AI-generated prompts
                 displayAIPrompts(simulatedPrompts);
+                showApiStatus("AI prompts generated successfully!", true);
             } catch (error) {
                 console.error('Error generating AI prompts:', error);
                 alert('Error generating AI prompts. Please check your connection.');
+                showApiStatus("Error generating AI prompts", false);
             } finally {
                 // Reset button state
                 aiGenerateBtn.innerHTML = '<i class="fas fa-robot"></i> Generate with AI';
@@ -1611,14 +1427,23 @@
         }
 
         // Enhance prompt function
-        function enhancePrompt(prompt) {
-            // In a real implementation, this would send to AI for enhancement
-            // For demo, we'll just show a notification
-            notification.innerHTML = '<i class="fas fa-check-circle"></i> Prompt enhanced!';
-            notification.classList.add('show');
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 2000);
+        async function enhancePrompt(prompt) {
+            try {
+                const enhancedPrompt = await enhancePromptWithMumeAI(prompt);
+                // Find the prompt card and update its content
+                const promptCards = document.querySelectorAll('.ai-prompt-card');
+                for (let card of promptCards) {
+                    const content = card.querySelector('.ai-prompt-content');
+                    if (content.textContent.includes(prompt)) {
+                        content.textContent = enhancedPrompt;
+                        break;
+                    }
+                }
+                showApiStatus("Prompt enhanced successfully!", true);
+            } catch (error) {
+                console.error('Error enhancing prompt:', error);
+                showApiStatus("Error enhancing prompt", false);
+            }
         }
 
         // Display prompts in cards with enhance buttons
@@ -1700,6 +1525,8 @@
             promptsContainer.innerHTML = '';
             // Clear classification result
             classificationResult.classList.remove('active');
+            // Hide API status
+            apiStatus.classList.remove('active');
         }
 
         // Event listeners
@@ -1811,3 +1638,12 @@
     </script>
 </body>
 </html>
+
+
+    
+              <script>
+                              
+              </script>
+                        </body>
+                        </html>
+                    
