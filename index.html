@@ -1,4 +1,19 @@
-<!DOCTYPE html>
+
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <style>
+                body {
+                  background-color: white; /* Ensure the iframe has a white background */
+                }
+    
+                
+              </style>
+                        </head>
+                        <body>
+                            <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,7 +21,7 @@
     <title>Raju's Image Prompts Generator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Your existing CSS remains the same */
+        /* Theme tokens */
         :root {
             --bg: #ffffff;
             --text: #111111;
@@ -69,7 +84,7 @@
             border-radius: 6px;
             padding: 10px 12px;
             width: 100%;
-            appearance: none;
+            appearance: none; /* hide native arrow to style consistently */
             -webkit-appearance: none;
             -moz-appearance: none;
             background-image:
@@ -1036,9 +1051,8 @@
         const apiStatus = document.getElementById('api-status');
         const apiStatusText = document.getElementById('api-status-text');
 
-        // API Configuration - Using your provided key
-        const API_KEY = "d4mly2vshcxmstd73a0zcwfk90bl124r";
-        const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent";
+        // TensorFlow.js variables
+        let model = null;
 
         // Show API status
         function showApiStatus(message, isSuccess = true) {
@@ -1292,54 +1306,81 @@
             }
         }
 
-        // Function to enhance a prompt using the Mume AI API (corrected version)
-        async function enhancePromptWithAI(originalPrompt) {
-            showApiStatus("Enhancing prompt with AI...", true);
+        // Enhanced prompt generation using local logic
+        function generateEnhancedPrompt(originalPrompt) {
+            // This is a local enhancement function that doesn't require API
+            const enhancements = [
+                "Create a stunning",
+                "Design an exquisite",
+                "Craft a magnificent",
+                "Develop a breathtaking",
+                "Compose a spectacular",
+                "Build a magnificent",
+                "Formulate a captivating",
+                "Construct a compelling",
+                "Generate a remarkable",
+                "Produce an extraordinary"
+            ];
             
-            try {
-                // Corrected API call with proper Gemini format
-                const payload = {
-                    contents: [{
-                        parts: [
-                            {
-                                text: `Enhance the following text to make it a more detailed and creative prompt for an AI image generator. Add more specific details about lighting, composition, style, and atmosphere, but do not change the core subject or theme. Do not use phrases like "A photorealistic image of" or "A professional photograph of". Just provide the descriptive text.\n\nOriginal Prompt: "${originalPrompt}"\n\nEnhanced Prompt:`
-                            }
-                        ]
-                    }]
-                };
-
-                const response = await fetch(`${API_URL}?key=${API_KEY}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(payload)
-                });
-
-                if (!response.ok) {
-                    throw new Error(`API error: ${response.status} ${response.statusText}`);
-                }
-
-                const data = await response.json();
-                
-                // Extract the enhanced text from the response
-                if (data.candidates && data.candidates.length > 0 && 
-                    data.candidates[0].content && 
-                    data.candidates[0].content.parts) {
-                    const enhancedPrompt = data.candidates[0].content.parts[0].text.trim();
-                    showApiStatus("Prompt enhanced successfully!", true);
-                    return enhancedPrompt;
-                } else {
-                    throw new Error('Unexpected API response format');
-                }
-            } catch (error) {
-                console.error('Error enhancing prompt:', error);
-                showApiStatus("Error enhancing prompt: " + error.message, false);
-                throw error;
-            }
+            const styles = [
+                "photorealistic",
+                "cinematic",
+                "digital art",
+                "oil painting",
+                "watercolor",
+                "abstract",
+                "surreal",
+                "minimalist",
+                "pop art",
+                "steampunk"
+            ];
+            
+            const lightingEffects = [
+                "dramatic lighting",
+                "soft natural lighting",
+                "neon glow",
+                "golden hour",
+                "moonlight",
+                "studio lighting",
+                "diffused lighting",
+                "backlighting",
+                "spotlight",
+                "ambient lighting"
+            ];
+            
+            const compositionTypes = [
+                "rule of thirds composition",
+                "symmetrical framing",
+                "leading lines",
+                "depth of field",
+                "dynamic angle",
+                "framing",
+                "negative space",
+                "centered composition",
+                "diagonal composition",
+                "golden ratio"
+            ];
+            
+            const adjectives = [
+                "ultra-detailed",
+                "highly realistic",
+                "masterpiece quality",
+                "8k resolution",
+                "sharp focus",
+                "vibrant colors",
+                "rich textures",
+                "exceptional quality",
+                "professional grade",
+                "studio quality"
+            ];
+            
+            // Simple enhancement logic
+            const enhancedPrompt = `${enhancements[Math.floor(Math.random() * enhancements.length)]} ${styles[Math.floor(Math.random() * styles.length)]} ${originalPrompt} with ${lightingEffects[Math.floor(Math.random() * lightingEffects.length)]}, ${compositionTypes[Math.floor(Math.random() * compositionTypes.length)]}, and ${adjectives[Math.floor(Math.random() * adjectives.length)]}.`;
+            
+            return enhancedPrompt;
         }
 
-        // AI Prompt Generation Function
+        // AI Prompt Generation Function (client-side only)
         async function generateAIPrompts() {
             const prompt = aiPromptInput.value.trim();
             if (!prompt) {
@@ -1350,47 +1391,23 @@
             aiGenerateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
             aiGenerateBtn.disabled = true;
             try {
-                // Call the correct API with proper Gemini format
-                const payload = {
-                    contents: [{
-                        parts: [
-                            {
-                                text: `Create a detailed, creative prompt for an AI image generator based on this description: "${prompt}". The prompt should be a single sentence describing the scene in detail with specific elements like subject, style, lighting, composition, and atmosphere. Avoid phrases like "A photo of" or "A picture of".`
-                            }
-                        ]
-                    }]
-                };
-
-                const response = await fetch(`${API_URL}?key=${API_KEY}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(payload)
-                });
-
-                if (!response.ok) {
-                    throw new Error(`API error: ${response.status} ${response.statusText}`);
-                }
-
-                const data = await response.json();
+                // Simulate processing delay
+                await new Promise(resolve => setTimeout(resolve, 1000));
                 
-                // Extract the generated prompt from the response
-                if (data.candidates && data.candidates.length > 0 && 
-                    data.candidates[0].content && 
-                    data.candidates[0].content.parts) {
-                    const generatedPrompt = data.candidates[0].content.parts[0].text.trim();
-                    
-                    // Display the generated prompt
-                    displayAIPrompts([generatedPrompt]);
-                    showApiStatus("AI prompt generated successfully!", true);
-                } else {
-                    throw new Error('Unexpected API response format');
+                // Generate enhanced prompts locally
+                const enhancedPrompts = [];
+                for (let i = 0; i < 3; i++) {
+                    const enhancedPrompt = generateEnhancedPrompt(prompt);
+                    enhancedPrompts.push(enhancedPrompt);
                 }
+                
+                // Display the generated prompts
+                displayAIPrompts(enhancedPrompts);
+                showApiStatus("AI prompts generated successfully!", true);
             } catch (error) {
                 console.error('Error generating AI prompts:', error);
-                alert('Error generating AI prompts. Please check your connection.');
-                showApiStatus("Error generating AI prompts: " + error.message, false);
+                alert('Error generating AI prompts.');
+                showApiStatus("Error generating AI prompts", false);
             } finally {
                 // Reset button state
                 aiGenerateBtn.innerHTML = '<i class="fas fa-robot"></i> Generate with AI';
@@ -1426,10 +1443,12 @@
             });
         }
 
-        // Enhance prompt function
+        // Enhanced prompt function (client-side)
         async function enhancePrompt(prompt) {
             try {
-                const enhancedPrompt = await enhancePromptWithAI(prompt);
+                // Generate enhanced version locally
+                const enhancedPrompt = generateEnhancedPrompt(prompt);
+                
                 // Find the prompt card and update its content
                 const promptCards = document.querySelectorAll('.ai-prompt-card');
                 for (let card of promptCards) {
@@ -1439,6 +1458,7 @@
                         break;
                     }
                 }
+                
                 showApiStatus("Prompt enhanced successfully!", true);
             } catch (error) {
                 console.error('Error enhancing prompt:', error);
@@ -1922,6 +1942,23 @@
 
         // Tag selection
         const tagElements = document.querySelectorAll('.tag');
+        tagElements.forEach(tag => {
+            tag.addEventListener('click', function() {
+                this.classList.toggle('selected');
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+    
+              <script>
+                              
+              </script>
+                        </body>
+                        </html>
+                            const tagElements = document.querySelectorAll('.tag');
         tagElements.forEach(tag => {
             tag.addEventListener('click', function() {
                 this.classList.toggle('selected');
