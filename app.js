@@ -1,4 +1,4 @@
-// AI Prompt Generator Application
+// Enhanced AI Prompt Generator Application
 class AIPromptGenerator {
     constructor() {
         this.data = {
@@ -11,20 +11,30 @@ class AIPromptGenerator {
             color_palettes: ["None", "Monochrome", "Vibrant", "Pastel", "Warm Colors", "Cool Colors", "Earth Tones", "Neon Accents", "Soft Gradients", "High Contrast", "Low Contrast", "Complementary", "Analogous", "Triadic", "Split Complementary", "Tetradic"],
             compositions: ["None", "Rule of Thirds", "Centered", "Symmetrical", "Asymmetrical", "Diagonal", "Framing", "Leading Lines", "Golden Ratio", "Negative Space", "Depth of Field", "Foreground Focus", "Background Blur", "High Contrast", "Low Contrast", "Dynamic Angle"],
             quality_tags: ["Masterpiece", "High Resolution", "Photo Realistic", "Best Quality", "8K", "Ultra High Res"],
-            emphasis_tags: ["Red Eyes", "Black Hair", "Long Hair", "Detailed Face", "Natural Lighting", "Cinematic"],
-            cameras: ["Nikon D850", "Canon 5D Mark IV", "Sony A7R IV", "Hasselblad X1D II", "Fujifilm GFX 100S", "Leica Q2"],
-            lenses: ["50mm", "85mm", "24mm", "35mm", "90mm", "135mm"],
-            apertures: ["f/1.4", "f/1.8", "f/2.0", "f/2.8", "f/4.0", "f/5.6"]
+            emphasis_tags: ["Red Eyes", "Black Hair", "Long Hair", "Detailed Face", "Natural Lighting", "Cinematic"]
         };
         
         this.promptTemplates = {
-            technical: "Technical Photography Style",
-            descriptive: "Detailed Descriptive Style", 
-            creative: "Creative Artistic Style",
-            professional: "Professional Studio Style",
-            cinematic: "Cinematic Film Style"
+            photography: "Professional photography style",
+            "digital-art": "Digital art masterpiece",
+            painting: "Traditional painting style",
+            anime: "Anime/manga illustration",
+            "3d-render": "3D rendered artwork",
+            logo: "Professional logo design",
+            character: "Character design concept"
         };
-
+        
+        this.synonyms = {
+            'beautiful': ['stunning', 'gorgeous', 'breathtaking', 'magnificent', 'striking'],
+            'detailed': ['intricate', 'elaborate', 'comprehensive', 'thorough', 'meticulous'],
+            'high quality': ['premium', 'professional', 'exceptional', 'superior', 'top-tier'],
+            'amazing': ['incredible', 'fantastic', 'extraordinary', 'remarkable', 'outstanding']
+        };
+        
+        this.usedCombinations = new Set();
+        this.history = JSON.parse(localStorage.getItem('promptHistory') || '[]');
+        this.currentTheme = localStorage.getItem('theme') || 'auto';
+        
         this.init();
     }
 
@@ -33,6 +43,241 @@ class AIPromptGenerator {
         this.createCheckboxes();
         this.bindEvents();
         this.loadPreferences();
+        this.setupTheme();
+        this.setupTabs();
+        this.setupImageUpload();
+        this.updateHistoryDisplay();
+    }
+
+    setupTheme() {
+        this.applyTheme();
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            this.toggleTheme();
+        });
+    }
+
+    applyTheme() {
+        const themeIcon = document.getElementById('themeIcon');
+        
+        if (this.currentTheme === 'auto') {
+            document.documentElement.removeAttribute('data-color-scheme');
+            themeIcon.textContent = '🌓';
+        } else if (this.currentTheme === 'dark') {
+            document.documentElement.setAttribute('data-color-scheme', 'dark');
+            themeIcon.textContent = '☀️';
+        } else {
+            document.documentElement.setAttribute('data-color-scheme', 'light');
+            themeIcon.textContent = '🌙';
+        }
+    }
+
+    toggleTheme() {
+        const themes = ['auto', 'light', 'dark'];
+        const currentIndex = themes.indexOf(this.currentTheme);
+        this.currentTheme = themes[(currentIndex + 1) % themes.length];
+        localStorage.setItem('theme', this.currentTheme);
+        this.applyTheme();
+    }
+
+    setupTabs() {
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetTab = btn.getAttribute('data-tab');
+                
+                // Remove active class from all tabs and contents
+                tabBtns.forEach(b => b.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding content
+                btn.classList.add('active');
+                document.getElementById(targetTab).classList.add('active');
+            });
+        });
+    }
+
+    setupImageUpload() {
+        const uploadArea = document.getElementById('imageUpload');
+        const fileInput = document.getElementById('imageInput');
+
+        uploadArea.addEventListener('click', () => fileInput.click());
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                this.handleImageUpload(files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                this.handleImageUpload(e.target.files[0]);
+            }
+        });
+    }
+
+    async handleImageUpload(file) {
+        if (!file.type.startsWith('image/')) {
+            this.showToast('Please upload an image file', 'error');
+            return;
+        }
+
+        try {
+            const prompt = await this.analyzeImage(file);
+            const resultContainer = document.getElementById('imageAnalysisResult');
+            
+            resultContainer.innerHTML = `
+                <div class="prompt-result">
+                    <div class="prompt-header">
+                        <span class="prompt-type">Image Analysis Result</span>
+                        <button class="btn btn--outline btn--sm copy-btn" onclick="navigator.clipboard.writeText('${prompt}')">
+                            📋 Copy
+                        </button>
+                    </div>
+                    <div class="prompt-text">${prompt}</div>
+                </div>
+            `;
+            
+            resultContainer.classList.remove('hidden');
+            this.addToHistory(prompt, { type: 'image-analysis', filename: file.name });
+            
+        } catch (error) {
+            this.showToast('Error analyzing image', 'error');
+            console.error(error);
+        }
+    }
+
+    async analyzeImage(file) {
+        return new Promise((resolve) => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            
+            img.onload = () => {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+                
+                const analysis = this.performImageAnalysis(canvas, ctx);
+                const prompt = this.generatePromptFromAnalysis(analysis);
+                resolve(prompt);
+            };
+            
+            img.src = URL.createObjectURL(file);
+        });
+    }
+
+    performImageAnalysis(canvas, ctx) {
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const pixels = imageData.data;
+        
+        // Analyze brightness
+        let totalBrightness = 0;
+        let colorCounts = {};
+        
+        for (let i = 0; i < pixels.length; i += 16) { // Sample every 4th pixel
+            const r = pixels[i];
+            const g = pixels[i + 1];
+            const b = pixels[i + 2];
+            
+            // Calculate brightness
+            const brightness = (r + g + b) / 3;
+            totalBrightness += brightness;
+            
+            // Categorize colors
+            const colorCategory = this.categorizeColor(r, g, b);
+            colorCounts[colorCategory] = (colorCounts[colorCategory] || 0) + 1;
+        }
+        
+        const avgBrightness = totalBrightness / (pixels.length / 4);
+        const aspectRatio = canvas.width / canvas.height;
+        
+        // Get dominant colors
+        const dominantColors = Object.entries(colorCounts)
+            .sort(([,a], [,b]) => b - a)
+            .slice(0, 3)
+            .map(([color]) => color);
+        
+        return {
+            brightness: avgBrightness / 255,
+            aspectRatio,
+            dominantColors,
+            width: canvas.width,
+            height: canvas.height
+        };
+    }
+
+    categorizeColor(r, g, b) {
+        const max = Math.max(r, g, b);
+        const min = Math.min(r, g, b);
+        const diff = max - min;
+        
+        if (diff < 30) return 'grayscale';
+        if (r > g && r > b) return 'red';
+        if (g > r && g > b) return 'green';
+        if (b > r && b > g) return 'blue';
+        if (r > 200 && g > 200 && b < 100) return 'yellow';
+        if (r > 200 && b > 200 && g < 100) return 'magenta';
+        if (g > 200 && b > 200 && r < 100) return 'cyan';
+        return 'mixed';
+    }
+
+    generatePromptFromAnalysis(analysis) {
+        let prompt = "";
+        
+        // Add dominant color information
+        if (analysis.dominantColors.length > 0) {
+            const colorDescriptions = {
+                'red': 'warm red tones',
+                'blue': 'cool blue palette',
+                'green': 'natural green hues',
+                'yellow': 'bright golden colors',
+                'grayscale': 'monochromatic palette',
+                'mixed': 'diverse color scheme'
+            };
+            
+            const colorDescs = analysis.dominantColors.map(color => 
+                colorDescriptions[color] || color
+            ).join(', ');
+            
+            prompt += `${colorDescs}, `;
+        }
+        
+        // Add lighting based on brightness
+        if (analysis.brightness > 0.7) {
+            prompt += "bright lighting, high key, well-lit, ";
+        } else if (analysis.brightness < 0.3) {
+            prompt += "dark mood, low key lighting, dramatic shadows, ";
+        } else {
+            prompt += "balanced lighting, natural illumination, ";
+        }
+        
+        // Add composition based on aspect ratio
+        if (analysis.aspectRatio > 1.5) {
+            prompt += "wide composition, landscape orientation, ";
+        } else if (analysis.aspectRatio < 0.7) {
+            prompt += "portrait composition, vertical format, ";
+        } else {
+            prompt += "balanced composition, ";
+        }
+        
+        // Add technical specs
+        prompt += `${analysis.width}x${analysis.height} resolution, detailed, professional quality`;
+        
+        return prompt;
     }
 
     populateDropdowns() {
@@ -72,7 +317,7 @@ class AIPromptGenerator {
         options.forEach(option => {
             const checkboxItem = document.createElement('div');
             checkboxItem.className = 'checkbox-item';
-            
+
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
             checkbox.id = `${containerId}_${option.replace(/\s+/g, '_').toLowerCase()}`;
@@ -93,19 +338,25 @@ class AIPromptGenerator {
         document.getElementById('generateBtn').addEventListener('click', () => this.generatePrompts());
         document.getElementById('resetBtn').addEventListener('click', () => this.resetForm());
         document.getElementById('copyAllBtn').addEventListener('click', () => this.copyAllPrompts());
-        
-        // Auto-save preferences on change
+
+        // History events
+        document.getElementById('historySearch').addEventListener('input', (e) => this.searchHistory(e.target.value));
+        document.getElementById('exportHistoryBtn').addEventListener('click', () => this.exportHistory());
+        document.getElementById('clearHistoryBtn').addEventListener('click', () => this.clearHistory());
+
+        // Auto-save preferences
         document.querySelectorAll('select, input[type="text"], textarea').forEach(element => {
             element.addEventListener('change', () => this.savePreferences());
         });
-        
+
         document.querySelectorAll('input[type="checkbox"]').forEach(element => {
             element.addEventListener('change', () => this.savePreferences());
         });
     }
 
     getSelectedValues() {
-        const values = {
+        return {
+            promptType: document.getElementById('promptType').value,
             artStyle: document.getElementById('artStyle').value,
             emotion: document.getElementById('emotion').value,
             atmosphere: document.getElementById('atmosphere').value,
@@ -122,8 +373,6 @@ class AIPromptGenerator {
             qualityTags: this.getCheckedValues('qualityTags'),
             emphasisTags: this.getCheckedValues('emphasisTags')
         };
-
-        return values;
     }
 
     getCheckedValues(groupName) {
@@ -139,552 +388,103 @@ class AIPromptGenerator {
 
         // Show loading state
         generateBtn.disabled = true;
-        generateBtn.textContent = 'Generating...';
-        
+        generateBtn.textContent = '✨ Generating...';
         resultsContainer.innerHTML = `
             <div class="loading-state">
-                <span class="loading-spinner"></span>
-                Generating enhanced prompts...
+                <div class="loading-spinner"></div>
+                Generating unique prompts...
             </div>
         `;
 
-        // Simulate processing time for better UX
+        // Simulate generation delay for better UX
         setTimeout(() => {
-            const prompts = this.createPromptVariations(values);
+            const prompts = this.createPromptVariations(values, 5);
             this.displayResults(prompts, values);
             
             generateBtn.disabled = false;
-            generateBtn.textContent = 'Generate Enhanced Prompts';
-            copyAllBtn.style.display = 'block';
+            generateBtn.textContent = '✨ Generate Enhanced Prompts';
+            copyAllBtn.disabled = false;
             
-            this.saveToHistory(values, prompts);
-        }, 1200);
+            // Add to history
+            prompts.forEach((prompt, index) => {
+                this.addToHistory(prompt, {
+                    ...values,
+                    variation: index + 1,
+                    type: 'generated'
+                });
+            });
+            
+            this.showToast('✨ Prompts generated successfully!', 'success');
+        }, 1000);
     }
 
-    createPromptVariations(values) {
+    createPromptVariations(values, count) {
         const prompts = [];
         
-        // Technical Photography Style
-        prompts.push({
-            type: 'technical',
-            title: 'Technical Photography Style',
-            text: this.generateTechnicalPrompt(values)
-        });
-
-        // Detailed Descriptive Style
-        prompts.push({
-            type: 'descriptive', 
-            title: 'Detailed Descriptive Style',
-            text: this.generateDescriptivePrompt(values)
-        });
-
-        // Creative Artistic Style
-        prompts.push({
-            type: 'creative',
-            title: 'Creative Artistic Style', 
-            text: this.generateCreativePrompt(values)
-        });
-
-        // Professional Studio Style
-        prompts.push({
-            type: 'professional',
-            title: 'Professional Studio Style',
-            text: this.generateProfessionalPrompt(values)
-        });
-
-        // Cinematic Film Style
-        prompts.push({
-            type: 'cinematic',
-            title: 'Cinematic Film Style',
-            text: this.generateCinematicPrompt(values)
-        });
-
+        for (let i = 0; i < count; i++) {
+            let prompt = this.buildBasePrompt(values, i);
+            prompt = this.enhancePrompt(prompt, values.promptType, i);
+            prompt = this.applySynonymVariation(prompt, i);
+            prompts.push(prompt);
+        }
+        
         return prompts;
     }
 
-    generateTechnicalPrompt(values) {
-        let prompt = '';
+    buildBasePrompt(values, variationIndex) {
+        let parts = [];
         
-        // Quality tags with weights
-        if (values.qualityTags.length > 0) {
-            const weightedTags = values.qualityTags.map(tag => {
-                const weight = this.getRandomFloat(1.2, 1.5);
-                return `(${tag.toLowerCase()}:${weight})`;
-            });
-            prompt += weightedTags.join(', ') + ', ';
-        }
-
-        // Main subject
-        const subject = this.buildSubject(values);
-        if (subject) prompt += subject + ', ';
-
-        // Technical camera settings
-        const camera = this.getRandomElement(this.data.cameras);
-        const lens = this.getRandomElement(this.data.lenses);
-        const aperture = this.getRandomElement(this.data.apertures);
-        
-        if (values.lighting && values.lighting !== 'None') {
-            prompt += `${values.lighting.toLowerCase()} lighting, `;
-        }
-        
-        if (values.cameraAngle && values.cameraAngle !== 'None') {
-            prompt += `${values.cameraAngle.toLowerCase()} shot, `;
-        }
-        
-        prompt += `shot with ${camera}, ${lens} lens at ${aperture}`;
-        
-        // Emphasis tags
-        if (values.emphasisTags.length > 0) {
-            prompt += ', ' + values.emphasisTags.map(tag => tag.toLowerCase()).join(', ');
-        }
-
-        return this.cleanPrompt(prompt);
-    }
-
-    generateDescriptivePrompt(values) {
-        let prompt = 'A stunning and meticulously detailed ';
-        
-        const subject = this.buildSubject(values);
-        prompt += subject || 'artwork';
-        
-        if (values.emotion && values.emotion !== 'None') {
-            prompt += ` with ${values.emotion.toLowerCase()} expression`;
-        }
-        
-        if (values.atmosphere && values.atmosphere !== 'None') {
-            prompt += `. The scene is filled with ${values.atmosphere.toLowerCase()} atmosphere`;
-        }
-        
-        if (values.background && values.background !== 'None') {
-            prompt += `. The background features ${values.background.toLowerCase()}`;
-        }
-        
-        if (values.lighting && values.lighting !== 'None') {
-            prompt += `. The ${values.lighting.toLowerCase()} creates dramatic visual effects`;
-        }
-        
-        if (values.colorPalette && values.colorPalette !== 'None') {
-            prompt += ` with ${values.colorPalette.toLowerCase()} color scheme`;
-        }
-        
-        if (values.composition && values.composition !== 'None') {
-            prompt += `. Composed using ${values.composition.toLowerCase()}`;
-        }
-        
-        // Add quality descriptors
-        if (values.qualityTags.length > 0) {
-            prompt += `. ` + values.qualityTags.join(', ').toLowerCase() + ' quality';
-        }
-        
-        return this.cleanPrompt(prompt);
-    }
-
-    generateCreativePrompt(values) {
-        let prompt = 'An extraordinary and imaginative ';
-        
-        if (values.artStyle && values.artStyle !== 'None') {
-            prompt += `${values.artStyle.toLowerCase()} style `;
-        }
-        
-        const subject = this.buildSubject(values);
-        prompt += subject || 'creation';
-        
-        if (values.inspiration) {
-            prompt += ` inspired by ${values.inspiration}`;
-        }
-        
-        if (values.lighting && values.lighting !== 'None') {
-            prompt += `. The scene is illuminated by ${values.lighting.toLowerCase()}`;
-        }
-        
-        if (values.atmosphere && values.atmosphere !== 'None') {
-            prompt += `, creating ${values.atmosphere.toLowerCase()} ambiance`;
-        }
-        
-        if (values.emotion && values.emotion !== 'None') {
-            prompt += ` that evokes ${values.emotion.toLowerCase()} emotions`;
-        }
-        
-        // Add artistic flourishes
-        const artisticElements = [
-            'with intricate details and masterful technique',
-            'showcasing exceptional artistic vision', 
-            'rendered with sublime beauty and precision',
-            'displaying remarkable depth and character'
-        ];
-        
-        prompt += '. ' + this.getRandomElement(artisticElements);
-        
-        return this.cleanPrompt(prompt);
-    }
-
-    generateProfessionalPrompt(values) {
-        let prompt = 'Professional ';
-        
-        if (values.artStyle && values.artStyle !== 'None') {
-            prompt += `${values.artStyle.toLowerCase()} `;
-        }
-        
-        prompt += 'photography of ';
-        
-        const subject = this.buildSubject(values);
-        prompt += subject || 'subject';
-        
-        if (values.emotion && values.emotion !== 'None') {
-            prompt += ` with ${values.emotion.toLowerCase()} expression`;
-        }
-        
-        if (values.lighting && values.lighting !== 'None') {
-            prompt += `, ${values.lighting.toLowerCase()} lighting`;
-        }
-        
-        if (values.background && values.background !== 'None') {
-            prompt += `, ${values.background.toLowerCase()} setting`;
-        }
-        
-        if (values.cameraAngle && values.cameraAngle !== 'None') {
-            prompt += `, ${values.cameraAngle.toLowerCase()} perspective`;
-        }
-        
-        if (values.colorPalette && values.colorPalette !== 'None') {
-            prompt += `, ${values.colorPalette.toLowerCase()} colors`;
-        }
-        
-        // Technical specs
-        const camera = this.getRandomElement(this.data.cameras);
-        const lens = this.getRandomElement(this.data.lenses);
-        const aperture = this.getRandomElement(this.data.apertures);
-        
-        prompt += `, shot with ${camera}, ${lens} lens at ${aperture}`;
-        
-        if (values.qualityTags.length > 0) {
-            prompt += ', ' + values.qualityTags.join(', ').toLowerCase();
-        }
-        
-        return this.cleanPrompt(prompt);
-    }
-
-    generateCinematicPrompt(values) {
-        let prompt = 'Cinematic shot of ';
-        
-        const subject = this.buildSubject(values);
-        prompt += subject || 'scene';
-        
-        if (values.emotion && values.emotion !== 'None') {
-            prompt += ` conveying ${values.emotion.toLowerCase()} mood`;
-        }
-        
-        if (values.cameraAngle && values.cameraAngle !== 'None') {
-            prompt += `, ${values.cameraAngle.toLowerCase()} camera movement`;
-        }
-        
-        if (values.lighting && values.lighting !== 'None') {
-            prompt += `, dramatic ${values.lighting.toLowerCase()}`;
-        }
-        
-        if (values.atmosphere && values.atmosphere !== 'None') {
-            prompt += `, ${values.atmosphere.toLowerCase()} atmosphere`;
-        }
-        
-        if (values.background && values.background !== 'None') {
-            prompt += ` in ${values.background.toLowerCase()}`;
-        }
-        
-        if (values.colorPalette && values.colorPalette !== 'None') {
-            prompt += `. ${values.colorPalette.toLowerCase()} color grading`;
-        }
-        
-        // Cinematic technical terms
-        const cinematicTerms = [
-            'depth of field', 'film grain', 'anamorphic', 'bokeh effects',
-            '35mm film', 'color correction', 'dramatic shadows', 'lens flares'
-        ];
-        
-        prompt += ', ' + this.getRandomElements(cinematicTerms, 2).join(', ');
-        
-        if (values.qualityTags.length > 0) {
-            prompt += ', ' + values.qualityTags.join(', ').toLowerCase();
-        }
-        
-        return this.cleanPrompt(prompt);
-    }
-
-    buildSubject(values) {
-        let subject = '';
-        
+        // Start with custom prompt or inspiration
         if (values.customPrompt) {
-            subject = values.customPrompt;
-        } else {
-            const parts = [];
-            
-            if (values.pose) parts.push(values.pose);
-            if (values.additionalOptions) parts.push(values.additionalOptions);
-            if (values.location) parts.push(`in ${values.location}`);
-            
-            subject = parts.join(', ') || 'portrait';
+            parts.push(values.customPrompt);
+        } else if (values.inspiration) {
+            parts.push(values.inspiration);
         }
         
-        return subject;
-    }
-
-    displayResults(prompts, values) {
-        const resultsContainer = document.getElementById('resultsContainer');
-        
-        let html = '';
-        
-        // Generation info
-        const selectedOptions = this.getSelectedOptionsDisplay(values);
-        if (selectedOptions.length > 0) {
-            html += `
-                <div class="generation-info">
-                    <h3>Generated with selected options:</h3>
-                    <div class="selected-options">
-                        ${selectedOptions.map(option => `<span class="option-tag">${option}</span>`).join('')}
-                    </div>
-                </div>
-            `;
+        // Add location/setting
+        if (values.location) {
+            parts.push(`in ${values.location}`);
+        } else if (values.background && values.background !== 'None') {
+            parts.push(`in a ${values.background.toLowerCase()}`);
         }
-
-        // Results summary
-        html += `
-            <div class="results-summary">
-                <span class="summary-text">Generated ${prompts.length} unique prompt variations</span>
-                <div class="summary-actions">
-                    <span class="feature-item">
-                        <span class="feature-icon">📋</span>
-                        <span>Ready to copy</span>
-                    </span>
-                </div>
-            </div>
-        `;
         
-        // Individual prompts
-        prompts.forEach((prompt, index) => {
-            const wordCount = prompt.text.split(' ').length;
-            const charCount = prompt.text.length;
-            
-            html += `
-                <div class="prompt-result" data-index="${index}">
-                    <div class="prompt-header">
-                        <span class="prompt-type">${prompt.title}</span>
-                        <button class="btn btn--secondary copy-btn" onclick="app.copyPrompt(${index})">
-                            Copy
-                        </button>
-                    </div>
-                    <div class="prompt-text">${prompt.text}</div>
-                    <div class="prompt-stats">
-                        <div class="stat-item">
-                            <span>📝</span>
-                            <span>${wordCount} words</span>
-                        </div>
-                        <div class="stat-item">
-                            <span>🔤</span>
-                            <span>${charCount} characters</span>
-                        </div>
-                    </div>
-                </div>
-            `;
-        });
-        
-        resultsContainer.innerHTML = html;
-        this.currentPrompts = prompts;
-    }
-
-    getSelectedOptionsDisplay(values) {
-        const options = [];
-        
-        Object.entries(values).forEach(([key, value]) => {
-            if (Array.isArray(value)) {
-                if (value.length > 0) {
-                    options.push(...value);
-                }
-            } else if (value && value !== 'None' && value.trim() !== '') {
-                if (key === 'customPrompt' && value.length > 30) {
-                    options.push('Custom Prompt');
-                } else if (key !== 'customPrompt') {
-                    options.push(value);
-                }
-            }
-        });
-        
-        return options;
-    }
-
-    copyPrompt(index) {
-        if (!this.currentPrompts || !this.currentPrompts[index]) return;
-        
-        const promptText = this.currentPrompts[index].text;
-        this.copyToClipboard(promptText);
-    }
-
-    copyAllPrompts() {
-        if (!this.currentPrompts) return;
-        
-        const allPrompts = this.currentPrompts
-            .map((prompt, index) => `${index + 1}. ${prompt.title}:\n${prompt.text}`)
-            .join('\n\n');
-        
-        this.copyToClipboard(allPrompts);
-    }
-
-    copyToClipboard(text) {
-        navigator.clipboard.writeText(text).then(() => {
-            this.showToast('Copied to clipboard!');
-        }).catch(() => {
-            // Fallback for older browsers
-            const textArea = document.createElement('textarea');
-            textArea.value = text;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            this.showToast('Copied to clipboard!');
-        });
-    }
-
-    showToast(message) {
-        const toast = document.getElementById('toast');
-        const toastMessage = document.getElementById('toastMessage');
-        
-        toastMessage.textContent = message;
-        toast.classList.remove('hidden');
-        toast.classList.add('show');
-        
-        setTimeout(() => {
-            toast.classList.remove('show');
-            setTimeout(() => {
-                toast.classList.add('hidden');
-            }, 300);
-        }, 3000);
-    }
-
-    resetForm() {
-        // Reset all dropdowns
-        document.querySelectorAll('select').forEach(select => {
-            select.selectedIndex = 0;
-        });
-        
-        // Reset all text inputs and textareas
-        document.querySelectorAll('input[type="text"], textarea').forEach(input => {
-            input.value = '';
-        });
-        
-        // Reset all checkboxes
-        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-            checkbox.checked = false;
-        });
-        
-        // Clear results
-        const resultsContainer = document.getElementById('resultsContainer');
-        resultsContainer.innerHTML = `
-            <div class="empty-state">
-                <p>Configure your settings and click "Generate Enhanced Prompts" to create professional AI prompts.</p>
-                <div class="empty-state__features">
-                    <div class="feature-item">
-                        <span class="feature-icon">✨</span>
-                        <span>Generate 5 unique variations</span>
-                    </div>
-                    <div class="feature-item">
-                        <span class="feature-icon">🎨</span>
-                        <span>Professional formatting</span>
-                    </div>
-                    <div class="feature-item">
-                        <span class="feature-icon">📋</span>
-                        <span>One-click copy to clipboard</span>
-                    </div>
-                </div>
-            </div>
-        `;
-        
-        document.getElementById('copyAllBtn').style.display = 'none';
-        this.currentPrompts = null;
-        
-        this.showToast('Form reset successfully!');
-        this.clearPreferences();
-    }
-
-    savePreferences() {
-        const values = this.getSelectedValues();
-        localStorage.setItem('aiPromptGeneratorPrefs', JSON.stringify(values));
-    }
-
-    loadPreferences() {
-        try {
-            const saved = localStorage.getItem('aiPromptGeneratorPrefs');
-            if (!saved) return;
-            
-            const values = JSON.parse(saved);
-            
-            // Load dropdown values
-            Object.entries(values).forEach(([key, value]) => {
-                const element = document.getElementById(key);
-                if (element && typeof value === 'string') {
-                    element.value = value;
-                }
-            });
-            
-            // Load checkboxes
-            ['qualityTags', 'emphasisTags'].forEach(groupName => {
-                if (values[groupName] && Array.isArray(values[groupName])) {
-                    values[groupName].forEach(value => {
-                        const checkbox = document.querySelector(`input[name="${groupName}"][value="${value}"]`);
-                        if (checkbox) checkbox.checked = true;
-                    });
-                }
-            });
-        } catch (error) {
-            console.error('Error loading preferences:', error);
+        // Add pose/action
+        if (values.pose) {
+            parts.push(values.pose);
         }
-    }
-
-    clearPreferences() {
-        localStorage.removeItem('aiPromptGeneratorPrefs');
-    }
-
-    saveToHistory(values, prompts) {
-        try {
-            const history = JSON.parse(localStorage.getItem('aiPromptGeneratorHistory') || '[]');
-            const entry = {
-                timestamp: new Date().toISOString(),
-                values: values,
-                prompts: prompts
-            };
-            
-            history.unshift(entry);
-            
-            // Keep only last 10 entries
-            const limitedHistory = history.slice(0, 10);
-            localStorage.setItem('aiPromptGeneratorHistory', JSON.stringify(limitedHistory));
-        } catch (error) {
-            console.error('Error saving to history:', error);
+        
+        // Add style elements
+        const styleElements = [
+            values.artStyle,
+            values.emotion,
+            values.atmosphere,
+            values.lighting,
+            values.colorPalette,
+            values.composition,
+            values.cameraAngle
+        ].filter(item => item && item !== 'None');
+        
+        if (styleElements.length > 0) {
+            // Rotate style elements for variation
+            const rotatedElements = this.rotateArray(styleElements, variationIndex);
+            parts.push(rotatedElements.slice(0, 3).join(', '));
         }
+        
+        // Add additional options
+        if (values.additionalOptions) {
+            parts.push(values.additionalOptions);
+        }
+        
+        return parts.filter(p => p).join(', ');
     }
 
-    // Utility functions
-    getRandomElement(array) {
-        return array[Math.floor(Math.random() * array.length)];
-    }
-
-    getRandomElements(array, count) {
-        const shuffled = [...array].sort(() => 0.5 - Math.random());
-        return shuffled.slice(0, count);
-    }
-
-    getRandomFloat(min, max) {
-        return (Math.random() * (max - min) + min).toFixed(1);
-    }
-
-    cleanPrompt(prompt) {
-        return prompt
-            .replace(/,\s*,/g, ',')
-            .replace(/,\s*$/, '')
-            .replace(/^\s*,/, '')
-            .trim();
-    }
-}
-
-// Initialize the application
-let app;
-document.addEventListener('DOMContentLoaded', () => {
-    app = new AIPromptGenerator();
-});
+    enhancePrompt(prompt, promptType, variationIndex) {
+        const enhancements = {
+            photography: [
+                'professional photography',
+                'shot with DSLR camera',
+                'studio lighting',
+                'high resolution',
+                'sharp focus'
+            ],
+           
