@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RS Advanced Image Prompting Tool</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header>
+    <h1>RS Advanced Image Prompting Tool</h1>
+    <button id="themeToggle" class="btn">Toggle Theme</button>
+</header>
+<main>
+    <section id="controls">
+        <button id="generateBtn" class="btn btn-primary">Generate</button>
+        <button id="randomBtn" class="btn btn-secondary">Random Prompt</button>
+        <button id="eraseBtn" class="btn btn-danger">Erase All</button>
+    </section>
+    <section id="form-section">
+        <div class="form-group">
+            <label for="artStyle">Art Style</label>
+            <select id="artStyle"></select>
+        </div>
+        <div class="form-group">
+            <label for="emotion">Emotion</label>
+            <select id="emotion"></select>
+        </div>
+        <div class="form-group">
+            <label for="atmosphere">Atmosphere</label>
+            <select id="atmosphere"></select>
+        </div>
+        <div class="form-group">
+            <label for="background">Background</label>
+            <select id="background"></select>
+        </div>
+        <div class="form-group">
+            <label for="lighting">Lighting</label>
+            <select id="lighting"></select>
+        </div>
+        <div class="form-group">
+            <label>Quality Tags</label>
+            <div id="qualityTags"></div>
+        </div>
+        <div class="form-group">
+            <label>Emphasis Tags</label>
+            <div id="emphasisTags"></div>
+        </div>
+        <div class="form-group">
+            <label for="cameraAngle">Camera Angle</label>
+            <select id="cameraAngle"></select>
+        </div>
+        <div class="form-group">
+            <label for="colorPalette">Color Palette</label>
+            <select id="colorPalette"></select>
+        </div>
+        <div class="form-group">
+            <label for="composition">Composition</label>
+            <select id="composition"></select>
+        </div>
+        <div class="form-group">
+            <label for="subjectDesc">Subject Description</label>
+            <input id="subjectDesc" type="text" placeholder="e.g., beautiful Latina woman with black hair" />
+        </div>
+        <div class="form-group">
+            <label for="styleInfluences">Style Influences</label>
+            <input id="styleInfluences" type="text" placeholder="e.g., inspired by Van Gogh, cyberpunk aesthetics" />
+        </div>
+        <div class="form-group">
+            <label for="additionalParams">Additional Parameters</label>
+            <input id="additionalParams" type="text" placeholder="Additional options" />
+        </div>
+        <div class="form-group">
+            <label for="poseAction">Pose/Action</label>
+            <input id="poseAction" type="text" placeholder="Describe pose or action" />
+        </div>
+    </section>
+    <section id="image-section">
+        <h2>Image to Prompt</h2>
+        <input type="file" id="imageUpload" accept="image/*" />
+        <p id="imageAnalysisResult"></p>
+    </section>
+    <section id="prompts-section">
+        <h2>Generated Prompts</h2>
+        <div id="promptsContainer"></div>
+    </section>
+</main>
+<script src="app.js"></script>
+</body>
+</html>
