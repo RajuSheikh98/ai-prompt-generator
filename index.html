@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RS Advanced Image Prompting Tool</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>RS Advanced Image Prompting Tool</h1>
+            <p class="subtitle">Create professional AI image generation prompts with advanced customization</p>
+        </header>
+        <main class="main">
+            <section class="controls">
+                <button id="randomGenerate" class="btn btn-primary">Generate Random Prompt</button>
+            </section>
+            <section class="config">
+                <div class="form-group">
+                    <label for="artStyle">Art Style</label>
+                    <select id="artStyle" class="form-control"></select>
+                </div>
+                <div class="form-group">
+                    <label for="emotion">Emotion</label>
+                    <select id="emotion" class="form-control"></select>
+                </div>
+                <div class="form-group">
+                    <label for="atmosphere">Atmosphere</label>
+                    <select id="atmosphere" class="form-control"></select>
+                </div>
+                <div class="form-group">
+                    <label for="background">Background</label>
+                    <select id="background" class="form-control"></select>
+                </div>
+                <div class="form-group">
+                    <label for="lighting">Lighting</label>
+                    <select id="lighting" class="form-control"></select>
+                </div>
+                <div class="form-group">
+                    <label for="qualityTags">Quality Tags</label>
+                    <div id="qualityTags" class="checkbox-group"></div>
+                </div>
+                <div class="form-group">
+                    <label for="emphasisTags">Emphasis Tags</label>
+                    <div id="emphasisTags" class="checkbox-group"></div>
+                </div>
+                <div class="form-group">
+                    <label for="cameraAngle">Camera Angle</label>
+                    <select id="cameraAngle" class="form-control"></select>
+                </div>
+                <div class="form-group">
+                    <label for="colorPalette">Color Palette</label>
+                    <select id="colorPalette" class="form-control"></select>
+                </div>
+                <div class="form-group">
+                    <label for="composition">Composition</label>
+                    <select id="composition" class="form-control"></select>
+                </div>
+                <div class="form-group">
+                    <label for="subjectDesc">Subject Description</label>
+                    <input type="text" id="subjectDesc" class="form-control" placeholder="e.g., beautiful Latina woman with black hair" />
+                </div>
+                <div class="form-group">
+                    <label for="styleInfluences">Style Influences</label>
+                    <input type="text" id="styleInfluences" class="form-control" placeholder="e.g., inspired by Van Gogh, cyberpunk aesthetics" />
+                </div>
+                <div class="form-group">
+                    <label for="additionalParams">Additional Parameters</label>
+                    <input type="text" id="additionalParams" class="form-control" placeholder="Additional options" />
+                </div>
+                <div class="form-group">
+                    <label for="poseAction">Pose/Action</label>
+                    <input type="text" id="poseAction" class="form-control" placeholder="Describe pose or action" />
+                </div>
+            </section>
+            <section class="image-to-prompt">
+                <h2>Image to Prompt</h2>
+                <input type="file" id="imageUpload" accept="image/*" />
+                <p id="imageAnalysisResult" class="info-text"></p>
+            </section>
+            <section class="prompts">
+                <h2>Generated Prompts</h2>
+                <div id="promptsContainer"></div>
+            </section>
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
