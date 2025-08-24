@@ -99,7 +99,7 @@ class AIPromptGenerator {
             element.addEventListener('change', () => this.savePreferences());
         });
         
-        document.querySNeil('input[type="checkbox"]').forEach(element => {
+        document.querySelectorAll('input[type="checkbox"]').forEach(element => {
             element.addEventListener('change', () => this.savePreferences());
         });
     }
