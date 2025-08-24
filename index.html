@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Prompt Generator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>AI Prompt Generator</h1>
+            <p class="header__subtitle">Create professional AI image generation prompts with advanced customization</p>
+        </header>
+
+        <main class="main">
+            <div class="generator-layout">
+                <!-- Configuration Panel -->
+                <div class="config-panel">
+                    <div class="card">
+                        <div class="card__body">
+                            <h2>Prompt Configuration</h2>
+                            
+                            <!-- Style Settings -->
+                            <div class="settings-section">
+                                <h3>Style & Mood</h3>
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label class="form-label" for="artStyle">Art Style</label>
+                                        <select id="artStyle" class="form-control">
+                                            <option value="">Select Style</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label" for="emotion">Emotion</label>
+                                        <select id="emotion" class="form-control">
+                                            <option value="">Select Emotion</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label" for="atmosphere">Atmosphere</label>
+                                        <select id="atmosphere" class="form-control">
+                                            <option value="">Select Atmosphere</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Visual Settings -->
+                            <div class="settings-section">
+                                <h3>Visual Composition</h3>
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label class="form-label" for="background">Background</label>
+                                        <select id="background" class="form-control">
+                                            <option value="">Select Background</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label" for="lighting">Lighting</label>
+                                        <select id="lighting" class="form-control">
+                                            <option value="">Select Lighting</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label" for="cameraAngle">Camera Angle</label>
+                                        <select id="cameraAngle" class="form-control">
+                                            <option value="">Select Angle</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label" for="colorPalette">Color Palette</label>
+                                        <select id="colorPalette" class="form-control">
+                                            <option value="">Select Colors</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label" for="composition">Composition</label>
+                                        <select id="composition" class="form-control">
+                                            <option value="">Select Composition</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Quality Tags -->
+                            <div class="settings-section">
+                                <h3>Quality & Enhancement Tags</h3>
+                                <div class="checkbox-grid">
+                                    <div class="checkbox-group">
+                                        <h4>Quality Tags</h4>
+                                        <div id="qualityTags" class="checkbox-list"></div>
+                                    </div>
+                                    
+                                    <div class="checkbox-group">
+                                        <h4>Emphasis Tags</h4>
+                                        <div id="emphasisTags" class="checkbox-list"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Custom Parameters -->
+                            <div class="settings-section">
+                                <h3>Custom Parameters</h3>
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label class="form-label" for="inspiration">Inspiration/Theme</label>
+                                        <input type="text" id="inspiration" class="form-control" placeholder="e.g., Studio Ghibli, Van Gogh style">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label" for="location">Specific Location</label>
+                                        <input type="text" id="location" class="form-control" placeholder="e.g., Tokyo street, Victorian mansion">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label" for="pose">Pose/Action</label>
+                                        <input type="text" id="pose" class="form-control" placeholder="e.g., dancing, meditating, running">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label" for="additionalOptions">Additional Options</label>
+                                        <input type="text" id="additionalOptions" class="form-control" placeholder="e.g., wearing red dress, holding flower">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Custom AI Prompt -->
+                            <div class="settings-section">
+                                <div class="form-group">
+                                    <label class="form-label" for="customPrompt">Custom AI Prompt (Optional)</label>
+                                    <textarea id="customPrompt" class="form-control" rows="3" placeholder="Enter your custom prompt here to be enhanced..."></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="action-buttons">
+                                <button id="generateBtn" class="btn btn--primary btn--lg">Generate Enhanced Prompts</button>
+                                <button id="resetBtn" class="btn btn--outline">Reset All</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Panel -->
+                <div class="results-panel">
+                    <div class="card">
+                        <div class="card__body">
+                            <div class="results-header">
+                                <h2>Generated Prompts</h2>
+                                <button id="copyAllBtn" class="btn btn--secondary" style="display: none;">Copy All Prompts</button>
+                            </div>
+                            
+                            <div id="resultsContainer" class="results-container">
+                                <div class="empty-state">
+                                    <p>Configure your settings and click "Generate Enhanced Prompts" to create professional AI prompts.</p>
+                                    <div class="empty-state__features">
+                                        <div class="feature-item">
+                                            <span class="feature-icon">✨</span>
+                                            <span>Generate 5 unique variations</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-icon">🎨</span>
+                                            <span>Professional formatting</span>
+                                        </div>
+                                        <div class="feature-item">
+                                            <span class="feature-icon">📋</span>
+                                            <span>One-click copy to clipboard</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast notification -->
+    <div id="toast" class="toast hidden">
+        <span id="toastMessage">Copied to clipboard!</span>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
